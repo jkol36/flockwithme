@@ -1,0 +1,66 @@
+extends base
+
+- load staticfiles
+- block title
+| Auto unfollow
+- endblock
+
+- block include
+- endblock
+
+- block content
+.container-fluid
+	.row
+		.col-md-12
+			.panel.panel-default.content
+				.panel-body
+					p.text-muted.content-header
+						i.fa.fa-reply.fa-fw
+						| &nbsp; AUTO UNFOLLOW USERS WHO HAVE NOT FOLLOWED YOU BACK
+					hr.divider
+					form(action="{% url 'auto_unfollow' %}", method="POST")
+						- csrf_token
+						input(type="hidden", name="action", value="UNFOLLOW_BACK")
+						input(type='hidden', name='profile', value='{{ user.pk }}')
+						.form-group
+							p.text-muted
+								| Select the account that should unfollow the users. Add more in 
+								a(href="{% url 'my_accounts' %}") my accounts.
+							.input-group
+								span.input-group-addon
+									i.fa.fa-user.fa-fw
+								select.form-control(name='socialProfile')
+									for account in user.accounts.all
+										option(value="{{ account.pk }}") {{ account.handle}}
+						p.text-center
+							button.btn.btn-info.btn-lg.form-submit(type="submit")
+								i.fa.fa-reply.fa-fw
+								| AUTO UNFOLLOW FOLLOWERS
+
+		//.col-md-6
+			.panel.panel-default.panel-content
+				.panel-body
+					p.text-muted.content-header
+						i.fa.fa-reply.fa-fw
+						| &nbsp; AUTO UNFOLLOW ALL FOLLOWERS
+					hr.divider
+					form(action="{% url 'auto_unfollow' %}", method="POST")
+						- csrf_token
+						input(type="hidden", name="action", value="UNFOLLOW_All")
+						input(type='hidden', name = 'profile', value='{{ user.pk }}')
+						.form-group
+							p.text-muted
+								| Select the account that should unfollow the users. Add more in 
+								a(href="{% url 'my_accounts' %}") my accounts.
+							.input-group
+								span.input-group-addon
+									i.fa.fa-user.fa-fw
+								select.form-control
+									for account in user.accounts.all
+										option(value="{{ account.pk }}") {{ account.handle}}
+									span.text(style="font-size: 1.2em;") #{number}
+						p.text-center
+							button.btn.btn-info.btn-lg.form-submit(type="submit")
+								i.fa.fa-reply.fa-fw
+								| AUTO UNFOLLOW ALL FOLLOWERS 
+- endblock

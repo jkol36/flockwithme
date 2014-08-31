@@ -1,0 +1,32 @@
+extends base
+
+- load staticfiles
+- load profile_tags
+
+- block title
+| Accounts
+- endblock
+
+- block include
+script(src="{% static 'django_ajax/js/jquery.ajax.min.js' %}", type="text/javascript")
+script(src="{% static 'js/oauthio.js' %}", type="text/javascript")
+script(src="{% static 'js/add_account.js' %}", type='text/javascript')
+- endblock
+
+- block content
+.container-fluid
+	.row
+		.col-md-12
+			.panel.panel-default.content
+				.panel-body
+					p.text-muted.content-header.lead
+						i.fa.fa-twitter.fa-fw
+						| YOUR ACCOUNTS
+					- list_accounts
+		.col-md-12
+			button#associate-button.btn.btn-info.btn-lg.form-submit(style="cursor: pointer;")
+				i.fa.fa-plus.fa-fw
+				| ADD ACCOUNT
+
+
+- endblock

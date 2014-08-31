@@ -1,0 +1,195 @@
+- load staticfiles
+
+!!!5
+html(lang="en")
+head
+	link(rel='stylesheet', href='//netdna.bootstrapcdn.com/bootswatch/3.1.1/united/bootstrap.min.css')
+	link(rel='stylesheet', href='//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css')
+	link(rel='stylesheet', href="{% static 'css/dashboard.css' %}")
+	meta(name='viewport', content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0')
+	script(type='text/javascript', src='http://code.jquery.com/jquery-1.11.0.min.js')
+	script(type='text/javascript', src='//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js')
+	script(src="{% static 'django_ajax/js/jquery.ajax.min.js' %}", type="text/javascript")
+	- comment
+	script.
+		$(document).ready(function() {
+			$('.dropdown-trigger').click(function(e) {
+				e.stopPropagation();
+				var $main = $(this);
+				if (!$main.next().is(':visible')) {
+					ajaxGet('/notification/seen/');
+				}
+				$('.dropdown-trigger').each(function(i, obj) {
+					if ($(obj).prop('id') != $main.prop('id')) {
+						$(obj).next().hide();
+					}
+				});
+				$main.next().slideToggle(200);
+			});
+		});
+		$(document).click(function(e) {
+			$('.dropdown-trigger').each(function(i, obj) {
+				var dropdown = $(obj).next();
+				if ($(dropdown).is(':visible')) {
+					$(obj).next().slideToggle(200);
+				}
+			});
+		});
+	- endcomment
+	- block include
+	- endblock
+
+body
+	.container-fluid(style="padding: 0 0 0 0;")
+		.row
+			.col-lg-2.col-md-3.col-sm-3.sidebar#sidebar
+				div.text-center(style='padding-top: 10px')
+					img(src="{% static 'img/flockwithme_logo.png' %}", width="100px;")
+				hr.sidebar-divider-top
+				ul.nav
+					li
+						a(href="{% url 'dashboard' %}")
+							i.fa.fa-user.fa-fw
+							strong &nbsp; HEY, {{ user.username|upper }}
+					hr.sidebar-divider
+					li
+						a(href="{% url 'my_accounts' %}")
+							i.fa.fa-users.fa-fw
+							strong &nbsp; ACCOUNTS
+					li
+						a(href="{% url 'auto_follow' %}")
+							i.fa.fa-twitter.fa-fw
+							strong &nbsp; AUTO FOLLOW
+					li
+						a(href="{% url 'auto_favorite' %}")
+							i.fa.fa-star.fa-fw
+							strong &nbsp; AUTO FAVORITE
+
+					li 
+						a(href ="{% url 'auto_unfollow' %}")
+							i.fa.fa-times-circle.fa-fw
+							strong &nbsp; AUTO UNFOLLOW
+					li
+						a(href="{% url 'auto_dm' %}")
+							i.fa.fa-envelope.fa-fw
+							strong &nbsp; AUTO DM
+					li
+						a(href="{% url 'analytics' %}")
+							i.fa.fa-bar-chart-o.fa-fw
+							strong &nbsp; ANALYTICS
+
+					hr.sidebar-divider
+					li
+						a(href="{% url 'my_hashtags' %}")
+							i.fa.fa-slack.fa-fw
+							strong &nbsp; MY HASHTAGS
+					
+
+					li 
+						a(href="{% url 'my_influencers' %}")
+							i.fa.fa-twitter
+							strong &nbsp; MY INFLUENCERS
+					
+					li
+						a(href="{% url 'my_locations' %}")
+							i.fa.fa-location-arrow.fa-fw
+							strong &nbsp; MY LOCATIONS
+					
+
+
+					li
+						a(href="{% url 'show_queue' %}")
+							i.fa.fa-cogs.fa-fw
+							strong &nbsp; MY JOBS
+
+					
+					li
+						a(href='#')
+							i.fa.fa-life-ring.fa-fw
+							strong &nbsp; HELP
+					li
+						a(href="{% url 'logout' %}")
+							i.fa.fa-sign-out.fa-fw
+							strong &nbsp; LOGOUT
+					hr.sidebar-divider
+			.col-lg-10.col-md-9.col-sm-9.content-wrapper
+				.container-fluid.container-top
+					.row.row-top
+						.col-lg-6.col-md-6.col-sm-6.col-xs-12
+							h1
+								//a#toggle-button(style='color: lightgrey; padding-right: 20px')
+									i.fa.fa-bars.fa-fw
+								- block title
+								- endblock
+						.col-lg-6.col-md-6.col-sm-6.col-xs-12
+							.container-fluid.pull-right
+								h1
+									a.icon-top.dropdown-trigger.dropdown-toggle#notification-dropdown(href='#', onclick="return false;")
+										i.fa.fa-bell-o.fa-fw
+										span.badge#notification-badge
+											| 0
+									- comment
+									ul.dropdown-menu.dropdown-show.pull-right
+										- var notifications = user.get_latest_notifications
+										if notifications
+											for notification in notifications
+												.row
+													.col-md-12 {{ notification.message }}
+												.row.text-muted
+													.col-md-8.col-md-offset-4
+														span.pull-right
+															i.fa.fa-clock-o.fa-fw
+															|{{ notification.created_at|timesince }} ago
+												if not forloop.last
+													hr.divider
+										else
+											p No new notifications
+									- endcomment
+				br
+				if user.is_authenticated
+					if not user.accounts.all or not user.hashtags.all or not user.locations.all
+						.container-fluid
+							.row
+								.col-lg-12
+									if not user.accounts.all
+										.alert(class='alert-info')
+											span(style='font-size: 1.2em;') 
+												| Get started by providing us with your twitter accounts. Click ACCOUNTS in the left sidebar, or simply click 
+												a(href="{% url 'my_accounts' %}") here!
+									elif not user.hashtags.all
+										.alert(class='alert-info')
+											span(style='font-size: 1.2em;') 
+												| Provide us with some relevant hashtags in MY HASHTAGS on the left, or click 
+												a(href="{% url 'my_hashtags' %}") here!
+									elif not user.locations.all
+										.alert.alert-dismissable(class='alert-warning')
+											button.close(type='button', data-dismiss='alert', aria-hidden='true') x
+											span(style='font-size: 1.2em;') 
+												| Want to be able to target by location? Add some locations in MY LOCATIONS on the left, or click 
+												a(href="{% url 'my_locations' %}") here
+									elif not user.influencers.all
+										.alert.alert-dismissable(class = 'alert-warning')
+											button.close(type='button', data-dismiss = 'alert', aria0hidden = 'true') x
+											span(style = 'font-size: 1.2em;')
+												| Want to be able to Follow the followers of a specific Twitter Account? Add some influencers on the left, or click 
+												a(href = "{% url 'my_influencers' %}") here
+
+				- include "display_messages.jade"
+				- block content
+				- endblock
+		.row
+			.col-lg-12.content-footer.pull-right
+				p.pull-right(style="color: #6f717c") Created with love by 
+					a(href="http://twitter.com/martolini", target="_blank")@martolini
+					|  and 
+					a(href="http://twitter.com/Jkol36", target="_blank")@Jkol36
+				p.pull-right
+					a.twitter-follow-button(href='https://twitter.com/realflockwithme', data-show-count='true', data-size='large') Follow @realflockwithme
+					script.
+						!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');
+				p.pull-right
+					a.twitter-share-button(href='https://twitter.com/share', data-url='http://www.flockwith.me', data-text='I just started using flockwith.me and have already gotten 10 new followers!', data-via='realflockwithme', data-size='large', data-dnt='true') Tweet
+		script.
+			!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');
+		script.
+			!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');

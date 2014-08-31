@@ -1,0 +1,95 @@
+extends base
+
+- load staticfiles
+- block title
+| Welcome, {{ user.get_full_name }}
+- endblock
+
+- block include
+
+- endblock
+
+- block content
+.container-fluid
+	.row
+		.col-md-4
+			a(href="{% url 'analytics' %}")
+				.well(style="background-color: #44b6ae; padding: 0 0 0 0;")
+					.row
+						.col-md-5
+							.visual
+								i.fa.fa-twitter.fa-fw(style="font-size: 8em; opacity: 0.3; color: white;")
+						.col-md-7.text-right
+							.number(style='font-size: 3.4em; text-align: right; font-weight: 300; color: white;')
+								| {{ new_followers }}
+							.details(style='font-size: 1.2em; color: white;')
+									| New followers
+		.col-md-4
+			a(href="{% url 'analytics' %}")
+				.well(style="background-color: #e35b5a; padding: 0 0 0 0;")
+					.row
+						.col-md-5
+							.visual
+								i.fa.fa-users.fa-fw(style="font-size: 8em; opacity: 0.3; color: white;")
+						.col-md-7.text-right
+							.number(style='font-size: 3.4em; text-align: right; font-weight: 300; color: white;')
+								| {{ potential_customers }}
+							.details(style='font-size: 1.2em; color: white;')
+								| Potential customers		
+		.col-md-4
+				.well(style="background-color: #8775a7; padding: 0 0 0 0;")
+					.row
+						.col-md-5
+							.visual
+								i.fa.fa-dollar.fa-fw(style="font-size: 8em; opacity: 0.3; color: white;")
+						.col-md-7.text-right
+							.number(style='font-size: 3.4em; text-align: right; font-weight: 300; color: white;')
+								| ${{ money_saved }}
+							.details(style='font-size: 1.2em; color: white;')
+								| Saved on twitter ads
+	hr.divider
+	.row
+		.col-md-4
+			a(href="{% url 'my_hashtags' %}")
+				.well(style="background-color: #8775a7; padding: 0 0 0 0;")
+					.row
+						.col-md-5
+							.visual
+								i.fa.fa-slack.fa-fw(style="font-size: 8em; opacity: 0.3; color: white;")
+						.col-md-7.text-right
+							.number(style='font-size: 3.4em; text-align: right; font-weight: 300; color: white;')
+								| {{ user.hashtags.all.count }}
+							.details(style='font-size: 1.2em; color: white;')
+									| Hashtags
+		.col-md-4
+			a(href="{% url 'my_locations' %}")
+				.well(style="background-color: #44b6ae; padding: 0 0 0 0;")
+					.row
+						.col-md-5
+							.visual
+								i.fa.fa-map-marker.fa-fw(style="font-size: 8em; opacity: 0.3; color: white;")
+						.col-md-7.text-right
+							.number(style='font-size: 3.4em; text-align: right; font-weight: 300; color: white;')
+								| {{ user.locations.all.count }}
+							.details(style='font-size: 1.2em; color: white;')
+								| Locations	
+		.col-md-4
+				a(href="{% url 'my_accounts' %}")
+					.well(style="background-color: #e35b5a; padding: 0 0 0 0;")
+						.row
+							.col-md-5
+								.visual
+									i.fa.fa-users.fa-fw(style="font-size: 8em; opacity: 0.3; color: white;")
+							.col-md-7.text-right
+								.number(style='font-size: 3.4em; text-align: right; font-weight: 300; color: white;')
+									| {{ user.accounts.all.count }}
+								.details(style='font-size: 1.2em; color: white;')
+									| Accounts
+		
+
+
+
+
+
+
+- endblock

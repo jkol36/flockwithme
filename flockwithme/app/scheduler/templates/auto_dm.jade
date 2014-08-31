@@ -1,0 +1,47 @@
+extends base
+
+- load staticfiles
+- block title
+| Auto DM
+- endblock
+
+- block include
+- endblock
+
+- block content
+.container-fluid
+	.row
+		.col-md-6
+			.panel.panel-default.content
+				.panel-body
+					p.lead.content-header
+						i.fa.fa-envelope.fa-fw
+						| &nbsp; AUTO DIRECT MESSAGE YOUR NEW FOLLOWERS
+					p.text-muted
+						| Once they follow you, it's time to engage. Automatically send out a direct message to your new followers stating how you can help them!
+					hr.divider
+					form(action="{% url 'auto_dm' %}", method="POST")
+						- csrf_token
+						input(type="hidden", name="action", value="AUTO_DM")
+						input(type='hidden', name='profile', value='{{ user.pk }}')
+						p.input-group
+							span.input-group-addon
+								i.fa.fa-envelope.fa-fw
+							textarea.form-control.input-lg(name="message", maxlength="160", rows="4", placeholder="Hey! I just started using flockwith.me, now it's so easy to grow my network. Try it out!", required)
+						span.help-block No links are allowed in the message as per twitters rules.
+						.form-group
+							p.text-muted
+								| Select the account that should send the message. Add more in 
+								a(href="{% url 'my_accounts' %}") my accounts.
+							.input-group
+								span.input-group-addon
+									i.fa.fa-user.fa-fw
+								select.form-control(name='socialProfile')
+									for account in user.accounts.all
+										option(value="{{ account.pk }}") {{ account.handle}}
+						p.text-center
+							button.btn.btn-info.btn-lg.form-submit(type="submit")
+								i.fa.fa-envelope.fa-fw
+								| AUTO DIRECT MESSAGE
+
+- endblock

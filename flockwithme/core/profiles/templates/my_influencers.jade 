@@ -1,0 +1,92 @@
+extends base
+
+- load staticfiles
+
+- block title
+| My Influencers
+- endblock
+
+- block include
+link(rel='stylesheet', href="{% static 'select2/select2.css' %}")
+script(type='text/javascript', src="{% static 'select2/select2.js' %}")
+script(type="text/javascript", src="//maps.google.com/maps/api/js?sensor=true")
+script(type='text/javascript', src="{% static 'gmaps/gmaps.js' %}")
+script.
+	$(function() {
+		map = new GMaps({
+			div: '#map',
+			zoom: 8,
+			lat: -12.043333,
+			lng: -77.028333,
+		});
+		var tags = '{{ locations|safe }}';
+		tags = tags.split(",");
+		for (i=0; i<tags.length; i++) {
+			GMaps.geocode({
+				address: tags[i],
+				callback: function(results, status) {
+					if (status == 'OK') {
+						var latlng = results[0].geometry.location;
+						map.setCenter(latlng.lat(), latlng.lng());
+						map.addMarker({
+							lat: latlng.lat(),
+							lng: latlng.lng()
+						});
+					}
+				}
+			});
+		}
+		$('#locations-input').select2({
+			tags: {{ all_locations|safe }},
+			tokenSeparators: [":"],
+		}).on('change', function(e) {
+			if (e.added) {
+				GMaps.geocode({
+					address: e.added.text,
+					callback: function(results, status) {
+						if (status == 'OK') {
+							var latlng = results[0].geometry.location;
+							map.setCenter(latlng.lat(), latlng.lng());
+							map.addMarker({
+								lat: latlng.lat(),
+								lng: latlng.lng()
+							});
+							map.drawCircle({
+								lat: latlng.lat(),
+								lng: latlng.lng(),
+								radius: 32000
+							});
+						}
+					}
+				});
+			}
+		});
+	});
+- endblock
+
+- block content
+//.container-fluid
+	.row
+		.col-md-6
+			.panel.panel-default.content.text-center
+				.panel-body(style="min-height: 300px;")
+					p.text-muted.content-header.lead
+						i.fa.fa-location-arrow.fa-fw
+						| YOUR LOCATIONS
+					hr.divider
+					p.text-muted Separate your locations with a colon. The shaded circle has a radius of 20 miles which will be the targeted location. You can change the radius yourself when creating a job.
+					form#location-form(method='POST', action="{% url 'my_locations' %}")
+						- csrf_token
+						.form-group
+							input#locations-input(type='hidden', name='locations', value='{{ locations|safe }}', style="width: 100%")
+						.form-group
+							button.btn.btn-info.btn-lg.form-submit(type='submit')
+								i.fa.fa-location-arrow.fa-fw
+								| SAVE LOCATIONS
+		.col-md-6
+			.panel.panel-default.content
+				.panel-body(style="height: 300px;")
+					div#map(style="width: 100%; height: 100%;")
+
+
+- endblock

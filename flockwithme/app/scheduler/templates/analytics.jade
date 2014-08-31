@@ -1,0 +1,61 @@
+extends base
+
+- load staticfiles
+- block title
+| Analytics
+- endblock
+
+- block include
+script(type="text/javascript", src="{% static 'js/raphael.2.1.0.min.js' %}")
+link(rel='stylesheet', href='http://cdn.oesmith.co.uk/morris-0.4.3.min.css')
+script(type="text/javascript", src='http://cdn.oesmith.co.uk/morris-0.4.3.min.js')
+
+- endblock
+
+- block content
+.container-fluid
+	.row
+		.col-md-12
+			.panel.panel-default.content
+				.panel-body
+					p.lead.content-header
+						i.fa.fa-user.fa-fw
+						| SELECT ACCOUNT
+					form.form-inline(action="{% url 'analytics' %}", method='GET')
+						.form-group.col-md-10
+							.input-group.col-md-12
+								.input-group-addon
+									i.fa.fa-twitter.fa-fw
+								select.form-control(style='width: 100%', name='sp_pk')
+									for acc in user.accounts.all
+										option(value='{{ acc.pk }}')
+											| {{ acc.handle }}
+						.col-md-2
+							button.btn.btn-info.form-submit(type="submit")
+								i.fa.fa-user.fa-fw
+								| SELECT
+	if data
+		.row
+			.col-lg-12
+				.panel.panel-default.content
+					.panel-body
+						p.text-muted.content-header THIS MONTHS STATISTICS
+						hr.divider
+						div#thechart(style="height: 250px")
+
+script(type="text/javascript").
+	new Morris.Line({
+		element: 'thechart',
+		data: [
+			{% for k, v in data.items %}
+				{ date: '{{ k|safe }}', followers: '{{ v }}' }{% if not forloop.last %},{% endif %}
+			{% endfor %}
+			],
+		xkey: 'date',
+		xLabels: ['day'],
+		ykeys: ['followers'],
+		labels: ['Followers'],
+		smooth: false,
+
+	});
+- endblock

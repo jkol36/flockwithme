@@ -1,0 +1,61 @@
+extends base
+
+- load staticfiles
+- block title
+| Auto DM
+- endblock
+
+- block include
+- endblock
+
+- block content
+.container-fluid
+	.row
+		.col-md-12
+			.panel.panel-default.content
+				.panel-body
+					p.lead.content-header
+						i.fa.fa-envelope.fa-fw
+						| &nbsp; YOUR JOBS
+					p.text-muted
+						| Manage your current jobs
+					if jobs
+						table.table.table-striped
+							tr
+								th Action
+								th Socialprofile
+								th Provider
+								th Hashtag
+								th Location
+								th Delete
+							for job in jobs
+								tr
+									td
+										if job.action
+											{{ job.get_action_display }}
+										else
+											| -
+									td
+										{{ job.socialprofile.handle}}
+									td
+										if job.socialprofile.provider == 'twitter'
+											i.fa.fa-twitter.fa-fw
+									td
+										if job.hashtag
+											{{ job.hashtag.name }}
+										else
+											| -
+									td
+										if job.location
+											{{ job.location.name }}
+										else
+											| -
+									td
+										a.btn.btn-danger(href="{% url 'delete_job' job.pk %}")
+											i.fa.fa-fw.fa-times
+											| Delete
+					else
+						p You have no jobs
+
+
+- endblock

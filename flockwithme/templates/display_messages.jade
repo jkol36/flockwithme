@@ -1,0 +1,12 @@
+if messages
+	.container-fluid
+		.row
+			.col-md-12
+				for message in messages
+					if message.tags == "error"
+						thetag = "danger"
+					else
+						thetag = message.tags
+					.alert.alert-dismissable(class="alert-{{ thetag }}")
+						button.close(type='button', data-dismiss='alert', aria-hidden='true') ×
+						{{ message|safe }}

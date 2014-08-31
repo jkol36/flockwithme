@@ -1,0 +1,44 @@
+extends base
+
+- load staticfiles
+
+- block title
+| My hashtags
+- endblock
+
+- block include
+link(rel='stylesheet', href="{% static 'select2/select2.css' %}")
+script(type='text/javascript', src="{% static 'select2/select2.js' %}")
+script.
+	$(function() {
+		var fisk = '{{ hashtags|safe }}';
+		console.log(fisk);
+		$('#hashtags-input').select2({
+			tags: {{ all_hashtags|safe }},
+			tokenSeparators: [",", " "],
+		});
+	});
+- endblock
+
+- block content
+.container-fluid
+	.row
+		.col-md-12
+			.panel.panel-default.content
+				.panel-body
+					p.text-muted.content-header.lead
+						i.fa.fa-slack.fa-fw
+						| YOUR HASHTAGS
+					hr.divider
+					p.text-muted Separate your hashtags with a space or a comma. Write the hashtag without the #.
+					form(method='POST', action="{% url 'my_hashtags' %}")
+						- csrf_token
+						.form-group
+							input#hashtags-input(type='hidden', name='hashtags', value='{{ hashtags|safe }}', style="width: 100%")
+						.form-group
+							button.btn.btn-info.btn-lg.form-submit(type='submit')
+								i.fa.fa-slack.fa-fw
+								| SAVE HASHTAGS
+
+
+- endblock

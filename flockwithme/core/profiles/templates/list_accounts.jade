@@ -1,0 +1,10 @@
+if accounts
+	for acc in accounts
+		a.btn.btn-large.btn-info.form-submit(style='margin-left: 10px;')
+			i.fa.fa-fw.fa-twitter
+			| {{ acc.handle }}
+
+else
+	p You have not added any accounts yet. Press the add account button to get started.
+	
+

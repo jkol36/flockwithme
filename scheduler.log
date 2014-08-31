@@ -1,0 +1,153 @@
+[26/Aug/2014 14:31:43] ERROR [flockwithme.app.scheduler.jobexecuter:206] 
+USER: Jkol36, ERROR: 'NoneType' object is not callable
+[26/Aug/2014 14:32:10] ERROR [flockwithme.app.scheduler.jobexecuter:206] 
+USER: Jkol36, ERROR: 'NoneType' object is not callable
+[26/Aug/2014 14:34:37] ERROR [flockwithme.app.scheduler.jobexecuter:206] 
+USER: Jkol36, ERROR: 'NoneType' object is not callable
+[26/Aug/2014 14:36:59] ERROR [flockwithme.app.scheduler.jobexecuter:196] 
+USER: Jkol36, ERROR: 'NoneType' object is not callable
+[26/Aug/2014 14:37:36] ERROR [flockwithme.app.scheduler.jobexecuter:186] 
+USER: Jkol36, ERROR: 'NoneType' object is not callable
+[26/Aug/2014 14:38:36] ERROR [flockwithme.app.scheduler.jobexecuter:186] 
+USER: Jkol36, ERROR: 'NoneType' object is not callable
+[26/Aug/2014 14:45:31] ERROR [flockwithme.app.scheduler.jobexecuter:186] 
+USER: Jkol36, ERROR: 'NoneType' object is not callable
+[26/Aug/2014 15:25:20] ERROR [flockwithme.app.scheduler.jobexecuter:187] 
+USER: Jkol36, ERROR: 'NoneType' object is not callable
+[26/Aug/2014 15:26:34] ERROR [flockwithme.app.scheduler.jobexecuter:187] 
+USER: Jkol36, ERROR: 'NoneType' object is not callable
+[26/Aug/2014 16:00:17] ERROR [flockwithme.app.scheduler.jobexecuter:187] 
+USER: realflockwithme, ERROR: 'NoneType' object is not callable
+[26/Aug/2014 16:02:45] ERROR [flockwithme.app.scheduler.jobexecuter:66] global name 'Unfollowed' is not defined
+[26/Aug/2014 16:02:45] ERROR [flockwithme.app.scheduler.jobexecuter:189] 
+USER: realflockwithme, ERROR: 'JobExecuter' object has no attribute 'check_limit_reached'
+[26/Aug/2014 16:04:43] ERROR [flockwithme.app.scheduler.jobexecuter:66] global name 'Unfollowed' is not defined
+[26/Aug/2014 16:04:43] ERROR [flockwithme.app.scheduler.jobexecuter:186] 
+USER: realflockwithme, ERROR: 'JobExecuter' object has no attribute 'check_limit_reached'
+[26/Aug/2014 16:05:12] ERROR [flockwithme.app.scheduler.jobexecuter:66] global name 'Unfollowed' is not defined
+[26/Aug/2014 16:06:17] ERROR [flockwithme.app.scheduler.jobexecuter:66] global name 'Unfollowed' is not defined
+[26/Aug/2014 16:07:15] ERROR [flockwithme.app.scheduler.jobexecuter:183] 
+USER: realflockwithme, ERROR: 'list' object has no attribute 'items'
+[26/Aug/2014 16:07:51] ERROR [flockwithme.app.scheduler.jobexecuter:67] global name 'Unfollowed' is not defined
+[26/Aug/2014 16:08:50] ERROR [flockwithme.app.scheduler.jobexecuter:67] global name 'Unfollowed' is not defined
+[26/Aug/2014 16:10:26] ERROR [flockwithme.app.scheduler.jobexecuter:185] 
+USER: realflockwithme, ERROR: 'list' object has no attribute 'items'
+[26/Aug/2014 16:14:15] ERROR [flockwithme.app.scheduler.jobexecuter:185] 
+USER: realflockwithme, ERROR: global name 'Cursor' is not defined
+[26/Aug/2014 16:15:34] ERROR [flockwithme.app.scheduler.jobexecuter:185] 
+USER: realflockwithme, ERROR: 'JobExecuter' object has no attribute 'tweepy'
+[26/Aug/2014 16:16:17] ERROR [flockwithme.app.scheduler.jobexecuter:185] 
+USER: realflockwithme, ERROR: 'list' object has no attribute 'items'
+[26/Aug/2014 16:16:43] ERROR [flockwithme.app.scheduler.jobexecuter:185] 
+USER: realflockwithme, ERROR: type object 'Cursor' has no attribute 'self'
+[26/Aug/2014 16:17:05] ERROR [flockwithme.app.scheduler.jobexecuter:185] 
+USER: realflockwithme, ERROR: 'JobExecuter' object has no attribute 'tweepy'
+[26/Aug/2014 16:17:47] ERROR [flockwithme.app.scheduler.jobexecuter:186] 
+USER: realflockwithme, ERROR: 'JobExecuter' object has no attribute 'tweepy'
+[26/Aug/2014 16:18:10] ERROR [flockwithme.app.scheduler.jobexecuter:186] 
+USER: realflockwithme, ERROR: global name 'api' is not defined
+[26/Aug/2014 16:18:44] ERROR [flockwithme.app.scheduler.jobexecuter:187] 
+USER: realflockwithme, ERROR: global name 'api' is not defined
+[26/Aug/2014 16:19:03] ERROR [flockwithme.app.scheduler.jobexecuter:187] 
+USER: realflockwithme, ERROR: global name 'api' is not defined
+[26/Aug/2014 16:22:51] ERROR [flockwithme.app.scheduler.jobexecuter:69] global name 'Unfollowed' is not defined
+[26/Aug/2014 16:24:47] ERROR [flockwithme.app.scheduler.jobexecuter:67] global name 'Unfollowed' is not defined
+[26/Aug/2014 16:25:27] ERROR [flockwithme.app.scheduler.jobexecuter:184] 
+USER: realflockwithme, ERROR: 'set' object has no attribute 'objects'
+[26/Aug/2014 16:25:44] ERROR [flockwithme.app.scheduler.jobexecuter:184] 
+USER: realflockwithme, ERROR: 'set' object has no attribute 'items'
+[26/Aug/2014 16:30:57] ERROR [flockwithme.app.scheduler.jobexecuter:65] global name 'Unfollowed' is not defined
+[26/Aug/2014 16:33:16] ERROR [flockwithme.app.scheduler.jobexecuter:65] global name 'Unfollowed' is not defined
+[26/Aug/2014 16:34:18] ERROR [flockwithme.app.scheduler.jobexecuter:65] global name 'Unfollowed' is not defined
+[27/Aug/2014 08:45:08] ERROR [flockwithme.app.scheduler.jobexecuter:177] 
+USER: realflockwithme, ERROR: 'SocialProfile' object has no attribute 'add'
+[27/Aug/2014 08:45:26] ERROR [flockwithme.app.scheduler.jobexecuter:177] 
+USER: realflockwithme, ERROR: 'SocialProfile' object has no attribute 'items'
+[27/Aug/2014 08:49:04] ERROR [flockwithme.app.scheduler.jobexecuter:175] 
+USER: realflockwithme, ERROR: global name 'friends' is not defined
+[27/Aug/2014 08:52:57] ERROR [flockwithme.app.scheduler.jobexecuter:177] 
+USER: realflockwithme, ERROR: 'SocialProfile' object has no attribute 'add'
+[28/Aug/2014 22:54:27] ERROR [flockwithme.app.scheduler.jobexecuter:183] 
+USER: realflockwithme, ERROR: 'NoneType' object has no attribute 'screen_name'
+[28/Aug/2014 23:01:45] ERROR [flockwithme.app.scheduler.jobexecuter:182] 
+USER: realflockwithme, ERROR: 'NoneType' object has no attribute 'screen_name'
+[28/Aug/2014 23:02:21] ERROR [flockwithme.app.scheduler.jobexecuter:182] 
+USER: realflockwithme, ERROR: 'Job' object has no attribute 'Influencer'
+[28/Aug/2014 23:02:52] ERROR [flockwithme.app.scheduler.jobexecuter:182] 
+USER: realflockwithme, ERROR: 'NoneType' object has no attribute 'all'
+[28/Aug/2014 23:06:02] ERROR [flockwithme.app.scheduler.jobexecuter:182] 
+USER: realflockwithme, ERROR: 'NoneType' object has no attribute 'all'
+[28/Aug/2014 23:09:25] ERROR [flockwithme.app.scheduler.jobexecuter:182] 
+USER: realflockwithme, ERROR: 'NoneType' object has no attribute 'all'
+[29/Aug/2014 00:01:56] ERROR [flockwithme.app.scheduler.jobexecuter:183] 
+USER: realflockwithme, ERROR: 'unicode' object has no attribute 'all'
+[29/Aug/2014 00:11:17] ERROR [flockwithme.app.scheduler.jobexecuter:182] 
+USER: realflockwithme, ERROR: 'unicode' object has no attribute 'items'
+[29/Aug/2014 00:12:07] ERROR [flockwithme.app.scheduler.jobexecuter:182] 
+USER: realflockwithme, ERROR: 'Influencer' object has no attribute 'statuses'
+[29/Aug/2014 00:16:34] ERROR [flockwithme.app.scheduler.jobexecuter:182] 
+USER: realflockwithme, ERROR: 'Influencer' object has no attribute 'statuses'
+[29/Aug/2014 00:16:34] ERROR [flockwithme.app.scheduler.jobexecuter:182] 
+USER: realflockwithme, ERROR: 'Influencer' object has no attribute 'statuses'
+[29/Aug/2014 00:19:00] ERROR [flockwithme.app.scheduler.jobexecuter:186] 
+USER: realflockwithme, ERROR: global name 'jobs' is not defined
+[29/Aug/2014 00:19:00] ERROR [flockwithme.app.scheduler.jobexecuter:186] 
+USER: realflockwithme, ERROR: global name 'jobs' is not defined
+[29/Aug/2014 00:19:11] ERROR [flockwithme.app.scheduler.jobexecuter:186] 
+USER: realflockwithme, ERROR: 'Influencer' object has no attribute 'screen_names'
+[29/Aug/2014 00:19:11] ERROR [flockwithme.app.scheduler.jobexecuter:186] 
+USER: realflockwithme, ERROR: 'Influencer' object has no attribute 'screen_names'
+[29/Aug/2014 00:22:22] ERROR [flockwithme.app.scheduler.jobexecuter:185] 
+USER: realflockwithme, ERROR: list index out of range
+[29/Aug/2014 00:22:22] ERROR [flockwithme.app.scheduler.jobexecuter:185] 
+USER: realflockwithme, ERROR: list index out of range
+[29/Aug/2014 19:21:16] ERROR [flockwithme.app.scheduler.jobexecuter:187] 
+USER: realflockwithme, ERROR: 'User' object has no attribute '__getitem__'
+[29/Aug/2014 19:21:17] ERROR [flockwithme.app.scheduler.jobexecuter:187] 
+USER: realflockwithme, ERROR: 'User' object has no attribute '__getitem__'
+[29/Aug/2014 19:25:40] ERROR [flockwithme.app.scheduler.jobexecuter:187] 
+USER: realflockwithme, ERROR: 'JobExecuter' object has no attribute 'Cursor'
+[29/Aug/2014 19:25:40] ERROR [flockwithme.app.scheduler.jobexecuter:187] 
+USER: realflockwithme, ERROR: 'JobExecuter' object has no attribute 'Cursor'
+[29/Aug/2014 19:26:22] ERROR [flockwithme.app.scheduler.jobexecuter:187] 
+USER: realflockwithme, ERROR: 'JobExecuter' object has no attribute 'tweepy'
+[29/Aug/2014 19:26:22] ERROR [flockwithme.app.scheduler.jobexecuter:187] 
+USER: realflockwithme, ERROR: 'JobExecuter' object has no attribute 'tweepy'
+[29/Aug/2014 19:28:47] ERROR [flockwithme.app.scheduler.jobexecuter:187] 
+USER: realflockwithme, ERROR: This method does not perform pagination
+[29/Aug/2014 19:28:47] ERROR [flockwithme.app.scheduler.jobexecuter:187] 
+USER: realflockwithme, ERROR: This method does not perform pagination
+[29/Aug/2014 19:32:33] ERROR [flockwithme.app.scheduler.jobexecuter:187] 
+USER: realflockwithme, ERROR: global name 'api' is not defined
+[29/Aug/2014 19:32:33] ERROR [flockwithme.app.scheduler.jobexecuter:187] 
+USER: realflockwithme, ERROR: global name 'api' is not defined
+[29/Aug/2014 19:41:30] ERROR [flockwithme.app.scheduler.jobexecuter:188] 
+USER: realflockwithme, ERROR: global name 'api' is not defined
+[29/Aug/2014 19:41:30] ERROR [flockwithme.app.scheduler.jobexecuter:188] 
+USER: realflockwithme, ERROR: global name 'api' is not defined
+[29/Aug/2014 19:41:59] ERROR [flockwithme.app.scheduler.jobexecuter:188] 
+USER: realflockwithme, ERROR: This method does not perform pagination
+[29/Aug/2014 19:41:59] ERROR [flockwithme.app.scheduler.jobexecuter:188] 
+USER: realflockwithme, ERROR: This method does not perform pagination
+[29/Aug/2014 19:42:21] ERROR [flockwithme.app.scheduler.jobexecuter:188] 
+USER: realflockwithme, ERROR: 'list' object has no attribute 'items'
+[29/Aug/2014 19:42:21] ERROR [flockwithme.app.scheduler.jobexecuter:188] 
+USER: realflockwithme, ERROR: 'list' object has no attribute 'items'
+[29/Aug/2014 19:42:48] ERROR [flockwithme.app.scheduler.jobexecuter:188] 
+USER: realflockwithme, ERROR: This method does not perform pagination
+[29/Aug/2014 19:42:49] ERROR [flockwithme.app.scheduler.jobexecuter:188] 
+USER: realflockwithme, ERROR: This method does not perform pagination
+[29/Aug/2014 19:43:51] ERROR [flockwithme.app.scheduler.jobexecuter:188] 
+USER: realflockwithme, ERROR: 'list' object has no attribute 'items'
+[29/Aug/2014 19:43:51] ERROR [flockwithme.app.scheduler.jobexecuter:188] 
+USER: realflockwithme, ERROR: 'list' object has no attribute 'items'
+[29/Aug/2014 20:17:00] ERROR [flockwithme.app.scheduler.jobexecuter:204] 
+USER: Jkol36, ERROR: 'SocialProfile' object has no attribute 'influencer'
+[29/Aug/2014 20:33:38] ERROR [flockwithme.app.scheduler.jobexecuter:203] 
+USER: Jkol36, ERROR: 'Influencer' object has no attribute 'add'
+[29/Aug/2014 20:34:17] ERROR [flockwithme.app.scheduler.jobexecuter:203] 
+USER: Jkol36, ERROR: 'Influencer' object has no attribute 'get_or_create'
+[29/Aug/2014 20:34:59] ERROR [flockwithme.app.scheduler.jobexecuter:203] 
+USER: Jkol36, ERROR: Manager isn't accessible via Influencer instances
+[29/Aug/2014 20:35:44] ERROR [flockwithme.app.scheduler.jobexecuter:203] 
+USER: Jkol36, ERROR: 'JobExecuter' object has no attribute 'influencer'
