@@ -23,7 +23,7 @@ class JobCreationForm(forms.Form):
 		self.cleaned_data['location'] = self.cleaned_data['location'] or None
 		self.cleaned_data['hashtag'] = self.cleaned_data['hashtag'] or None
 		self.cleaned_data['influencer'] = self.cleaned_data['influencer'] or None
-		self.cleaned_data['lists'] = self.cleaned_data['lists'] or None
+		#self.cleaned_data['lists'] = self.cleaned_data['lists'] or None
 		return self.cleaned_data
 
 
@@ -82,12 +82,14 @@ class JobCreationForm(forms.Form):
 		job.message = self.cleaned_data.get('message')
 		job.hashtag = self.hashtag
 		job.influencer = self.influencer
-		job.list = self.lists
+		#job.list = self.lists
 		job.location = self.location
 		job.radius = self.cleaned_data.get('radius')
 
 		job.save()
 		return job
+
+
 
 
 class HashtagForm(forms.Form):

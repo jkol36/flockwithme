@@ -1,0 +1,46 @@
+extends base
+
+- load staticfiles
+
+- block title
+| My Influencers
+- endblock
+
+- block include
+link(rel='stylesheet', href="{% static 'select2/select2.css' %}")
+script(type='text/javascript', src="{% static 'select2/select2.js' %}")
+script(type="text/javascript", src="//maps.google.com/maps/api/js?sensor=true")
+script.
+	$(function() {
+		var fisk = '{{ influencers|safe }}';
+		console.log(fisk);
+		$('#influencer-input').select2({
+			tags: {{ all_influencers|safe }},
+			tokenSeparators: [",", " "],
+		});
+	});
+- endblock
+
+- block content
+.container-fluid
+	.row
+		.col-md-12
+			.panel.panel-default.content.text-center
+				.panel-body(style="min-height: 300px;")
+					p.text-muted.content-header.lead
+						i.fa.fa-twitter
+						| Your Influencers
+					hr.divider
+					p.text-muted Seperate influencers with a comma
+					form#influencer-form(method='POST', action="{% url 'my_influencers' %}")
+						- csrf_token
+						.form-group
+							input#influencer-input(type="hidden" name='influencers', value='{{ influencers|safe }}', style="width: 100%")
+						.form-group
+							button.btn.btn-info.btn-lg.form-submit(type='submit')
+								i.fa.fa-location-arrow.fa-fw
+								| Save Influencers
+		
+
+
+- endblock

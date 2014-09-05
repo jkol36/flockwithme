@@ -16,3 +16,7 @@ def index(request):
 		'potential_customers': potential_customers,
 		'money_saved': money_saved
 		})
+@login_required
+
+def help(request):
+	return render(request, 'help.jade')

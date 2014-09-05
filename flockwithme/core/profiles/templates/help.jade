@@ -1,0 +1,95 @@
+extends base
+
+- load staticfiles
+
+- block title
+| Having Trouble, {{user.get_full_name}} ?
+- endblock
+
+- block include
+link(rel='stylesheet', href="{% static 'select2/select2.css' %}")
+script(type='text/javascript', src="{% static 'select2/select2.js' %}")
+script(type="text/javascript", src="//maps.google.com/maps/api/js?sensor=true")
+script.
+	$(function() {
+		var fisk = '{{ influencers|safe }}';
+		console.log(fisk);
+		$('#influencer-input').select2({
+			tags: {{ all_influencers|safe }},
+			tokenSeparators: [",", " "],
+		});
+	});
+- endblock
+
+- block content
+.container-fluid
+	.row
+		.col-md-6
+			.panel.panel-default.content.text-center
+				.panel-body(style ="min-height: 382px;")
+					p.text-muted.content-header.lead FAQ
+					.panel-group#accordion
+						.panel.panel-default
+							.panel-heading
+								h4.panel-title 
+									a(href="#collapseOne", data-toggle="collapse", data-parent="#accordion") Does Flockwith.me support Instagram?
+
+							#collapseOne.panel-collapse.collapse.out
+								.panel-body No. Flockwith.me does not currently support instagram, but that is something we may add in the future if there's enough demand for it. 
+
+					.panel-group#accordion
+						.panel.panel-default
+							.panel-heading
+								h4.panel-title 
+									a(href="#collapseTwo", data-toggle="collapse", data-parent="#accordion") Will Flockwith.me get me banned?
+
+							#collapseTwo.panel-collapse.collapse.out
+								.panel-body We can't 100% guarantee anything, but probably not. We've spent a lot of time experimenting with Twitter's API and we've taken the neccessary precautions to insure Twitter does not pick up on any automation. 
+
+					.panel-group#accordion
+						.panel.panel-default
+							.panel-heading
+								h4.panel-title 
+									a(href="#collapseThree", data-toggle="collapse", data-parent="#accordion") How many people does flock follow?
+
+							#collapseThree.panel-collapse.collapse.out
+								.panel-body We spent a lot of time polishing up our algorithm to ensure none of our users get banned. The amount of people you can follow is determined by your following to follower ratio. If you'd like to insure that you are reaching as many people as possible, we recommend that you upgrade your account to premium. You can do so through paypal. Our paypal email is <strong> flockwme@gmail.com. </strong> 
+
+
+
+
+   
+
+									
+
+
+
+							
+
+
+						
+						
+
+
+		.col-md-6
+			.panel.panel-default.content.text-center
+				.panel-body(style = "min-height: 300px; margin-left:auto; margin-right:auto;")
+					p.text-muted.content-header.lead
+						| Contact Us
+					.col-lg-8(style="display: block; margin-right: auto; margin-left: auto; text-align: center;")
+						form#ContactForm(role="form", method="POST", action="{% url 'help' %}")
+							- csrf_token
+							.form-group
+								label(for="name") name
+								input(type="text", class="form-control", id="name",  name = "name", placeholder="enter full name" )
+							.form-group
+								label(for="email") email
+								input(type="email", class="form-control", id="email", placeholder="what's your email address?")
+							.form-group
+								label(for="message") Your message
+								textarea.form-control(rows="3", id="message", placeholder="Write your feedback here.")
+							button.btn.btn-primary#ContactUs(type="submit") Submit
+								
+		
+
+- endblock

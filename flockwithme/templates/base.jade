@@ -5,6 +5,7 @@ html(lang="en")
 head
 	link(rel='stylesheet', href='//netdna.bootstrapcdn.com/bootswatch/3.1.1/united/bootstrap.min.css')
 	link(rel='stylesheet', href='//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css')
+	link(href='http://fonts.googleapis.com/css?family=Josefin+Slab', rel='stylesheet', type='text/css')
 	link(rel='stylesheet', href="{% static 'css/dashboard.css' %}")
 	meta(name='viewport', content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0')
 	script(type='text/javascript', src='http://code.jquery.com/jquery-1.11.0.min.js')
@@ -89,7 +90,7 @@ body
 						a(href="{% url 'my_influencers' %}")
 							i.fa.fa-twitter
 							strong &nbsp; MY INFLUENCERS
-					
+
 					li
 						a(href="{% url 'my_locations' %}")
 							i.fa.fa-location-arrow.fa-fw
@@ -103,10 +104,11 @@ body
 							strong &nbsp; MY JOBS
 
 					
-					li
-						a(href='#')
-							i.fa.fa-life-ring.fa-fw
+					li 
+						a(href="{% url 'help' %}")
+							i.fa.fa-child.fa-fw
 							strong &nbsp; HELP
+
 					li
 						a(href="{% url 'logout' %}")
 							i.fa.fa-sign-out.fa-fw

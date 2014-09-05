@@ -54,9 +54,14 @@ class SocialProfileCreationForm(forms.ModelForm):
 		return True
 
 
+
 	def save(self, *args, **kwargs):
 		kwargs['commit'] = False
 		socialprofile = super(SocialProfileCreationForm, self).save(*args, **kwargs)
 		socialprofile.profile = self.profile
 		socialprofile.save()
 		return socialprofile
+
+
+class ContactForm(forms.ModelForm):
+	pass

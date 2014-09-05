@@ -1,6 +1,9 @@
 from django.shortcuts import render, redirect
+from django.views.generic.edit import FormView
+from .forms import ContactForm
 from django.contrib.auth import logout
 from django.core.urlresolvers import reverse
+
 from flockwithme.app.scheduler.models import Hashtag, Location, Influencer #Lists
 from flockwithme.app.scheduler.forms import HashtagForm, LocationForm, InfluencerForm #follow_members_of_list_form
 from django.contrib import messages
@@ -8,6 +11,32 @@ import json
 
 def my_accounts(request):
 	return render(request, 'my_accounts.jade')
+
+def help(request):
+	return render(request, 'help.jade')
+
+class ContactFormView(FormView):
+    form_class = ContactForm
+
+    def form_valid(self, form):
+        form.save()
+        return super(ContactFormView, self).form_valid(form)
+
+    def get_form_kwargs(self):
+        # ContactForm instances require instantiation with an
+        # HttpRequest.
+        kwargs = super(ContactFormView, self).get_form_kwargs()
+        kwargs.update({'request': self.request})
+        return kwargs
+
+    def get_success_url(self):
+        # This is in a method instead of the success_url attribute
+        # because doing it as an attribute would involve a
+        # module-level call to reverse(), creating a circular
+        # dependency between the URLConf (which imports this module)
+        # and this module (which would need to access the URLConf to
+        # make the reverse() call).
+        return reverse('contact_form_sent')
 
 def my_hashtags(request):
 	if request.POST:
@@ -65,6 +94,7 @@ def my_lists(request):
 		'all_lists': json.dumps([x.name for x in Lists.objects.filter(profiles__isnull = False)])
 		})
 '''
+
 def logout_view(request):
 	logout(request)
 	return redirect(reverse('landingpage'))

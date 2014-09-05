@@ -112,12 +112,12 @@ class JobExecuter(Thread):
 			num_followed = 0
 			try:
 				for follower in followers:
-						twitterUser, _ = TwitterUser.objects.get_or_create(twitter_id=follower)
-						self.api.create_friendship(follower)
-						self.account.add_friend(twitterUser)
-						print 'successfully followed %d' % (follower)
-						num_followed +=1 
-						self.sleep_action()
+					twitterUser, _ = TwitterUser.objects.get_or_create(twitter_id=follower)
+					self.api.create_friendship(follower)
+					self.account.add_friend(twitterUser)
+					print 'successfully followed %d' % (follower)
+					num_followed +=1 
+					self.sleep_action()
 				print "followed %d" % num_followed
 			except Exception, e:
 				print e 

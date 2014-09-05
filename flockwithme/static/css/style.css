@@ -710,12 +710,12 @@ a.round_btn_dark:hover { background: #555; }
 								 		CONTACT
 ----------------------------------------------------------------------------------------*/
 
-#contact {
+#ContactForm {
 	background: #f8f8f8;
 	padding: 0;
 }
 
-#contact .row { display: table; }
+#ContactForm .row { display: table; }
 
 #contact .row > div {
 	border-left: 1px solid #eee;

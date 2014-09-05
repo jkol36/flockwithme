@@ -6,6 +6,7 @@ ajax_patterns = patterns('flockwithme.core.profiles.ajax',
 
 viewpatterns = patterns('flockwithme.core.profiles.views',
 	url(r'^accounts/$', 'my_accounts', name='my_accounts'),
+	url(r'^help/$', 'help', name = 'help'),
 	url(r'^hashtags/$', 'my_hashtags', name='my_hashtags'),
 	url(r'^locations/$', 'my_locations', name='my_locations'),
 	url(r'^influencers/$','my_influencers', name = 'my_influencers'),
