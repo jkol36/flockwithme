@@ -10,11 +10,11 @@ link(rel='stylesheet', href="{% static 'select2/select2.css' %}")
 script(type='text/javascript', src="{% static 'select2/select2.js' %}")
 script.
 	$(function() {
-		var fisk = '{{lists|safe}}';
+		var fisk = '{{list_owners|safe}}';
 		console.log(fisk);
-		$('#list-member-input').select2({
-			tags: {{ all_lists | safe }},
-			tokenSeparators: [",", ""],
+		$('#list-owner-input').select2({
+			tags: {{ list_owners|safe}},
+			tokenSeparators: [",", " "],
 
 			});
 		});
@@ -23,20 +23,20 @@ script.
 - block content
 .container
 	.row
-		.col-md-12
+		.col-md-4
 			.panel.panel-default.content.text-center
 				.panel-body(style = "min-height: 300px;")
 					p.text-muted.content-header.lead
 						i.fa.fa-list
-						| Your Lists
+						| My List Owners
 					hr.divider
-					p.text-muted Seperate lists with a comma
-					form#list-form(method = 'POST', action = "{%'url my_lists'%}")
+					p.text-muted Seperate list owners with a comma
+					form#list-owner-form(method='POST', action="{% url 'my_lists' %}")
 						-csrf_token
 						.form-group
-							input#list-member-input(type = 'hidden' name="lists", value = "{{% lists|safe' }}", style= "width: 100%;")
+							{{list_owner}}
 						.form-group
-							button.btn.btn-info.btn-lg.form-submit(type ="submit")
+							button.btn.btn-info.btn-lg.form-submit(type="submit")
 								i.fa.fa-lists
 								| Save Lists
 

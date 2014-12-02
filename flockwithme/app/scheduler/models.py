@@ -77,18 +77,43 @@ class Influencer(models.Model):
 
 	def __unicode__(self):
 		return unicode(self.screen_name)
-'''
+
 class Lists(models.Model):
 	name = models.CharField(max_length = 100, blank = True, null = True, unique = True)
-	profiles = models.ManyToManyField(Profile, related_name = "lists", blank = True, null = True)
-	members = models.PositiveIntegerField(blank = True, null = True)
+	profile = models.ForeignKey(Profile, related_name = "lists", blank = True, null = True)
+	number_of_members = models.PositiveIntegerField(blank = True, null = True)
 	created_at = models.DateTimeField(auto_now_add = True)
 
 
 	def __unicode__(self):
-		return unicode(self.name)
-'''
+		return self.name
 
+	def get_profile(self):
+		return self.profile.username
+
+	def get_number_of_members(self):
+		return int(self.number_of_members)
+
+class List_member(models.Model):
+	twitter_user_instance = models.ForeignKey(TwitterUser)
+	list_instance = models.ForeignKey(Lists)
+
+	def get_list_member_screenname(self):
+		return self.twitter_user_instance.screen_name
+
+	def get_list_member_id(self):
+		return self.twitter_user_instance.twitter_id
+
+	def get_list_memberships(self):
+		return self.list_instance.name
+
+class List_owner(models.Model):
+	profile = models.ForeignKey(Profile, related_name= "list_owner_profiles", default=None)
+	twitter_user_instance = models.ForeignKey(TwitterUser)
+	list_instance = models.ForeignKey(Lists)
+
+	def __unicode__(self):
+		return self.twitter_user_instance.screen_name
 
 class Job(models.Model):
 	ACTION_CHOICES = (
@@ -101,6 +126,7 @@ class Job(models.Model):
 		("FOLLOW_INFLUENCER", "Follow people who follow certain accounts."),
 		("FOLLOW_MEMBERS_OF_LIST", "Follow the members of a specific list"),
 		("TRACK_FOLLOWERS", "Track followers"),
+		("GET_FOLLOWERS", 'get_followers'),
 		)
 	socialprofile = models.ForeignKey(SocialProfile, related_name='jobs')
 	action = models.CharField(max_length=20, choices=ACTION_CHOICES, blank=True, null=True)
@@ -110,7 +136,7 @@ class Job(models.Model):
 	radius = models.PositiveIntegerField(blank=True, null=True)
 	number = models.PositiveIntegerField(blank=True, null=True)
 	influencer = models.ForeignKey(Influencer, related_name = 'influencers', blank = True, null = True)
-	#lists = models.ForeignKey(Lists, related_name = 'follow_members_of_list', blank = True, null = True)
+	lists = models.ForeignKey(Lists, related_name = 'follow_members_of_list', blank = True, null = True)
 
 
 	def __unicode__(self):

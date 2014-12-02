@@ -1,6 +1,5 @@
-Django==1.6.4
+Django==1.7
 Markdown==2.4.1
-South==0.8.4
 coverage==3.7.1
 -e git://github.com/yceruto/django-ajax@36d45bc0f4380feb69b213241fc6ff74a6d05161#egg=django_ajax-2.2.8
 django-filter==0.7

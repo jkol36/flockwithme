@@ -1,5 +1,5 @@
 from django import forms
-from .models import Hashtag, Location, Job, Influencer #Lists
+from .models import Hashtag, Location, Job, Influencer, Lists, List_owner, TwitterUser
 from geopy import GoogleV3
 from flockwithme.core.profiles.models import SocialProfile, Profile
 
@@ -138,13 +138,13 @@ class InfluencerForm(forms.Form):
 				self.profile.influencers.remove(influencer)
 		self.profile.save()
 
-'''
-class follow_members_of_list_form(forms.Form):
+
+class listForm(forms.Form):
 	lists = forms.CharField(required = False)
 
 	def __init__(self, profile, *args, **kwargs):
 		self.profile = profile
-		return super(follow_members_of_list_form, self).__init__(*args, **kwargs)
+		return super(list_form, self).__init__(*args, **kwargs)
 
 	def save(self, *args, **kwargs):
 		my_lists = [h.name for h in self.profile.lists.all()]
@@ -161,7 +161,7 @@ class follow_members_of_list_form(forms.Form):
 				list_, _ = Lists.objects.get_or_create(name = name.lstrip('').lower())
 				self.profile.lists.remove(list_)
 		self.profile.save()
-'''		
+		
 
 
 
@@ -170,8 +170,8 @@ class LocationForm(forms.Form):
 	locations = forms.CharField(required=False)
 
 	def __init__(self, profile, *args, **kwargs):
-		self.profile = profile
-		return super(LocationForm, self).__init__(*args, **kwargs)
+		 profile = self.profile
+		 return super(LocationForm, self).__init__(*args, **kwargs)
 
 	def save(self, *args, **kwargs):
 		my_locations = [l.name for l in self.profile.locations.all()]
@@ -195,6 +195,31 @@ class LocationForm(forms.Form):
 				loc, _ = Location.objects.get_or_create(name=name.lower())
 				self.profile.locations.remove(loc)
 		self.profile.save()
+
+class addListOwnerForm(forms.Form):
+	list_owner = forms.CharField(required=False)
+
+	def __init__(self, *args, **kwargs):
+		return super(addListOwnerForm, self).__init__(*args, **kwargs)
+	def save(self, *args, **kwargs):
+		my_list_owners = [l.twitter_user_instance for l in self.list_owners.all()]
+		cleaned_owner = self.cleaned_data['list_owner']
+		should_add = [x for x in cleaned_owner if x not in my_list_owners]
+		should_delete = [x for x in my_list_owners if x not in cleaned_owner]
+
+		for i in should_add:
+			if i:
+				twitter_user, created = TwitterUser.objects.get_or_create(screen_name = i)
+				if created:
+					twitter_user.save()
+				#get_twitter_instance
+				twitter_instance = TwitterUser.objects.get(screen_name = i)
+				#create a new list owner using that twitter_instance
+				new_list_owner, created = List_owner.objects.get_or_create(twitter_user_instance = twitter_instance, profile=profile)
+				if created:
+					new_list_owner.save()
+				self.profile.save()
+
 
 
 		

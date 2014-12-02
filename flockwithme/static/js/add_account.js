@@ -1,5 +1,5 @@
 $(function() {
-    OAuth.initialize('4zofYmuzWczQY0QGZ8Ix4M-UEHM');
+    OAuth.initialize('AJNxVaMg67eYFkejUcYJRHcudTA');
 
     $('#associate-button').click(function() {
         OAuth.popup('twitter', function(err, result) {

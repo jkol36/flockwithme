@@ -141,6 +141,44 @@ script.
 											button.btn.btn-info.btn-lg.form-submit(type="submit")
 												i.fa.fa-twitter.fa-fw
 												| Follow Influencer
+					.panel-group#accordion
+						.panel.panel-default
+							.panel-heading
+								h4.panel-title
+									a(data-toggle="collapse", href="#collapseMOL", data-parent="#accordion") Follow members of a twitter list
+							.panel-collapse.collapse.out#collapseMOL
+								.panel-body
+
+									form(action="{% url 'auto_follow' %}", method="POST")
+										- csrf_token
+										input(type="hidden", name="action", value="FOLLOW_INFLUENCER")
+										input(type='hidden', name='profile', value='{{ user.pk }}')
+										.form-group
+											p.text-muted 
+												| Select a list. Add more in  
+												a(href="{% url 'my_lists' %}") my lists.
+											.input-group
+												span.input-group-addon
+													i.fa.fa-twitter
+												select.form-control(name='influencer')
+													for influencer in user.influencers.all
+														option(value="{{ influencer.pk }}") {{ influencer.screen_name }}
+										
+										.form-group
+											p.text-muted
+												| Select the account that should follow the users. Add more in 
+												a(href="{% url 'my_accounts' %}") my accounts.
+											.input-group
+												span.input-group-addon
+													i.fa.fa-user.fa-fw
+												select.form-control(name='socialProfile')
+													for account in user.accounts.all
+														option(value="{{ account.pk }}") {{ account.handle}}
+										p.text-center
+											button.btn.btn-info.btn-lg.form-submit(type="submit")
+												i.fa.fa-twitter.fa-fw
+												| Go
+							
 
 
 		.col-md-6

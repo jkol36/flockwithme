@@ -4,8 +4,8 @@ from .forms import ContactForm
 from django.contrib.auth import logout
 from django.core.urlresolvers import reverse
 
-from flockwithme.app.scheduler.models import Hashtag, Location, Influencer #Lists
-from flockwithme.app.scheduler.forms import HashtagForm, LocationForm, InfluencerForm #follow_members_of_list_form
+from flockwithme.app.scheduler.models import Hashtag, Location, Influencer, Lists, List_owner
+from flockwithme.app.scheduler.forms import HashtagForm, LocationForm, InfluencerForm, addListOwnerForm
 from django.contrib import messages
 import json
 
@@ -79,21 +79,21 @@ def my_influencers(request):
 	return render(request, 'influencers.jade', { 'influencers': ','.join([x.screen_name for x in request.user.influencers.all()]),
 		'all_influencers': json.dumps([x.screen_name for x in Influencer.objects.filter(profiles__isnull=False)])
 		})
-'''
+
 def my_lists(request):
+	owners = request.user.list_owner_profiles.all()
+
 	if request.POST:
-		form = follow_members_of_list_form(request.user, request.POST)
+		if "list_owner" in request.POST:
+			print request.POST
+		form = addListOwnerForm(request.user, request.POST)
 		if form_is_valid():
 			form.save()
 			messages.success(request, "lists updated")
 		else:
 			messages.error(request, "Uh Oh, Something went wrong on our end. Feel free to bug Jon. :D")
 			print form.errors
-	return render(request, 'my_lists.jade', {
-		'lists': ','.join([x.name for x in request.user.lists.all()]),
-		'all_lists': json.dumps([x.name for x in Lists.objects.filter(profiles__isnull = False)])
-		})
-'''
+	return render(request, 'my_lists.jade', {'list_owner':addListOwnerForm()})
 
 def logout_view(request):
 	logout(request)

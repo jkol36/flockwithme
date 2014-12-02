@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.http import HttpResponse
 from django.contrib import auth
 from django.core.urlresolvers import reverse
 from flockwithme.core.profiles.forms import ProfileCreationForm
@@ -7,8 +8,6 @@ def index(request):
 	if request.user.is_authenticated():
 		return redirect(reverse('dashboard'))
 	if request.POST:
-		if request.POST.get('betakey') != 'letsflock':
-			return render(request, 'landing.jade')
 		form = ProfileCreationForm(request.POST)
 		if form.is_valid():
 			profile = form.save()
@@ -16,8 +15,10 @@ def index(request):
 			if user:
 				auth.login(request, user)
 				return redirect(reverse('dashboard'))
+			else:
+				return HttpResponse("A user with that username and password does not exist:(")
 		else:
-			pass
+			return HttpResponse("password's don't match")
 	return render(request, 'landing.jade')
 
 def login(request):

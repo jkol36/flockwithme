@@ -38,8 +38,6 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'south',
-
     'flockwithme.core',
     'flockwithme.core.profiles',
     'flockwithme.core.dashboard',
@@ -143,9 +141,8 @@ STATICFILES_DIRS = (
 
 AUTH_USER_MODEL = 'profiles.Profile'
 SOCIAL_AUTH_USER_MODEL = 'profiles.Profile'
-# SOCIAL_AUTH_STORAGE = 'social.apps.django_app.me.models.DjangoStorage'
-
-# SOCIAL_AUTH_USER_MODEL = 'mongoengine.django.auth.User'
+SOCIAL_AUTH_STORAGE = 'social.apps.django_app.me.models.DjangoStorage'
+SOCIAL_AUTH_USER_MODEL = 'mongoengine.django.auth.User'
 
 
 TWITTER_KEY = 'G3uP1GqVicL1l76NyoLvXYA8p'

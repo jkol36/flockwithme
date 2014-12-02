@@ -10,7 +10,7 @@ viewpatterns = patterns('flockwithme.core.profiles.views',
 	url(r'^hashtags/$', 'my_hashtags', name='my_hashtags'),
 	url(r'^locations/$', 'my_locations', name='my_locations'),
 	url(r'^influencers/$','my_influencers', name = 'my_influencers'),
-	#url(r'^lists/$', 'my_lists', name = 'my_lists'),
+	url(r'^lists/$', 'my_lists', name = 'my_lists'),
 	url(r'^logout/$', 'logout_view', name='logout'),
 )
 
