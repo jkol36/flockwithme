@@ -145,8 +145,8 @@ SOCIAL_AUTH_STORAGE = 'social.apps.django_app.me.models.DjangoStorage'
 SOCIAL_AUTH_USER_MODEL = 'mongoengine.django.auth.User'
 
 
-TWITTER_KEY = 'G3uP1GqVicL1l76NyoLvXYA8p'
-TWITTER_SECRET = 'lPbzRLGrJycomcQs0V1EJ9o8NhvwwB3kn961RadKTxb7uwS8mZ'
+TWITTER_KEY = '3Gsg8IIX95Wxq28pDEkA'
+TWITTER_SECRET = 'LjEPM4kQAC0XE81bgktdHAaND3am9tTllXghn0B639o'
 
 
 LOGGING = {

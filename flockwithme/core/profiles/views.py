@@ -3,10 +3,11 @@ from django.views.generic.edit import FormView
 from .forms import ContactForm
 from django.contrib.auth import logout
 from django.core.urlresolvers import reverse
-
 from flockwithme.app.scheduler.models import Hashtag, Location, Influencer, TwitterList
 from flockwithme.app.scheduler.forms import HashtagForm, LocationForm, InfluencerForm, TwitterListOwnerForm
 from django.contrib import messages
+import tweepy
+from django.conf import settings
 import json
 
 def my_accounts(request):
@@ -86,9 +87,21 @@ def my_lists(request):
 	account = request.user.accounts.get(pk=pk)
 	token = account.token
 	secret = account.secret
+	print secret
+	print token
 	if request.POST:
-		print request.POST
-		form = TwitterListOwnerForm(request.user, request.POST, token, secret)
+		owner = request.POST["TwitterListOwner"].split(',')
+		for i in owner:
+			try:
+				consumer_key, consumer_secret, twitter_key, twitter_secret = token, secret, settings.TWITTER_KEY, settings.TWITTER_SECRET
+				auth = tweepy.OAuthHandler(twitter_key, twitter_secret)
+				auth.set_access_token(token, secret)
+				api = tweepy.API(auth)
+				user = api.get_user(screen_name = i)
+				print user
+			except Exception, e:
+				print e
+		form = TwitterListOwnerForm(request.user, request.POST)
 		if form.is_valid():
 			form.save()
 			messages.success(request, "lists updated")

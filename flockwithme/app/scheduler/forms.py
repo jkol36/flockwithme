@@ -205,9 +205,9 @@ class LocationForm(forms.Form):
 class TwitterListOwnerForm(forms.Form):
 	TwitterListOwner = forms.CharField(required = False)
 
-	def __init__(self, profile, *args, **kwargs):
-		print args
+	def __init__(self, profile, token, secret, *args, **kwargs):
 		self.profile = profile
+		print args
 		return super(TwitterListOwnerForm, self).__init__(*args, **kwargs)
 
 	def save(self, *args, **kwargs):
@@ -221,7 +221,6 @@ class TwitterListOwnerForm(forms.Form):
 		print "Should add %s" %(should_add)
 		for name in should_add:
 			a,b = (settings.TWITTER_KEY, settings.TWITTER_SECRET)
-			print a,b
 			#t_id = JobExecuter(screen_name=name, job= queue=None, account=None, jobs=None)
 			#create object with t_id as the twitter_id
 			
