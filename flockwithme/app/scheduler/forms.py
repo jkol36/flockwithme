@@ -1,7 +1,12 @@
+# -*- coding: utf-8 -*-
 from django import forms
-from .models import Hashtag, Location, Job, Influencer, Lists, List_owner, TwitterUser
+from django.conf import settings
+import tweepy
+from .models import Hashtag, Location, Job, Influencer, TwitterList, TwitterUser
 from geopy import GoogleV3
 from flockwithme.core.profiles.models import SocialProfile, Profile
+import logging
+
 
 class JobCreationForm(forms.Form):
 	action = forms.ChoiceField(required=True, choices=Job.ACTION_CHOICES)
@@ -11,6 +16,7 @@ class JobCreationForm(forms.Form):
 	hashtag = forms.IntegerField(required=False)
 	influencer = forms.IntegerField(required = False)
 	#list_= forms.IntegerField(required = False)
+	twitter_username = forms.CharField(required=False)
 	location = forms.IntegerField(required=False)
 	radius = forms.IntegerField(required=False)
 
@@ -170,7 +176,7 @@ class LocationForm(forms.Form):
 	locations = forms.CharField(required=False)
 
 	def __init__(self, profile, *args, **kwargs):
-		 profile = self.profile
+		 self.profile = profile
 		 return super(LocationForm, self).__init__(*args, **kwargs)
 
 	def save(self, *args, **kwargs):
@@ -196,29 +202,37 @@ class LocationForm(forms.Form):
 				self.profile.locations.remove(loc)
 		self.profile.save()
 
-class addListOwnerForm(forms.Form):
-	list_owner = forms.CharField(required=False)
+class TwitterListOwnerForm(forms.Form):
+	TwitterListOwner = forms.CharField(required = False)
 
-	def __init__(self, *args, **kwargs):
-		return super(addListOwnerForm, self).__init__(*args, **kwargs)
+	def __init__(self, profile, *args, **kwargs):
+		print args
+		self.profile = profile
+		return super(TwitterListOwnerForm, self).__init__(*args, **kwargs)
+
 	def save(self, *args, **kwargs):
-		my_list_owners = [l.twitter_user_instance for l in self.list_owners.all()]
-		cleaned_owner = self.cleaned_data['list_owner']
-		should_add = [x for x in cleaned_owner if x not in my_list_owners]
-		should_delete = [x for x in my_list_owners if x not in cleaned_owner]
+		from jobexecuter import JobExecuter
+		logger = logging.getLogger(__name__)
+		TwitterListOwners = self.cleaned_data['TwitterListOwner'].split(',')
+		should_add = [x for x in TwitterListOwners if x not in TwitterList.objects.filter(pk=self.profile.id)]
+		print should_add
+		should_delete = [x for x in TwitterList.objects.filter(pk=self.profile.id) if x not in TwitterListOwners]
+		print "Should Delete %s" %(should_delete)
+		print "Should add %s" %(should_add)
+		for name in should_add:
+			a,b = (settings.TWITTER_KEY, settings.TWITTER_SECRET)
+			print a,b
+			#t_id = JobExecuter(screen_name=name, job= queue=None, account=None, jobs=None)
+			#create object with t_id as the twitter_id
+			
 
-		for i in should_add:
-			if i:
-				twitter_user, created = TwitterUser.objects.get_or_create(screen_name = i)
-				if created:
-					twitter_user.save()
-				#get_twitter_instance
-				twitter_instance = TwitterUser.objects.get(screen_name = i)
-				#create a new list owner using that twitter_instance
-				new_list_owner, created = List_owner.objects.get_or_create(twitter_user_instance = twitter_instance, profile=profile)
-				if created:
-					new_list_owner.save()
-				self.profile.save()
+			
+
+				
+	
+
+
+	
 
 
 

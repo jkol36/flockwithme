@@ -4,8 +4,8 @@ from .forms import ContactForm
 from django.contrib.auth import logout
 from django.core.urlresolvers import reverse
 
-from flockwithme.app.scheduler.models import Hashtag, Location, Influencer, Lists, List_owner
-from flockwithme.app.scheduler.forms import HashtagForm, LocationForm, InfluencerForm, addListOwnerForm
+from flockwithme.app.scheduler.models import Hashtag, Location, Influencer, TwitterList
+from flockwithme.app.scheduler.forms import HashtagForm, LocationForm, InfluencerForm, TwitterListOwnerForm
 from django.contrib import messages
 import json
 
@@ -81,19 +81,22 @@ def my_influencers(request):
 		})
 
 def my_lists(request):
-	owners = request.user.list_owner_profiles.all()
-
+	accounts = request.user.accounts.all()
+	pk=accounts[0].id
+	account = request.user.accounts.get(pk=pk)
+	token = account.token
+	secret = account.secret
 	if request.POST:
-		if "list_owner" in request.POST:
-			print request.POST
-		form = addListOwnerForm(request.user, request.POST)
-		if form_is_valid():
+		print request.POST
+		form = TwitterListOwnerForm(request.user, request.POST, token, secret)
+		if form.is_valid():
 			form.save()
 			messages.success(request, "lists updated")
 		else:
 			messages.error(request, "Uh Oh, Something went wrong on our end. Feel free to bug Jon. :D")
 			print form.errors
-	return render(request, 'my_lists.jade', {'list_owner':addListOwnerForm()})
+	return render(request, 'my_lists.jade', {'list_owner':','.join([x.owner for x in TwitterList.objects.all()]),
+		'all_list_owners': json.dumps([x.owner for x in TwitterList.objects.all()])})
 
 def logout_view(request):
 	logout(request)

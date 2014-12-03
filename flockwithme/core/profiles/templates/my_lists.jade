@@ -10,14 +10,14 @@ link(rel='stylesheet', href="{% static 'select2/select2.css' %}")
 script(type='text/javascript', src="{% static 'select2/select2.js' %}")
 script.
 	$(function() {
-		var fisk = '{{list_owners|safe}}';
-		console.log(fisk);
 		$('#list-owner-input').select2({
-			tags: {{ list_owners|safe}},
+			tags: [{{list_owner}}],
+			placeholder: "Enter a Twitter handle and we'll fetch his lists.",
+			width:'300',
 			tokenSeparators: [",", " "],
-
 			});
 		});
+
 - endblock
 
 - block content
@@ -34,7 +34,7 @@ script.
 					form#list-owner-form(method='POST', action="{% url 'my_lists' %}")
 						-csrf_token
 						.form-group
-							{{list_owner}}
+							input#list-owner-input(type="hidden", name='TwitterListOwner', value="{{list_owner}}")
 						.form-group
 							button.btn.btn-info.btn-lg.form-submit(type="submit")
 								i.fa.fa-lists

@@ -9,20 +9,23 @@ import logging
 logger = logging.getLogger(__name__)
 
 class JobExecuter(Thread):
-
-
 	def __init__(self, lock=None, *args, **kwargs):
+		self.screen_names = kwargs.pop('screen_name')
 		self.queue = kwargs.pop('queue')
 		self.account = kwargs.pop('account')
 		self.jobs = kwargs.pop('jobs')
 		self.lock = lock
-		try:
-			if self.jobs.filter(action="TRACK_FOLLOWERS").count() == 0:
-				self.sleep_on_start()
-		except tweepy.TweepError as e:
-			logger.error("\nUSER: %s, ERROR: %s" % (self.account.handle, e))
-			self.queue.put(self)
-			return
+		for screen_name in self.screen_names:
+			self.get_twitter_id(screen_name)
+		#try:
+			#if self.jobs.filter(action="TRACK_FOLLOWERS").count() == 0:
+				#self.sleep_on_start()
+			#else:
+				#pass
+		#except tweepy.TweepError as e:
+			#logger.error("\nUSER: %s, ERROR: %s" % (self.account.handle, e))
+			#self.queue.put(self)
+		return
 		super(JobExecuter, self).__init__(*args, **kwargs)
 		self.daemon = True
 		self.api = self.get_api()
@@ -83,7 +86,10 @@ class JobExecuter(Thread):
 				self.sleep_status()
 		
 		self.account.save()
-		
+	def get_twitter_id(self, job, screen_name):
+		twitter_id = self.api.get_user(screen_name=screen_name)
+		print twitter_id
+		return twitter_id
 
 	def auto_favorite(self, job):
 		for status in job.hashtag.statuses.all().exclude(twitter_id__in=[x.twitterStatus.twitter_id for x in self.account.get_favorites()])[0:job.number]:
@@ -194,6 +200,8 @@ class JobExecuter(Thread):
 				action = self.unfollow_back
 			elif job.action =="UNFOLLOW_ALL":
 				action = self.unfollow_all
+			elif job.action == "GET_TWITTER_ID":
+				job.action = self.get_twitter_id
 			try:
 				action(job)
 			except Exception, e:
