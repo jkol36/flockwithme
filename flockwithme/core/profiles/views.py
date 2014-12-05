@@ -3,8 +3,8 @@ from django.views.generic.edit import FormView
 from .forms import ContactForm
 from django.contrib.auth import logout
 from django.core.urlresolvers import reverse
-from flockwithme.app.scheduler.models import Hashtag, Location, Influencer, TwitterList
-from flockwithme.app.scheduler.forms import HashtagForm, LocationForm, InfluencerForm, TwitterListOwnerForm
+from flockwithme.app.scheduler.models import Hashtag, Location, Influencer, TwitterList, TwitterUser
+from flockwithme.app.scheduler.forms import HashtagForm, LocationForm, InfluencerForm
 from django.contrib import messages
 import tweepy
 from django.conf import settings
@@ -40,6 +40,18 @@ class ContactFormView(FormView):
         return reverse('contact_form_sent')
 
 def my_hashtags(request):
+	if request:
+		try:
+			accounts = request.user.accounts.all()
+			pk = accounts[0].id
+			return render(request, 'my_hashtags.jade', {
+				'hashtags': ','.join([x.name for x in request.user.hashtags.all()]),
+				'all_hashtags': json.dumps([x.name for x in Hashtag.objects.all()[:20]])
+				})
+		except Exception, e:
+			messages.error(request, "Please add a Twitter Account First.")
+			return redirect("my_accounts")
+
 	if request.POST:
 		form = HashtagForm(request.user, request.POST)
 		if form.is_valid():
@@ -49,12 +61,20 @@ def my_hashtags(request):
 			messages.error(request, "Something went wrong!")
 			print form.errors
 
-	return render(request, 'my_hashtags.jade', {
-		'hashtags': ','.join([x.name for x in request.user.hashtags.all()]),
-		'all_hashtags': json.dumps([x.name for x in Hashtag.objects.all()[:20]])
-		})
 
 def my_locations(request):
+	if request:
+		try:
+			accounts = request.user.account.all()
+			pk = accounts[0].id
+			return render(request, 'my_locations.jade', {
+				'locations': ','.join([x.name for x in request.user.locations.all()]),
+				'all_locations': json.dumps([x.name for x in Location.objects.filter(profiles__isnull=False)])
+				})
+		except Exception, e:
+			messages.error(request, "Please add a Twitter Account First")
+			return redirect("my_accounts")
+	
 	if request.POST:
 		form = LocationForm(request.user, request.POST)
 		if form.is_valid():
@@ -64,12 +84,18 @@ def my_locations(request):
 			messages.error(request, "Uh Oh. Something went wrong on our end. Feel free to harrass Jon.")
 			print form.errors
 
-	return render(request, 'my_locations.jade', {
-		'locations': ','.join([x.name for x in request.user.locations.all()]),
-		'all_locations': json.dumps([x.name for x in Location.objects.filter(profiles__isnull=False)])
-		})
 
 def my_influencers(request):
+	if request:
+		try:
+			accounts = request.user.accounts.all()
+			pk=accounts[0].id
+		 	return render(request, 'influencers.jade', { 'influencers': ','.join([x.screen_name for x in request.user.influencers.all()]),
+			'all_influencers': json.dumps([x.screen_name for x in Influencer.objects.filter(profiles__isnull=False)])
+			})
+		except Exception, e:
+			messages.error(request, "Please add a Twitter Account First.")
+			return redirect("my_accounts")
 	if request.POST:
 		form = InfluencerForm(request.user, request.POST)
 		if form.is_valid():
@@ -77,18 +103,20 @@ def my_influencers(request):
 			messages.success(request, "Influencers updated")
 		else:
 			messages.error(request, "Uh oh, something went wrong on our end. Feel free to harrass Jon.")
-	return render(request, 'influencers.jade', { 'influencers': ','.join([x.screen_name for x in request.user.influencers.all()]),
-		'all_influencers': json.dumps([x.screen_name for x in Influencer.objects.filter(profiles__isnull=False)])
-		})
+	
 
 def my_lists(request):
-	accounts = request.user.accounts.all()
-	pk=accounts[0].id
-	account = request.user.accounts.get(pk=pk)
-	token = account.token
-	secret = account.secret
-	print secret
-	print token
+	if request:
+		try:
+			accounts = request.user.accounts.all()
+			pk=accounts[0].id
+			account = request.user.accounts.get(pk=pk)
+			token = account.token
+			secret = account.secret
+		except Exception, e:
+			messages.error(request, "Please add a twitter account first.")
+			return redirect("my_accounts")
+		
 	if request.POST:
 		owner = request.POST["TwitterListOwner"].split(',')
 		for i in owner:
@@ -97,19 +125,21 @@ def my_lists(request):
 				auth = tweepy.OAuthHandler(twitter_key, twitter_secret)
 				auth.set_access_token(token, secret)
 				api = tweepy.API(auth)
-				user = api.get_user(screen_name = i)
-				print user
+				Twitter_User_Id = api.get_user(screen_name = i).id
+				Twitter_user, created = TwitterUser.objects.get_or_create(screen_name = i, twitter_id = Twitter_User_Id)
+				Twitter_List, created = TwitterList.objects.get_or_create(profile=request.user, name="TBD", owner=Twitter_user)
+				print Twitter_List
 			except Exception, e:
 				print e
-		form = TwitterListOwnerForm(request.user, request.POST)
-		if form.is_valid():
-			form.save()
-			messages.success(request, "lists updated")
-		else:
-			messages.error(request, "Uh Oh, Something went wrong on our end. Feel free to bug Jon. :D")
-			print form.errors
-	return render(request, 'my_lists.jade', {'list_owner':','.join([x.owner for x in TwitterList.objects.all()]),
-		'all_list_owners': json.dumps([x.owner for x in TwitterList.objects.all()])})
+		#form = TwitterListOwnerForm(request.user, request.POST)
+		#if form.is_valid():
+			#form.save()
+			#messages.success(request, "lists updated")
+		#else:
+			#messages.error(request, "Uh Oh, Something went wrong on our end. Feel free to bug Jon. :D")
+			#print form.errors
+	return render(request, 'my_lists.jade', {'list_owner':','.join([str(x.owner) for x in TwitterList.objects.filter(profile=request.user)]),
+		'all_list_owners': json.dumps([x.name for x in TwitterList.objects.all()])})
 
 def logout_view(request):
 	logout(request)

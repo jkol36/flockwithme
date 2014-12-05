@@ -79,7 +79,7 @@ class Influencer(models.Model):
 		return unicode(self.screen_name)
 
 class TwitterList(models.Model):
-	name = models.CharField(max_length = 100, blank = True, null = True, unique = True)
+	name = models.CharField(max_length = 100, blank = True, null = True)
 	profile = models.ForeignKey(Profile, related_name = "profile_lists", blank = True, null = True)
 	owner = models.ForeignKey(TwitterUser, related_name = "Twitter_List_Owner", default = None)
 	subscribers = models.ManyToManyField(TwitterUser, related_name = "List_Subscribers", default = None)

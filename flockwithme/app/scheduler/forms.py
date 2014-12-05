@@ -202,27 +202,7 @@ class LocationForm(forms.Form):
 				self.profile.locations.remove(loc)
 		self.profile.save()
 
-class TwitterListOwnerForm(forms.Form):
-	TwitterListOwner = forms.CharField(required = False)
 
-	def __init__(self, profile, token, secret, *args, **kwargs):
-		self.profile = profile
-		print args
-		return super(TwitterListOwnerForm, self).__init__(*args, **kwargs)
-
-	def save(self, *args, **kwargs):
-		from jobexecuter import JobExecuter
-		logger = logging.getLogger(__name__)
-		TwitterListOwners = self.cleaned_data['TwitterListOwner'].split(',')
-		should_add = [x for x in TwitterListOwners if x not in TwitterList.objects.filter(pk=self.profile.id)]
-		print should_add
-		should_delete = [x for x in TwitterList.objects.filter(pk=self.profile.id) if x not in TwitterListOwners]
-		print "Should Delete %s" %(should_delete)
-		print "Should add %s" %(should_add)
-		for name in should_add:
-			a,b = (settings.TWITTER_KEY, settings.TWITTER_SECRET)
-			#t_id = JobExecuter(screen_name=name, job= queue=None, account=None, jobs=None)
-			#create object with t_id as the twitter_id
 			
 
 			

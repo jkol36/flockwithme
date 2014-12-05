@@ -85,7 +85,30 @@ extends base
 									| {{ user.accounts.all.count }}
 								.details(style='font-size: 1.2em; color: white;')
 									| Accounts
-		
+		.col-md-4
+			a(href="{% url 'my_lists' %}")
+				.well(style="background-color: #e35b5a; padding: 0 0 0 0;")
+					.row
+						.col-md-5
+							.visual
+								i.fa.fa-users.fa-fw(style="font-size: 8em; opacity: 0.3; color:white;")
+						.col-md-7.text-right
+							.number(style="font-size: 3.4em; color:white; font-weight:300;")
+								| {{user.twitter_lists.all.count}}
+							.details(style="font-size:1.2em; color:white;")
+								| Twitter Lists
+		.col-md-4
+			a(href="{% url 'my_influencers' %}")
+				.well(style="background-color: #e35b5a; padding: 0 0 0 0;")
+					.row
+						.col-md-5
+							.visual
+								i.fa.fa-users.fa-fw(style="font-size: 8em; opacity: 0.3; color:white;")
+						.col-md-7.text-right
+							.number(style="font-size: 3.4em; color:white; font-weight:300;")
+								| {{user.influencers.all.count}}
+							.details(style="font-size:1.2em; color:white;")
+								| Influencers
 
 
 

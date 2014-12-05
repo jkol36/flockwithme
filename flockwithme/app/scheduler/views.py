@@ -22,34 +22,79 @@ def analytics_view(request):
 	return render(request, 'analytics.jade', {'data': data})
 
 def handle_form(request):
-	if request.POST:
-		form = JobCreationForm(request.POST)
-		if form.is_valid():
-			form.save()
-			messages.success(request, "Smile! :) Your social media marketing is now being handles by us. Focus your energy elsewhere!")
-		else:
-			messages.error(request, "Something went wrong...")
-			print form.errors
+	form = JobCreationForm(request.POST)
+	if form.is_valid():
+		form.save()
+		messages.success(request, "Smile! :) Your social media marketing is now being handles by us. Focus your energy elsewhere!")
+	else:
+		messages.error(request, "Something went wrong...")
+		print form.errors
 
+def check_account(request):
+	try:
+		accounts = request.user.accounts.all()
+		pk = accounts[0].id
+		return pk
+	except Exception, e:
+		messages.error(request, "Please add a twitter account first.")
+		return redirect("my_accounts")
 @login_required
 def auto_favorite(request):
-	handle_form(request)
-	return render(request, 'auto_favorite.jade')
+	if request:
+		try:
+			accounts = request.user.accounts.all()
+			pk = accounts[0].id
+			handle_form(request)
+			return render(request, 'auto_favorite.jade')
+		except Exception, e:
+			messages.error(request, "Please add a Twitter Account first")
+			return redirect("my_accounts")
 
 @login_required
 def auto_follow(request):
-	handle_form(request)
-	return render(request, 'auto_follow.jade')
+	if request.POST:
+		handle_form(request)
+	if request:
+		try:
+			accounts = request.user.accounts.all()
+			pk = accounts[0].id
+			return render(request, 'auto_follow.jade')
+		except Exception, e:
+			messages.error(request, "Please add a Twitter Account First")
+			return redirect("my_accounts")
 
 @login_required
 def auto_unfollow(request):
-	handle_form(request)
-	return render(request, 'auto_unfollow.jade')
+	if request:
+		try:
+			accounts = request.user.accounts.all()
+			pk = accounts[0].id
+			return render(request, 'auto_unfollow.jade')
+		except Exception, e:
+			messages.error("Please add a Twitter Account First.")
+			return redirect("my_accounts")
+	if request.POST:
+		handle_form(request)
+		return render(request, 'auto_unfollow.jade')
 
 @login_required
 def auto_dm(request):
-	handle_form(request)
-	return render(request, 'auto_dm.jade')
+	if request:
+		try:
+			accounts = request.user.accounts.all()
+			pk = accounts[0].id
+			return render(request, "auto_dm.jade")
+		except Exception, e:
+			messages.error("Please add a Twitter Account First.")
+
+	if request.POST:
+		try:
+			handle_form(request)
+			return render(request, 'auto_dm.jade')
+		except Exception, e:
+			messages.error(request, "Something went wrong. If the problem persists please email us.")
+			
+
 
 
 

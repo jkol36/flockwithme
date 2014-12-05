@@ -11,7 +11,7 @@ script(type='text/javascript', src="{% static 'select2/select2.js' %}")
 script.
 	$(function() {
 		$('#list-owner-input').select2({
-			tags: [{{list_owner}}],
+			tags: ['{{list_owner}}'],
 			placeholder: "Enter a Twitter handle and we'll fetch his lists.",
 			width:'300',
 			tokenSeparators: [",", " "],
