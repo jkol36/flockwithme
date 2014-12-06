@@ -10,23 +10,19 @@ logger = logging.getLogger(__name__)
 
 class JobExecuter(Thread):
 	def __init__(self, lock=None, *args, **kwargs):
-		self.screen_names = kwargs.pop('screen_name')
 		self.queue = kwargs.pop('queue')
 		self.account = kwargs.pop('account')
 		self.jobs = kwargs.pop('jobs')
 		self.lock = lock
-		for screen_name in self.screen_names:
-			self.get_twitter_id(screen_name)
-		#try:
-			#if self.jobs.filter(action="TRACK_FOLLOWERS").count() == 0:
-				#self.sleep_on_start()
-			#else:
-				#pass
-		#except tweepy.TweepError as e:
-			#logger.error("\nUSER: %s, ERROR: %s" % (self.account.handle, e))
-			#self.queue.put(self)
-		return
-		super(JobExecuter, self).__init__(*args, **kwargs)
+		try:
+			if self.jobs.filter(action="TRACK_FOLLOWERS").count() == 0:
+				self.sleep_on_start()
+			else:
+				pass
+		except tweepy.TweepError as e:
+			logger.error("\nUSER: %s, ERROR: %s" % (self.account.handle, e))
+			self.queue.put(self)
+		return super(JobExecuter, self).__init__(*args, **kwargs)
 		self.daemon = True
 		self.api = self.get_api()
 
@@ -108,6 +104,19 @@ class JobExecuter(Thread):
 					break
 
 		self.account.save()
+
+	def get_lists(self, job):
+		twitter_screen_name = job.twitter_list.get_owner()
+		api = self.get_api()
+		twitter_lists = [{'list_name', 'list_id', 'subscribers'}]
+		for screen_name in twitter_screen_name:
+			list_ = api.lists_all(screen_name)
+			print list_.ids
+
+			
+
+		
+
 	def follow_influencer(self, job):
 		screen_names = []
 		screen_names_in_jobs = job.influencer.screen_name
@@ -187,26 +196,32 @@ class JobExecuter(Thread):
 		## END NUMBERSETTING
 
 		for job in self.jobs:
-			action = None
 			if job.action == 'FOLLOW_HASHTAG':
 				action = self.auto_follow
+				job.action(job)
 			elif job.action == 'FAVORITE':
 				action = self.auto_favorite
+				action(job)
 			elif job.action == 'FOLLOW_INFLUENCER':
 				action = self.follow_influencer
+				job.action(job)
 			elif job.action == 'TRACK_FOLLOWERS':
 				action = self.track_followers
+				job.action(job)
 			elif job.action == 'UNFOLLOW_BACK':
 				action = self.unfollow_back
+				job.action(job)
 			elif job.action =="UNFOLLOW_ALL":
 				action = self.unfollow_all
+				job.action(job)
 			elif job.action == "GET_TWITTER_ID":
 				job.action = self.get_twitter_id
-			try:
-				action(job)
-			except Exception, e:
-				print e
-				logger.error("\nUSER: %s, ERROR: %s" % (self.account.handle, e))
+				job.action(job)
+			elif job.action =="GET_LISTS":
+				job.action = self.get_lists
+				job.action(job)
+			
+			#logger.error("\nUSER: %s, ERROR: %s" % (self.account.handle, e))
 		self.queue.put(self)
 
 	def handle_error(self, e):

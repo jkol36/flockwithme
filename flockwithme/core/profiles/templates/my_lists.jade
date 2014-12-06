@@ -17,7 +17,13 @@ script.
 			tokenSeparators: [",", " "],
 			});
 		});
-
+script.
+	$(document).ready(function() {
+		list_owner = $("#listowner")
+		list_owner.click(function() {
+			console.log("click")
+			})
+		});
 - endblock
 
 - block content
@@ -36,9 +42,25 @@ script.
 						.form-group
 							input#list-owner-input(type="hidden", name='TwitterListOwner', value="{{list_owner}}")
 						.form-group
-							button.btn.btn-info.btn-lg.form-submit(type="submit")
+							button.btn.btn-info.btn-lg.form-submit#listowner(type="submit")
 								i.fa.fa-lists
-								| Save Lists
+								| Save List Owners
+		.col-md-6 
+			.panel.panel-default.content.text-center
+				.panel-body
+					p.text-muted.content-header.lead
+						i.fa.fa-list
+							| My Lists
+						hr.divider
+						p.text-muted Add more lists manually below, or add a list owner to the left.
+					table.table
+						tr name
+							td hello
+							td hello
+						tr hi
+							td yoo
+
+
 
 
 - endblock

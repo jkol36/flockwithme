@@ -88,7 +88,8 @@ class TwitterList(models.Model):
 
 	def __unicode__(self):
 		return self.name
-
+	def get_owner(self):
+		return unicode(self.owner)
 	def get_profile(self):
 		return self.profile.username
 
@@ -108,7 +109,7 @@ class Job(models.Model):
 		("FOLLOW_MEMBERS_OF_LIST", "Follow the members of a specific list"),
 		("TRACK_FOLLOWERS", "Track followers"),
 		("GET_FOLLOWERS", 'get_followers'),
-		("GET_TWITTER_ID", 'get_twitter_id'),
+		("GET_LISTS", 'get_lists',)
 		)
 	socialprofile = models.ForeignKey(SocialProfile, related_name='jobs')
 	action = models.CharField(max_length=20, choices=ACTION_CHOICES, blank=True, null=True)
@@ -118,7 +119,7 @@ class Job(models.Model):
 	radius = models.PositiveIntegerField(blank=True, null=True)
 	number = models.PositiveIntegerField(blank=True, null=True)
 	influencer = models.ForeignKey(Influencer, related_name = 'influencers', blank = True, null = True)
-
+	twitter_list = models.ForeignKey(TwitterList, related_name = 'twitter_list_job', blank= True, null = True)
 
 	def __unicode__(self):
 		return unicode("%s for %s" % (self.action, self.socialprofile))

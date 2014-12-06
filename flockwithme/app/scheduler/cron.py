@@ -19,8 +19,10 @@ def do_work():
 	while threads:
 		try:
 			executer = queue.get(timeout=1)
+			print "executer works"
 		except:
 			executer = None
+			print "executer none"
 		if executer:
 			threads.remove(executer)
 		else:

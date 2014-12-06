@@ -151,3 +151,187 @@ USER: Jkol36, ERROR: 'Influencer' object has no attribute 'get_or_create'
 USER: Jkol36, ERROR: Manager isn't accessible via Influencer instances
 [29/Aug/2014 20:35:44] ERROR [flockwithme.app.scheduler.jobexecuter:203] 
 USER: Jkol36, ERROR: 'JobExecuter' object has no attribute 'influencer'
+[05/Dec/2014 15:26:47] ERROR [flockwithme.app.scheduler.jobexecuter:211] 
+USER: Jkol36, ERROR: 'NoneType' object is not callable
+[05/Dec/2014 15:26:47] ERROR [flockwithme.app.scheduler.jobexecuter:211] 
+USER: Jkol36, ERROR: 'NoneType' object is not callable
+[05/Dec/2014 15:26:47] ERROR [flockwithme.app.scheduler.jobexecuter:211] 
+USER: Jkol36, ERROR: 'NoneType' object is not callable
+[05/Dec/2014 15:26:47] ERROR [flockwithme.app.scheduler.jobexecuter:211] 
+USER: Jkol36, ERROR: 'NoneType' object is not callable
+[05/Dec/2014 15:28:17] ERROR [flockwithme.app.scheduler.jobexecuter:211] 
+USER: Jkol36, ERROR: 'NoneType' object is not callable
+[05/Dec/2014 15:28:17] ERROR [flockwithme.app.scheduler.jobexecuter:211] 
+USER: Jkol36, ERROR: 'NoneType' object is not callable
+[05/Dec/2014 15:28:17] ERROR [flockwithme.app.scheduler.jobexecuter:211] 
+USER: Jkol36, ERROR: 'NoneType' object is not callable
+[05/Dec/2014 15:28:17] ERROR [flockwithme.app.scheduler.jobexecuter:211] 
+USER: Jkol36, ERROR: 'NoneType' object is not callable
+[05/Dec/2014 15:28:27] ERROR [flockwithme.app.scheduler.jobexecuter:211] 
+USER: Jkol36, ERROR: 'NoneType' object is not callable
+[05/Dec/2014 15:28:27] ERROR [flockwithme.app.scheduler.jobexecuter:211] 
+USER: Jkol36, ERROR: 'NoneType' object is not callable
+[05/Dec/2014 15:28:27] ERROR [flockwithme.app.scheduler.jobexecuter:211] 
+USER: Jkol36, ERROR: 'NoneType' object is not callable
+[05/Dec/2014 15:28:27] ERROR [flockwithme.app.scheduler.jobexecuter:211] 
+USER: Jkol36, ERROR: 'NoneType' object is not callable
+[05/Dec/2014 15:28:59] ERROR [flockwithme.app.scheduler.jobexecuter:211] 
+USER: Jkol36, ERROR: 'NoneType' object is not callable
+[05/Dec/2014 15:28:59] ERROR [flockwithme.app.scheduler.jobexecuter:211] 
+USER: Jkol36, ERROR: 'NoneType' object is not callable
+[05/Dec/2014 15:28:59] ERROR [flockwithme.app.scheduler.jobexecuter:211] 
+USER: Jkol36, ERROR: 'NoneType' object is not callable
+[05/Dec/2014 15:28:59] ERROR [flockwithme.app.scheduler.jobexecuter:211] 
+USER: Jkol36, ERROR: 'NoneType' object is not callable
+[05/Dec/2014 15:29:59] ERROR [flockwithme.app.scheduler.jobexecuter:211] 
+USER: Jkol36, ERROR: 'NoneType' object is not callable
+[05/Dec/2014 15:29:59] ERROR [flockwithme.app.scheduler.jobexecuter:211] 
+USER: Jkol36, ERROR: 'NoneType' object is not callable
+[05/Dec/2014 15:29:59] ERROR [flockwithme.app.scheduler.jobexecuter:211] 
+USER: Jkol36, ERROR: 'NoneType' object is not callable
+[05/Dec/2014 15:29:59] ERROR [flockwithme.app.scheduler.jobexecuter:211] 
+USER: Jkol36, ERROR: 'NoneType' object is not callable
+[05/Dec/2014 15:36:26] ERROR [flockwithme.app.scheduler.jobexecuter:211] 
+USER: Jkol36, ERROR: 'NoneType' object is not callable
+[05/Dec/2014 15:36:26] ERROR [flockwithme.app.scheduler.jobexecuter:211] 
+USER: Jkol36, ERROR: 'NoneType' object is not callable
+[05/Dec/2014 15:36:26] ERROR [flockwithme.app.scheduler.jobexecuter:211] 
+USER: Jkol36, ERROR: 'NoneType' object is not callable
+[05/Dec/2014 15:36:26] ERROR [flockwithme.app.scheduler.jobexecuter:211] 
+USER: Jkol36, ERROR: 'NoneType' object is not callable
+[05/Dec/2014 15:39:26] ERROR [flockwithme.app.scheduler.jobexecuter:211] 
+USER: Jkol36, ERROR: 'NoneType' object is not callable
+[05/Dec/2014 15:39:26] ERROR [flockwithme.app.scheduler.jobexecuter:211] 
+USER: Jkol36, ERROR: 'NoneType' object is not callable
+[05/Dec/2014 15:39:26] ERROR [flockwithme.app.scheduler.jobexecuter:211] 
+USER: Jkol36, ERROR: 'NoneType' object is not callable
+[05/Dec/2014 15:39:26] ERROR [flockwithme.app.scheduler.jobexecuter:211] 
+USER: Jkol36, ERROR: 'NoneType' object is not callable
+[05/Dec/2014 15:39:37] ERROR [flockwithme.app.scheduler.jobexecuter:211] 
+USER: Jkol36, ERROR: 'NoneType' object is not callable
+[05/Dec/2014 15:39:37] ERROR [flockwithme.app.scheduler.jobexecuter:211] 
+USER: Jkol36, ERROR: 'NoneType' object is not callable
+[05/Dec/2014 15:39:37] ERROR [flockwithme.app.scheduler.jobexecuter:211] 
+USER: Jkol36, ERROR: 'NoneType' object is not callable
+[05/Dec/2014 15:39:37] ERROR [flockwithme.app.scheduler.jobexecuter:211] 
+USER: Jkol36, ERROR: 'NoneType' object is not callable
+[05/Dec/2014 15:46:55] ERROR [flockwithme.app.scheduler.jobexecuter:212] 
+USER: Jkol36, ERROR: 'NoneType' object is not callable
+[05/Dec/2014 15:46:55] ERROR [flockwithme.app.scheduler.jobexecuter:212] 
+USER: Jkol36, ERROR: 'NoneType' object is not callable
+[05/Dec/2014 15:46:55] ERROR [flockwithme.app.scheduler.jobexecuter:212] 
+USER: Jkol36, ERROR: 'NoneType' object is not callable
+[05/Dec/2014 15:46:55] ERROR [flockwithme.app.scheduler.jobexecuter:212] 
+USER: Jkol36, ERROR: 'NoneType' object is not callable
+[05/Dec/2014 15:49:18] ERROR [flockwithme.app.scheduler.jobexecuter:212] 
+USER: Jkol36, ERROR: 'NoneType' object is not callable
+[05/Dec/2014 15:49:18] ERROR [flockwithme.app.scheduler.jobexecuter:212] 
+USER: Jkol36, ERROR: 'NoneType' object is not callable
+[05/Dec/2014 15:49:18] ERROR [flockwithme.app.scheduler.jobexecuter:212] 
+USER: Jkol36, ERROR: 'NoneType' object is not callable
+[05/Dec/2014 15:49:18] ERROR [flockwithme.app.scheduler.jobexecuter:212] 
+USER: Jkol36, ERROR: 'NoneType' object is not callable
+[05/Dec/2014 15:49:46] ERROR [flockwithme.app.scheduler.jobexecuter:212] 
+USER: Jkol36, ERROR: 'NoneType' object is not callable
+[05/Dec/2014 15:49:46] ERROR [flockwithme.app.scheduler.jobexecuter:212] 
+USER: Jkol36, ERROR: 'NoneType' object is not callable
+[05/Dec/2014 15:49:46] ERROR [flockwithme.app.scheduler.jobexecuter:212] 
+USER: Jkol36, ERROR: 'NoneType' object is not callable
+[05/Dec/2014 15:49:46] ERROR [flockwithme.app.scheduler.jobexecuter:212] 
+USER: Jkol36, ERROR: 'NoneType' object is not callable
+[05/Dec/2014 15:50:09] ERROR [flockwithme.app.scheduler.jobexecuter:212] 
+USER: Jkol36, ERROR: 'NoneType' object is not callable
+[05/Dec/2014 15:50:09] ERROR [flockwithme.app.scheduler.jobexecuter:212] 
+USER: Jkol36, ERROR: 'NoneType' object is not callable
+[05/Dec/2014 15:50:09] ERROR [flockwithme.app.scheduler.jobexecuter:212] 
+USER: Jkol36, ERROR: 'NoneType' object is not callable
+[05/Dec/2014 15:50:09] ERROR [flockwithme.app.scheduler.jobexecuter:212] 
+USER: Jkol36, ERROR: 'NoneType' object is not callable
+[05/Dec/2014 15:50:59] ERROR [flockwithme.app.scheduler.jobexecuter:211] 
+USER: Jkol36, ERROR: 'NoneType' object is not callable
+[05/Dec/2014 15:50:59] ERROR [flockwithme.app.scheduler.jobexecuter:211] 
+USER: Jkol36, ERROR: 'NoneType' object is not callable
+[05/Dec/2014 15:50:59] ERROR [flockwithme.app.scheduler.jobexecuter:211] 
+USER: Jkol36, ERROR: 'NoneType' object is not callable
+[05/Dec/2014 15:50:59] ERROR [flockwithme.app.scheduler.jobexecuter:211] 
+USER: Jkol36, ERROR: 'NoneType' object is not callable
+[05/Dec/2014 15:51:23] ERROR [flockwithme.app.scheduler.jobexecuter:211] 
+USER: Jkol36, ERROR: 'NoneType' object is not callable
+[05/Dec/2014 15:51:23] ERROR [flockwithme.app.scheduler.jobexecuter:211] 
+USER: Jkol36, ERROR: 'NoneType' object is not callable
+[05/Dec/2014 15:51:23] ERROR [flockwithme.app.scheduler.jobexecuter:211] 
+USER: Jkol36, ERROR: 'NoneType' object is not callable
+[05/Dec/2014 15:51:23] ERROR [flockwithme.app.scheduler.jobexecuter:211] 
+USER: Jkol36, ERROR: 'NoneType' object is not callable
+[05/Dec/2014 15:56:34] ERROR [flockwithme.app.scheduler.jobexecuter:211] 
+USER: Jkol36, ERROR: 'NoneType' object is not callable
+[05/Dec/2014 15:56:34] ERROR [flockwithme.app.scheduler.jobexecuter:211] 
+USER: Jkol36, ERROR: 'NoneType' object is not callable
+[05/Dec/2014 15:56:34] ERROR [flockwithme.app.scheduler.jobexecuter:211] 
+USER: Jkol36, ERROR: 'NoneType' object is not callable
+[05/Dec/2014 15:56:34] ERROR [flockwithme.app.scheduler.jobexecuter:211] 
+USER: Jkol36, ERROR: 'NoneType' object is not callable
+[05/Dec/2014 15:57:28] ERROR [flockwithme.app.scheduler.jobexecuter:211] 
+USER: Jkol36, ERROR: 'NoneType' object is not callable
+[05/Dec/2014 15:57:28] ERROR [flockwithme.app.scheduler.jobexecuter:211] 
+USER: Jkol36, ERROR: 'NoneType' object is not callable
+[05/Dec/2014 15:57:28] ERROR [flockwithme.app.scheduler.jobexecuter:211] 
+USER: Jkol36, ERROR: 'NoneType' object is not callable
+[05/Dec/2014 15:57:28] ERROR [flockwithme.app.scheduler.jobexecuter:211] 
+USER: Jkol36, ERROR: 'NoneType' object is not callable
+[05/Dec/2014 15:57:49] ERROR [flockwithme.app.scheduler.jobexecuter:211] 
+USER: Jkol36, ERROR: 'NoneType' object is not callable
+[05/Dec/2014 15:57:49] ERROR [flockwithme.app.scheduler.jobexecuter:211] 
+USER: Jkol36, ERROR: 'NoneType' object is not callable
+[05/Dec/2014 15:57:49] ERROR [flockwithme.app.scheduler.jobexecuter:211] 
+USER: Jkol36, ERROR: 'NoneType' object is not callable
+[05/Dec/2014 15:57:49] ERROR [flockwithme.app.scheduler.jobexecuter:211] 
+USER: Jkol36, ERROR: 'NoneType' object is not callable
+[05/Dec/2014 15:58:07] ERROR [flockwithme.app.scheduler.jobexecuter:211] 
+USER: Jkol36, ERROR: 'NoneType' object is not callable
+[05/Dec/2014 15:58:07] ERROR [flockwithme.app.scheduler.jobexecuter:211] 
+USER: Jkol36, ERROR: 'NoneType' object is not callable
+[05/Dec/2014 15:58:07] ERROR [flockwithme.app.scheduler.jobexecuter:211] 
+USER: Jkol36, ERROR: 'NoneType' object is not callable
+[05/Dec/2014 15:58:07] ERROR [flockwithme.app.scheduler.jobexecuter:211] 
+USER: Jkol36, ERROR: 'NoneType' object is not callable
+[05/Dec/2014 15:59:54] ERROR [flockwithme.app.scheduler.jobexecuter:211] 
+USER: Jkol36, ERROR: 'NoneType' object is not callable
+[05/Dec/2014 15:59:54] ERROR [flockwithme.app.scheduler.jobexecuter:211] 
+USER: Jkol36, ERROR: 'NoneType' object is not callable
+[05/Dec/2014 15:59:54] ERROR [flockwithme.app.scheduler.jobexecuter:211] 
+USER: Jkol36, ERROR: 'NoneType' object is not callable
+[05/Dec/2014 15:59:54] ERROR [flockwithme.app.scheduler.jobexecuter:211] 
+USER: Jkol36, ERROR: 'NoneType' object is not callable
+[05/Dec/2014 16:00:21] ERROR [flockwithme.app.scheduler.jobexecuter:211] 
+USER: Jkol36, ERROR: 'NoneType' object is not callable
+[05/Dec/2014 16:00:21] ERROR [flockwithme.app.scheduler.jobexecuter:211] 
+USER: Jkol36, ERROR: 'NoneType' object is not callable
+[05/Dec/2014 16:00:21] ERROR [flockwithme.app.scheduler.jobexecuter:211] 
+USER: Jkol36, ERROR: 'NoneType' object is not callable
+[05/Dec/2014 16:00:21] ERROR [flockwithme.app.scheduler.jobexecuter:211] 
+USER: Jkol36, ERROR: 'NoneType' object is not callable
+[05/Dec/2014 16:00:40] ERROR [flockwithme.app.scheduler.jobexecuter:211] 
+USER: Jkol36, ERROR: 'NoneType' object is not callable
+[05/Dec/2014 16:00:40] ERROR [flockwithme.app.scheduler.jobexecuter:211] 
+USER: Jkol36, ERROR: 'NoneType' object is not callable
+[05/Dec/2014 16:00:40] ERROR [flockwithme.app.scheduler.jobexecuter:211] 
+USER: Jkol36, ERROR: 'NoneType' object is not callable
+[05/Dec/2014 16:00:40] ERROR [flockwithme.app.scheduler.jobexecuter:211] 
+USER: Jkol36, ERROR: 'NoneType' object is not callable
+[05/Dec/2014 16:03:30] ERROR [flockwithme.app.scheduler.jobexecuter:212] 
+USER: Jkol36, ERROR: 'NoneType' object is not callable
+[05/Dec/2014 16:03:30] ERROR [flockwithme.app.scheduler.jobexecuter:212] 
+USER: Jkol36, ERROR: 'NoneType' object is not callable
+[05/Dec/2014 16:03:30] ERROR [flockwithme.app.scheduler.jobexecuter:212] 
+USER: Jkol36, ERROR: 'NoneType' object is not callable
+[05/Dec/2014 16:03:30] ERROR [flockwithme.app.scheduler.jobexecuter:212] 
+USER: Jkol36, ERROR: 'NoneType' object is not callable
+[05/Dec/2014 16:04:22] ERROR [flockwithme.app.scheduler.jobexecuter:211] 
+USER: Jkol36, ERROR: local variable 'action' referenced before assignment
+[05/Dec/2014 16:04:22] ERROR [flockwithme.app.scheduler.jobexecuter:211] 
+USER: Jkol36, ERROR: local variable 'action' referenced before assignment
+[05/Dec/2014 16:04:22] ERROR [flockwithme.app.scheduler.jobexecuter:211] 
+USER: Jkol36, ERROR: local variable 'action' referenced before assignment
+[05/Dec/2014 16:04:22] ERROR [flockwithme.app.scheduler.jobexecuter:211] 
+USER: Jkol36, ERROR: local variable 'action' referenced before assignment

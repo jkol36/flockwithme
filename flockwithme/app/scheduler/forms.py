@@ -15,7 +15,6 @@ class JobCreationForm(forms.Form):
 	message = forms.CharField(required=False)
 	hashtag = forms.IntegerField(required=False)
 	influencer = forms.IntegerField(required = False)
-	#list_= forms.IntegerField(required = False)
 	twitter_username = forms.CharField(required=False)
 	location = forms.IntegerField(required=False)
 	radius = forms.IntegerField(required=False)
@@ -29,7 +28,7 @@ class JobCreationForm(forms.Form):
 		self.cleaned_data['location'] = self.cleaned_data['location'] or None
 		self.cleaned_data['hashtag'] = self.cleaned_data['hashtag'] or None
 		self.cleaned_data['influencer'] = self.cleaned_data['influencer'] or None
-		#self.cleaned_data['lists'] = self.cleaned_data['lists'] or None
+		self.cleaned_data['list_owner'] = self.cleaned_data['list_owner'] or None
 		return self.cleaned_data
 
 
@@ -65,10 +64,10 @@ class JobCreationForm(forms.Form):
 		except Influencer.DoesNotExist:
 			self._errors['influencer'] = "There is no such influencer"
 			return False
-		'''	
+		"""	
 		try: 
-			if self.cleaned_data['lists']:
-				self.list_name= list_.objects.get(pk=self.cleaned_data.get('lists'))
+			if self.cleaned_data['list_owner']:
+				self.list_name= TwitterList.objects.get(pk=
 			else:
 				self.list_name = None
 		except List_.DoesNotExist:
@@ -94,6 +93,7 @@ class JobCreationForm(forms.Form):
 
 		job.save()
 		return job
+	"""
 
 
 
@@ -201,7 +201,6 @@ class LocationForm(forms.Form):
 				loc, _ = Location.objects.get_or_create(name=name.lower())
 				self.profile.locations.remove(loc)
 		self.profile.save()
-
 
 			
 

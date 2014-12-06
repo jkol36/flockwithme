@@ -3,7 +3,7 @@ from django.views.generic.edit import FormView
 from .forms import ContactForm
 from django.contrib.auth import logout
 from django.core.urlresolvers import reverse
-from flockwithme.app.scheduler.models import Hashtag, Location, Influencer, TwitterList, TwitterUser
+from flockwithme.app.scheduler.models import Hashtag, Location, Influencer, TwitterList, TwitterUser, Job
 from flockwithme.app.scheduler.forms import HashtagForm, LocationForm, InfluencerForm
 from django.contrib import messages
 import tweepy
@@ -119,18 +119,34 @@ def my_lists(request):
 		
 	if request.POST:
 		owner = request.POST["TwitterListOwner"].split(',')
-		for i in owner:
-			try:
-				consumer_key, consumer_secret, twitter_key, twitter_secret = token, secret, settings.TWITTER_KEY, settings.TWITTER_SECRET
-				auth = tweepy.OAuthHandler(twitter_key, twitter_secret)
-				auth.set_access_token(token, secret)
-				api = tweepy.API(auth)
-				Twitter_User_Id = api.get_user(screen_name = i).id
-				Twitter_user, created = TwitterUser.objects.get_or_create(screen_name = i, twitter_id = Twitter_User_Id)
-				Twitter_List, created = TwitterList.objects.get_or_create(profile=request.user, name="TBD", owner=Twitter_user)
-				print Twitter_List
-			except Exception, e:
-				print e
+		should_add = [x for x in owner if x not in TwitterList.objects.filter(profile=request.user)]
+		should_delete = [x for x in TwitterList.objects.filter(profile=request.user) if x not in owner]
+		
+		for i in should_delete:
+			if i:
+				try:
+					i.delete()
+				except Exception, e:
+					messages.error(request,"Something went wrong trying to delete list owner")
+		
+		for i in should_add:
+			if i:
+				try:
+					consumer_key, consumer_secret, twitter_key, twitter_secret = token, secret, settings.TWITTER_KEY, settings.TWITTER_SECRET
+					auth = tweepy.OAuthHandler(twitter_key, twitter_secret)
+					auth.set_access_token(token, secret)
+					api = tweepy.API(auth)
+					Twitter_User_Id = api.get_user(screen_name = i).id
+					Twitter_user, created = TwitterUser.objects.get_or_create(screen_name = i, twitter_id = Twitter_User_Id)
+					Twitter_List, created = TwitterList.objects.get_or_create(profile=request.user, name="TBD", owner=Twitter_user)
+					accounts = request.user.accounts.all()
+					account = accounts[0].id
+					job, created = Job.objects.get_or_create(socialprofile_id=account, action="GET_LISTS", twitter_list=Twitter_List)
+				except Exception, e:
+					print e
+		messages.success(request, "list owners updated successfully")
+
+
 		#form = TwitterListOwnerForm(request.user, request.POST)
 		#if form.is_valid():
 			#form.save()
@@ -139,7 +155,7 @@ def my_lists(request):
 			#messages.error(request, "Uh Oh, Something went wrong on our end. Feel free to bug Jon. :D")
 			#print form.errors
 	return render(request, 'my_lists.jade', {'list_owner':','.join([str(x.owner) for x in TwitterList.objects.filter(profile=request.user)]),
-		'all_list_owners': json.dumps([x.name for x in TwitterList.objects.all()])})
+		'all_list_owners': json.dumps([x.name for x in TwitterList.objects.all()]), "twitter_lists":TwitterList.objects.filter(profile=request.user)})
 
 def logout_view(request):
 	logout(request)
