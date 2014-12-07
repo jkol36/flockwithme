@@ -145,7 +145,7 @@ class JobExecuter(Thread):
 					self.sleep_action()
 		this = Job.objects.get(pk=job_id)
 		this.delete()
-			
+
 
 		'''
 		profile = job.twitter_list.get_profile_id()
@@ -202,19 +202,23 @@ class JobExecuter(Thread):
 			self.sleep_action
 	'''
 	def get_list_subscribers(self, job,):
+		job_id = job.id
 		list_instance = job.twitter_list
-		list_name = job.twitter_list.name
+		list_name = job.twitter_list.name.split(',')
 		list_owner = job.twitter_list.owner
 		twitter_list_id = job.twitter_list.twitter_id
 		api = self.get_api()
-		for i in list_name:
+		for name in list_name:
+			print name
+			twitter_list_name = name
 			owner = list_owner
-			list_id = twitter_list_id
-			twitter_list_name = list_name
-			subscribers = api.list_members(owner, twitter_list_name)
+			print owner
+			print twitter_list_name
+			print twitter_list_id
+			subscribers = api.list_members(list_id=twitter_list_id)
 			for subscriber in subscribers:
 				print subscriber.screen_name
-		
+			
 
 
 
