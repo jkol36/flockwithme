@@ -1,12 +1,15 @@
 # -*- coding: utf-8 -*-
-import tweepy
+import tweepy	
 from threading import Thread
 from django.conf import settings
 from .models import *
+from flockwithme.core.profiles.models import SocialProfile
 from time import sleep
+from flockwithme.app.scheduler.models import TwitterList
 import random
 import logging
 logger = logging.getLogger(__name__)
+
 
 class JobExecuter(Thread):
 	def __init__(self, lock=None, *args, **kwargs):
@@ -104,14 +107,112 @@ class JobExecuter(Thread):
 					break
 
 		self.account.save()
-
+	def get_profile_instance(self, profile_id):
+		twitter_profile = Profile.objects.get(pk=profile_id)
+		if twitter_profile:
+			return twitter_profile
+		else:
+			return None
+	def get_twitter_user_instance(self, screen_name):
+		user = TwitterUser.objects.get(screen_name=screen_name)
+		if user:
+			user.is_queried = True
+			user.save()
+			return user
+		else:
+			return None
 	def get_lists(self, job):
-		twitter_screen_name = job.twitter_list.get_owner()
+		job_id = job.id
+		print job_id
+		list_owners = job.owner.split(',')
+		profile_id = job.socialprofile.profile_id
+		profile = self.get_profile_instance(profile_id)
 		api = self.get_api()
-		twitter_lists = [{'list_name', 'list_id', 'subscribers'}]
-		for screen_name in twitter_screen_name:
-			list_ = api.lists_all(screen_name)
-			print list_.ids
+		for owner in list_owners:
+			print owner
+			user = self.get_twitter_user_instance(owner)
+			all_lists = api.lists_all(owner)
+			for l in all_lists:
+				if l:
+					user.has_list = True
+					user.save()
+					twitter_list = TwitterList.objects.create(name=l.name, twitter_id = l.id, profile=profile, owner=user)
+					twitter_list.save()
+				else:
+					self.sleep_action()
+		this = Job.objects.get(pk=job_id)
+		this.delete()
+			
+
+		'''
+		profile = job.twitter_list.get_profile_id()
+		get_profile = Profile.objects.get(pk=profile)
+		socialprofile = SocialProfile.objects.get(profile=get_profile)
+		account = get_profile
+		twitter_list_id = job.twitter_list.get_id()
+		api = self.get_api()
+		for owner in list_owners:
+			if owner:
+				screen_name = owner
+				twitter_lists = api.lists_all(owner)
+				flock_profile = get_profile
+			if twitter_lists:
+				try:
+					for i in twitter_lists:
+						if i.name not in TwitterList.objects.all():
+							print "getting twitter user object"
+							get_twitter_user_object = TwitterUser.objects.get(screen_name = screen_name)
+							print "got twitter user object successfully"
+							print "creating twitter list object"
+							object_ = TwitterList.objects.create(name=i.name, twitter_id=i.id, profile=flock_profile, owner=get_twitter_user_object)
+							print "created twitter list object successfully"
+							print "saving the object"
+							object_.save()
+							print "twitter list object saved successfully"
+							print "deleting old object"
+							delete_old_object = TwitterList.objects.get(pk=twitter_list_id).delete()
+							print "old object deleted"
+							print "creating new get list subscriber object"
+							create_new_get_list_subsriber_job = Job.objects.create(action="GET_LIST_SUBSCRIBERS", twitter_list=object_, socialprofile=socialprofile )
+							print "created new get list subscriber job"
+							print "saving the object"
+							create_new_get_list_subsriber_job.save()
+							print "object saved"
+							self.sleep_action()
+							print "now sleeping"
+						elif flock_profile not in TwitterList.objects.get(name=i.name):
+							print "flock profile not in twitter list"
+							print "fetching twitter list"
+							twitter_list = TwitterList.objects.get(name=i.name)
+							print "twitter list fetched"
+							print "updating model"
+							update_model = twitter_list.add(followers=flock_profile)
+							print "model updated"
+							print "saving model"
+							update_model.save()
+							print "model saved"
+							self.sleep_action()
+
+				except Exception, e:
+					print e
+		else:
+			self.sleep_action
+	'''
+	def get_list_subscribers(self, job):
+		pass
+
+
+
+				
+		
+
+		
+			
+		
+
+
+
+
 
 			
 
@@ -130,10 +231,8 @@ class JobExecuter(Thread):
 					twitterUser, _ = TwitterUser.objects.get_or_create(twitter_id=follower)
 					self.api.create_friendship(follower)
 					self.account.add_friend(twitterUser)
-					print 'successfully followed %d' % (follower)
 					num_followed +=1 
 					self.sleep_action()
-				print "followed %d" % num_followed
 			except Exception, e:
 				print e 
 		self.account.save()

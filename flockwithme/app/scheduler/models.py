@@ -27,11 +27,17 @@ class TwitterUser(models.Model):
 	location = models.CharField(max_length=100, blank=True, null=True)
 	statuses_count = models.PositiveIntegerField(blank=True, null=True)
 	relationships = models.ManyToManyField(SocialProfile, through='TwitterRelationship')
-
+	has_list = models.BooleanField(default=False)
+	is_queried = models.BooleanField(default=False)
+	
 	def __unicode__(self):
 		return unicode(self.screen_name)
 
+	def get_queried(self):
+		return self.is_queried
 
+	def has_lists(self):
+		return self.has_lists
 class TwitterRelationship(models.Model):
 	ACTION_CHOICES = (
 		('FOLLOWER', 'Follower'),
@@ -84,7 +90,8 @@ class TwitterList(models.Model):
 	owner = models.ForeignKey(TwitterUser, related_name = "Twitter_List_Owner", default = None)
 	subscribers = models.ManyToManyField(TwitterUser, related_name = "List_Subscribers", default = None)
 	created_at = models.DateTimeField(auto_now_add = True)
-
+	twitter_id = models.IntegerField(null = True, blank = True)
+	followers = models.ManyToManyField(Profile)
 
 	def __unicode__(self):
 		return self.name
@@ -92,11 +99,17 @@ class TwitterList(models.Model):
 		return unicode(self.owner)
 	def get_profile(self):
 		return self.profile.username
-
+	def get_profile_id(self):
+		return self.profile.id
 	def get_list_subscribers(self):
 		return self.subscribers.screen_name
+	def get_id(self):
+		return self.id
+class list_owner(models.Model):
+	screen_name = models.CharField(max_length=250)
 
-
+	def __unicode__(self):
+		return self.screen_name
 class Job(models.Model):
 	ACTION_CHOICES = (
 		("FOLLOW_HASHTAG", "Follow users based on hashtags"),
@@ -109,7 +122,8 @@ class Job(models.Model):
 		("FOLLOW_MEMBERS_OF_LIST", "Follow the members of a specific list"),
 		("TRACK_FOLLOWERS", "Track followers"),
 		("GET_FOLLOWERS", 'get_followers'),
-		("GET_LISTS", 'get_lists',)
+		("GET_LISTS", 'get_lists'),
+		("GET_LIST_SUBSCRIBERS", 'get_list_subscribers'),
 		)
 	socialprofile = models.ForeignKey(SocialProfile, related_name='jobs')
 	action = models.CharField(max_length=20, choices=ACTION_CHOICES, blank=True, null=True)
@@ -119,7 +133,7 @@ class Job(models.Model):
 	radius = models.PositiveIntegerField(blank=True, null=True)
 	number = models.PositiveIntegerField(blank=True, null=True)
 	influencer = models.ForeignKey(Influencer, related_name = 'influencers', blank = True, null = True)
-	twitter_list = models.ForeignKey(TwitterList, related_name = 'twitter_list_job', blank= True, null = True)
+	owner = models.CharField(max_length=250, null = True, blank = True)
 
 	def __unicode__(self):
 		return unicode("%s for %s" % (self.action, self.socialprofile))

@@ -18,6 +18,13 @@ script.
 			});
 		});
 script.
+	$(function() {
+		$("#list-follower-input").select2({
+			tags: ['{{list_followers}}'],
+			width:'300',
+			});
+		});
+script.
 	$(document).ready(function() {
 		list_owner = $("#listowner")
 		list_owner.click(function() {
@@ -50,16 +57,39 @@ script.
 				.panel-body
 					p.text-muted.content-header.lead
 						i.fa.fa-list
-							| My Lists
+							| Fetched Lists
+				
 						hr.divider
-						p.text-muted Add more lists manually below, or add a list owner to the left.
-					table.table
-						tr name
-							td hello
-							td hello
-						tr hi
-							td yoo
-
+						p.text-muted You can now follow the subscribers of Twitter Lists in 
+							a(href="{% url 'auto_follow' %} ") Auto Follow
+					table.table.table-bordered
+						thead
+							th #
+							th Screen Name
+							th List Name
+							th Number of Subscribers
+						tbody
+							td 1
+							td @jkol36
+							td Hackers
+							td 12,000
+	.row 
+		.col-md-4
+			.panel.panel-default.content.text-center
+				.panel-body(style = "min-height: 300px;")
+					p.text-muted.content-header.lead
+						i.fa.fa-list
+						| List owners you follow
+					hr.divider
+					p.text-muted If you submit a list owners who's already in our database, they'll appear here.
+					form#list-owner-form(method='POST', action="{% url 'my_lists' %}")
+						-csrf_token
+						.form-group
+							input#list-follower-input(type="hidden", name='TwitterFollower', disabled, value="{{list_followers}}")
+						.form-group
+							button.btn.btn-info.btn-lg.form-submit#listowner(type="submit")
+								i.fa.fa-lists
+								| Update 
 
 
 

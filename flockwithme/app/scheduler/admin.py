@@ -14,7 +14,7 @@ class influencerAdmin(admin.ModelAdmin):
 	list_display = ('created_at', 'screen_name', 'twitter_id', 'followers_count', 'favorites_count', 'tweet_count')
 
 class TwitterListAdmin(admin.ModelAdmin):
-	list_display = ('name', 'owner', 'profile')
+	list_display = ('name', 'owner', 'profile', )
 
 admin.site.register(Job)
 admin.site.register(Hashtag)
