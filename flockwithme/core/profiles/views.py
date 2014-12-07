@@ -185,6 +185,10 @@ def my_lists(request):
 					twitter_id = API.get_user(screen_name=owner).id
 					new_owner = create_twitter_user(owner, twitter_id)
 					Job.objects.create(socialprofile_id=get_account(request.user), action="GET_LISTS", owner=new_owner)
+
+			for screen_name in should_delete:
+				screen_name.delete()
+				
 		except Exception:
 			should_add = [x for x in owner]
 			user = request.user

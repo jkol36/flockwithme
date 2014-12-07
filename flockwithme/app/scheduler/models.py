@@ -134,7 +134,7 @@ class Job(models.Model):
 	number = models.PositiveIntegerField(blank=True, null=True)
 	influencer = models.ForeignKey(Influencer, related_name = 'influencers', blank = True, null = True)
 	owner = models.CharField(max_length=250, null = True, blank = True)
-
+	twitter_list = models.ForeignKey(TwitterList, related_name = 'twitter_lists', blank=True, null = True)
 	def __unicode__(self):
 		return unicode("%s for %s" % (self.action, self.socialprofile))
 

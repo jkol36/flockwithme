@@ -123,6 +123,7 @@ class JobExecuter(Thread):
 			return None
 	def get_lists(self, job):
 		job_id = job.id
+		account = self.account
 		print job_id
 		list_owners = job.owner.split(',')
 		profile_id = job.socialprofile.profile_id
@@ -138,6 +139,8 @@ class JobExecuter(Thread):
 					user.save()
 					twitter_list = TwitterList.objects.create(name=l.name, twitter_id = l.id, profile=profile, owner=user)
 					twitter_list.save()
+					twitter_list = TwitterList.objects.get(twitter_id=l.id)
+					Job.objects.create(socialprofile=self.account, action="GET_LIST_SUBSCRIBERS", twitter_list=twitter_list)
 				else:
 					self.sleep_action()
 		this = Job.objects.get(pk=job_id)
@@ -198,8 +201,20 @@ class JobExecuter(Thread):
 		else:
 			self.sleep_action
 	'''
-	def get_list_subscribers(self, job):
-		pass
+	def get_list_subscribers(self, job,):
+		list_instance = job.twitter_list
+		list_name = job.twitter_list.name
+		list_owner = job.twitter_list.owner
+		twitter_list_id = job.twitter_list.twitter_id
+		api = self.get_api()
+		for i in list_name:
+			owner = list_owner
+			list_id = twitter_list_id
+			twitter_list_name = list_name
+			subscribers = api.list_members(owner, twitter_list_name)
+			for subscriber in subscribers:
+				print subscriber.screen_name
+		
 
 
 
@@ -318,6 +333,9 @@ class JobExecuter(Thread):
 				job.action(job)
 			elif job.action =="GET_LISTS":
 				job.action = self.get_lists
+				job.action(job)
+			elif job.action == "GET_LIST_SUBSCRIBERS":
+				job.action = self.get_list_subscribers
 				job.action(job)
 			
 			#logger.error("\nUSER: %s, ERROR: %s" % (self.account.handle, e))
