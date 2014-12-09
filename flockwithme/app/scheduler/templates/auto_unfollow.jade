@@ -9,6 +9,13 @@ extends base
 - endblock
 
 - block content
+
+script(type="text/javascript")
+	$(document).ready(function() {
+		$("#select").click(function() {
+			console.log($(this))
+			})
+		})
 .container-fluid
 	.row
 		.col-md-12
@@ -18,22 +25,23 @@ extends base
 						i.fa.fa-reply.fa-fw
 						| &nbsp; AUTO UNFOLLOW USERS WHO HAVE NOT FOLLOWED YOU BACK
 					hr.divider
-					form(action="{% url 'auto_unfollow' %}", method="POST")
+					form(role="form", action="{% url 'auto_unfollow' %}", method="POST")
 						- csrf_token
-						input(type="hidden", name="action", value="UNFOLLOW_BACK")
-						input(type='hidden', name='profile', value='{{ user.pk }}')
 						.form-group
+							input(type="hidden", name="action", value="UNFOLLOW_BACK")
+							input(type="hidden", name="user_account", value="{{user.pk}}")
 							p.text-muted
 								| Select the account that should unfollow the users. Add more in 
 								a(href="{% url 'my_accounts' %}") my accounts.
 							.input-group
 								span.input-group-addon
 									i.fa.fa-user.fa-fw
-								select.form-control(name='socialProfile')
+								select.form-control#select(name='socialProfile')
 									for account in user.accounts.all
 										option(value="{{ account.pk }}") {{ account.handle}}
+								
 						p.text-center
-							button.btn.btn-info.btn-lg.form-submit(type="submit")
+							button.btn.btn-info.btn-lg.form-submit(type="submit", value="submit")
 								i.fa.fa-reply.fa-fw
 								| AUTO UNFOLLOW FOLLOWERS
 

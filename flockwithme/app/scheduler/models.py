@@ -29,7 +29,6 @@ class TwitterUser(models.Model):
 	relationships = models.ManyToManyField(SocialProfile, through='TwitterRelationship')
 	has_list = models.BooleanField(default=False)
 	is_queried = models.BooleanField(default=False)
-	
 	def __unicode__(self):
 		return unicode(self.screen_name)
 
@@ -38,6 +37,31 @@ class TwitterUser(models.Model):
 
 	def has_lists(self):
 		return self.has_lists
+class TwitterList(models.Model):
+	name = models.CharField(max_length = 100, blank = True, null = True)
+	profile = models.ForeignKey(Profile, related_name = "profile_lists", blank = True, null = True)
+	owner = models.ForeignKey(TwitterUser, related_name = "Twitter_List_Owner", default = None)
+	subscribers = models.ManyToManyField(TwitterUser, through="TwitterRelationship", related_name = "List_Subscribers", default = None)
+	created_at = models.DateTimeField(auto_now_add = True)
+	twitter_id = models.IntegerField(null = True, blank = True)
+	followers = models.ManyToManyField(Profile)
+
+	def __unicode__(self):
+		return self.name
+	def get_owner(self):
+		return unicode(self.owner)
+	def get_profile(self):
+		return self.profile.username
+	def get_profile_id(self):
+		return self.profile.id
+	def get_list_subscribers(self):
+		return ' '.join(str(x.screen_name) for x in self.subscribers.all())
+	
+	def get_id(self):
+		return self.id
+	def get_subscriber_count(self):
+		return len(self.subscribers.all())
+
 class TwitterRelationship(models.Model):
 	ACTION_CHOICES = (
 		('FOLLOWER', 'Follower'),
@@ -45,11 +69,13 @@ class TwitterRelationship(models.Model):
 		('UNFRIEND', 'Unfriended'),
 		('FAVORITE', 'Favorite'),
 		('DM', 'Direct Message'),
+		('SUBSCRIBE', 'Subscriber')
 		)
 	action = models.CharField(choices=ACTION_CHOICES, max_length=20)
-	socialProfile = models.ForeignKey(SocialProfile, related_name='relationships')
+	socialProfile = models.ForeignKey(SocialProfile, null=True, blank=True, related_name='relationships')
 	twitterUser = models.ForeignKey(TwitterUser, blank=True, null=True)
 	twitterStatus = models.ForeignKey(TwitterStatus, blank=True, null=True)
+	twitterList = models.ForeignKey(TwitterList, blank=True, null = True)
 	message = models.CharField(max_length=160, null=True, blank=True)
 	is_initial = models.BooleanField(default=False)
 	created_at = models.DateTimeField(auto_now_add=True)
@@ -84,27 +110,8 @@ class Influencer(models.Model):
 	def __unicode__(self):
 		return unicode(self.screen_name)
 
-class TwitterList(models.Model):
-	name = models.CharField(max_length = 100, blank = True, null = True)
-	profile = models.ForeignKey(Profile, related_name = "profile_lists", blank = True, null = True)
-	owner = models.ForeignKey(TwitterUser, related_name = "Twitter_List_Owner", default = None)
-	subscribers = models.ManyToManyField(TwitterUser, related_name = "List_Subscribers", default = None)
-	created_at = models.DateTimeField(auto_now_add = True)
-	twitter_id = models.IntegerField(null = True, blank = True)
-	followers = models.ManyToManyField(Profile)
 
-	def __unicode__(self):
-		return self.name
-	def get_owner(self):
-		return unicode(self.owner)
-	def get_profile(self):
-		return self.profile.username
-	def get_profile_id(self):
-		return self.profile.id
-	def get_list_subscribers(self):
-		return self.subscribers.screen_name
-	def get_id(self):
-		return self.id
+
 class list_owner(models.Model):
 	screen_name = models.CharField(max_length=250)
 
@@ -124,6 +131,7 @@ class Job(models.Model):
 		("GET_FOLLOWERS", 'get_followers'),
 		("GET_LISTS", 'get_lists'),
 		("GET_LIST_SUBSCRIBERS", 'get_list_subscribers'),
+		("GET_ACCOUNT_INFO", "get_acocunt_info"),
 		)
 	socialprofile = models.ForeignKey(SocialProfile, related_name='jobs')
 	action = models.CharField(max_length=20, choices=ACTION_CHOICES, blank=True, null=True)
@@ -135,6 +143,7 @@ class Job(models.Model):
 	influencer = models.ForeignKey(Influencer, related_name = 'influencers', blank = True, null = True)
 	owner = models.CharField(max_length=250, null = True, blank = True)
 	twitter_list = models.ForeignKey(TwitterList, related_name = 'twitter_lists', blank=True, null = True)
+	is_complete = models.BooleanField(default=False)
 	def __unicode__(self):
 		return unicode("%s for %s" % (self.action, self.socialprofile))
 

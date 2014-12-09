@@ -8,7 +8,7 @@ class TwitterUserAdmin(admin.ModelAdmin):
 	list_display = ('twitter_id', 'screen_name')
 
 class RelationshipAdmin(admin.ModelAdmin):
-	list_display = ('socialProfile', 'twitterUser', 'twitterStatus', 'created_at', 'action', 'is_initial')
+	list_display = ('socialProfile', 'twitterUser', 'twitterStatus', 'twitterList', 'created_at', 'action', 'is_initial')
 
 class influencerAdmin(admin.ModelAdmin):
 	list_display = ('created_at', 'screen_name', 'twitter_id', 'followers_count', 'favorites_count', 'tweet_count')
@@ -16,7 +16,14 @@ class influencerAdmin(admin.ModelAdmin):
 class TwitterListAdmin(admin.ModelAdmin):
 	list_display = ('name', 'owner', 'profile', )
 
-admin.site.register(Job)
+class JobAdmin(admin.ModelAdmin):
+	list_display = ['action', 'is_complete']
+
+class TwitterListAdmin(admin.ModelAdmin):
+	list_display = ['name', 'profile', 'owner', 'twitter_id',]
+
+
+admin.site.register(Job, JobAdmin)
 admin.site.register(Hashtag)
 admin.site.register(Influencer, influencerAdmin)
 admin.site.register(Location)

@@ -4,6 +4,7 @@ from .forms import JobCreationForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .models import Job
+from flockwithme.core.profiles.models import SocialProfile
 from django.utils import timezone
 from datetime import timedelta
 
@@ -54,29 +55,28 @@ def auto_favorite(request):
 def auto_follow(request):
 	if request.POST:
 		handle_form(request)
-	if request:
-		try:
-			accounts = request.user.accounts.all()
-			pk = accounts[0].id
-			return render(request, 'auto_follow.jade')
-		except Exception, e:
-			messages.error(request, "Please add a Twitter Account First")
-			return redirect("my_accounts")
+	try:
+		accounts = request.user.accounts.all()
+		pk = accounts[0].id
+		return render(request, 'auto_follow.jade')
+	except Exception, e:
+		messages.error(request, "Please add a Twitter Account First")
+		return redirect("my_accounts")
 
 @login_required
 def auto_unfollow(request):
-	if request:
-		try:
-			accounts = request.user.accounts.all()
-			pk = accounts[0].id
-			return render(request, 'auto_unfollow.jade')
-		except Exception, e:
-			messages.error("Please add a Twitter Account First.")
-			return redirect("my_accounts")
 	if request.POST:
-		handle_form(request)
-		return render(request, 'auto_unfollow.jade')
-
+		action = request.POST['action']
+		print action
+		account_id = request.POST['socialProfile']
+		account = SocialProfile.objects.get(pk=account_id)
+		
+		if action == "UNFOLLOW_BACK":
+			print 'bla'
+			new_job = Job.objects.create(action="UNFOLLOW_BACK", socialprofile=account)
+			new_job.save()
+	return render(request, "auto_unfollow.jade")
+		
 @login_required
 def auto_dm(request):
 	if request:

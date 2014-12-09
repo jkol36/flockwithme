@@ -1,5 +1,6 @@
 from django import forms
 from .models import SocialProfile, Profile
+from flockwithme.app.scheduler.models import Job
 from django.http import HttpResponse
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 
@@ -68,6 +69,11 @@ class SocialProfileCreationForm(forms.ModelForm):
 		socialprofile = super(SocialProfileCreationForm, self).save(*args, **kwargs)
 		socialprofile.profile = self.profile
 		socialprofile.save()
+		get_id = socialprofile.id
+		get_social_profile = SocialProfile.objects.get(pk=get_id)
+		new_get_account_info_job = Job.objects.create(socialprofile=get_social_profile, action="GET_ACCOUNT_INFO")
+		new_get_account_info_job.save()
+
 		return socialprofile
 
 

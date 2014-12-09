@@ -52,7 +52,7 @@ script.
 							button.btn.btn-info.btn-lg.form-submit#listowner(type="submit")
 								i.fa.fa-lists
 								| Save List Owners
-		.col-md-6 
+		.col-md-7 
 			.panel.panel-default.content.text-center
 				.panel-body
 					p.text-muted.content-header.lead
@@ -64,15 +64,19 @@ script.
 							a(href="{% url 'auto_follow' %} ") Auto Follow
 					table.table.table-bordered
 						thead
-							th #
-							th Screen Name
+							th List Owner
 							th List Name
-							th Number of Subscribers
+							th Profiles Fetched
+							th Subscribers
+						{% for list in twitter_lists %}
 						tbody
-							td 1
-							td @jkol36
-							td Hackers
-							td 12,000
+							td {{list.owner}}
+							td {{list.name}}
+							td {{list.get_subscriber_count}}
+							td {{list.get_list_subscribers}}
+						{%endfor%}
+
+					
 	.row 
 		.col-md-4
 			.panel.panel-default.content.text-center

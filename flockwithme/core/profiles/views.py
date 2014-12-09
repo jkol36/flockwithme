@@ -121,11 +121,15 @@ def api(self):
 	api = tweepy.API(auth)
 	return api
 
-def get_account(self):
+def get_account_id(self):
 	accounts = self.accounts.all()
 	account = accounts[0].id
 	return account
 
+def get_account(self):
+	accounts = self.accounts.all()
+	account = accounts[0]
+	return account
 def get_twitter_user_instance(Screen_Name):
 	twitter_user_instance = TwitterUser.objects.get(screen_name=Screen_Name)
 	try:
@@ -155,8 +159,9 @@ def create_twitter_list(name, profile, owner, twitter_id):
 	return twitter_list
 
 def create_twitter_user(screen_name, twitter_id):
-	twitter_user = TwitterUser.objects.create(screen_name=screen_name, twitter_id=twitter_id)
+	twitter_user, created = TwitterUser.objects.get_or_create(screen_name=screen_name, twitter_id=twitter_id)
 	return twitter_user
+
 def my_lists(request):
 	if request:
 		try:
@@ -166,37 +171,65 @@ def my_lists(request):
 			return redirect("my_accounts")
 
 	if request.POST:
+		
 		owner = request.POST["TwitterListOwner"].split(',')
+		
+		account = get_account(request.user)
+		
 		try:
-			already_added_owners = [x.screen_name for x in twitter_list_through_profile(request.user)]
+			
+			if account.first_query == False:
+				
+				already_added_owners = [x.screen_name for x in twitter_list_through_profile(request.user)]
+			
+			else:
+				
+				already_added_owners = []
+			
 			should_add = [x for x in owner if x not in already_added_owners]
+			
 			should_delete = [x for x in already_added_owners if x not in owner]
-			print should_add
-			print should_delete
+			
 			for i in should_add:
+				
 				owner = str(i)
+				
 				try:
 					owner_ = get_twitter_user_instance(owner)
 					if owner_.get_queried() == False:
-						Job.objects.create(socialprofile_id=get_account(request.user), action="GET_LISTS", owner=owner_)
-					else:
+						Job.objects.create(socialprofile_id=get_account_id(request.user), action="GET_LISTS", owner=owner_)
+	
+					
+					elif owner_ == None:
+						twitter_id = API.get_user(screen_name=owner).id
+						twitter_user_instance = create_twitter_user(owner, twitter_id)
+						twitter_user_instance.save()
+						Job.objects.create(socialprofile_id=get_account_id(request.user), action="GET_LISTS", owner=owner)
+					
+
+					elif owner_.get_queried() == True and owner_.has_list == False:
 						messages.error(request, "This twitter user does not have any lists:(")
-				except Exception, e:
+				
+				except Exception, DoesNotExist:
 					twitter_id = API.get_user(screen_name=owner).id
-					new_owner = create_twitter_user(owner, twitter_id)
-					Job.objects.create(socialprofile_id=get_account(request.user), action="GET_LISTS", owner=new_owner)
+					new_twitter_user = create_twitter_user(owner, twitter_id)
+					new_twitter_user.save()
+					Job.objects.create(socialprofile_id=get_account_id(request.user), action="GET_LISTS", owner=owner)
+				
 
 			for screen_name in should_delete:
-				screen_name.delete()
 				
-		except Exception:
-			should_add = [x for x in owner]
-			user = request.user
-			for i in should_add:
-				owner = str(i)
-				twitter_id = API.get_user(screen_name=owner).id
-				new_owner = create_twitter_user(owner, twitter_id)
-				Job.objects.create(socialprofile_id=get_account(user), action="GET_LISTS", owner = new_owner)
+				screen_name.delete()
+
+			account.first_query == False
+			
+			account.save()
+				
+		except Exception, e:
+			print "second"
+			print e
+
+
 
 		messages.success(request, "list owners updated successfully")
 		

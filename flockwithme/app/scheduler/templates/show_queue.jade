@@ -27,6 +27,7 @@ extends base
 								th Provider
 								th Hashtag
 								th Location
+								th Executed
 								th Delete
 							for job in jobs
 								tr
@@ -50,6 +51,9 @@ extends base
 											{{ job.location.name }}
 										else
 											| -
+									td
+										if job.is_complete
+											{{job.is_complete}}
 									td
 										a.btn.btn-danger(href="{% url 'delete_job' job.pk %}")
 											i.fa.fa-fw.fa-times

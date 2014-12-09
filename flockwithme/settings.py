@@ -148,7 +148,10 @@ SOCIAL_AUTH_USER_MODEL = 'mongoengine.django.auth.User'
 TWITTER_KEY = '3Gsg8IIX95Wxq28pDEkA'
 TWITTER_SECRET = 'LjEPM4kQAC0XE81bgktdHAaND3am9tTllXghn0B639o'
 
-
+Consumer_Keys = {"consumer_key1":"fYPmnEQtta3xXqS9CGhTwJf4M"}
+Consumer_Secrets = {"consumer_secret1":"pVMlJRb47bYEPRrzRcGydYhcuWDwiaXPqgyDKahTtWf4tcu8A8"}
+Access_Tokens = {"access_token1":"258627515-fE5flw24GC8DPVWr5EE1nAVRWKwutkZOlH4L1Z0J"}
+Access_Secrets = {"access_secret1":"0fJsYMlf1KBtKCMP6RrLVxlAAuAjn34FEscVOSNSbjDO2"}
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,

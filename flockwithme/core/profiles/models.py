@@ -22,7 +22,9 @@ class SocialProfile(models.Model):
 	token = models.CharField(max_length=100, blank=True, null=True)
 	secret = models.CharField(max_length=100, blank=True, null=True)
 	is_executing_jobs = models.BooleanField(default=False)
-
+	first_query = models.BooleanField(default=True)
+	last_follower = models.IntegerField(default = None, null = True)
+	last_friend = models.IntegerField(default = None, null = True)
 	def get_followers(self, is_initial=True):
 		return self.relationships.filter(action="FOLLOWER", socialProfile=self, is_initial=is_initial).all()
 
