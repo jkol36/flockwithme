@@ -5,7 +5,7 @@ from django.conf import settings
 from .models import *
 from flockwithme.core.profiles.models import SocialProfile
 from time import sleep
-from flockwithme.app.scheduler.models import TwitterList, TwitterUser
+from flockwithme.app.scheduler.models import TwitterList, TwitterUser, OauthSet
 import random
 import logging
 logger = logging.getLogger(__name__)
@@ -19,10 +19,12 @@ class JobExecuter(Thread):
 		self.lock = lock
 		try:
 			if self.jobs.filter(action="TRACK_FOLLOWERS").count() == 0:
+				"print sleep on start"
 				self.sleep_on_start()
 			else:
 				pass
 		except tweepy.TweepError as e:
+			print "tweep error"
 			logger.error("\nUSER: %s, ERROR: %s" % (self.account.handle, e))
 			self.queue.put(self)
 		return super(JobExecuter, self).__init__(*args, **kwargs)
@@ -34,6 +36,8 @@ class JobExecuter(Thread):
 
 	def sleep_on_start(self):
 		sleep(random.randint(1,2))
+
+	
 
 	def auto_follow(self, job):
 		statuses = job.hashtag.statuses.all().exclude(twitter_user__twitter_id__in=[x.twitterUser.twitter_id for x in self.account.get_friends()])[0:(job.number*10)]
@@ -58,62 +62,77 @@ class JobExecuter(Thread):
 			api.create_friendship(profile)
 		this_job = job.id
 		Job.objects.delete(this_job)
+	
 	def get_account_info(self, job):
-		#Self holds the specific instance of JobExecutor
-		#Job holds the specific Instance of this Job
-		#Api is a defined function inside the jobExecutor class and holds the api keys for this user instance
 		api = self.get_api()
-		#Job holds our socialprofile instance which is found at the address below
 		profile_instance = job.socialprofile
-		#Page index is going to None the first time we run it, so we run this part of the program with a Try Clause to catch that exception
-		#We already know what the exception will be, so if it raises, we'll change the page index from None to 0
-		try:
-			start_page = job.socialprofile.last_follower
-			if start_page == None:
-				start_page = 0
-			else:
-				start_page = job.socialprofile.last_follower
-		except Exception, e:
-			print e
-		#The default amount of items to pull. The below is equivalent to 65499 pages
-		#Tweepy allows us to fetch either pages with profiles on them or profiles respectivily
-		#
+		twitter_followers = tweepy.Cursor(api.followers_ids).items()
 		print "starting"
-		times_rate_limited = 0
 		while True:
-			twitter_followers = api.followers_ids(page=start_page)
-			if twitter_followers:
-				try:
-					should_add = [x for x in twitter_followers]
-					for twitter_id in should_add:
+			try:
+				current_twitter_ids = [x.twitter_id for x in TwitterUser.objects.all()]
+				print "current_twitter_ids"
+				should_query = [x for x in twitter_followers if x not in current_twitter_ids]
+				remaining = [x for x in twitter_followers if x in current_twitter_ids]
+				print "should_query"
+				print should_query
+				print "remaining"
+				print remaining
+				if should_query:
+					for twitter_id in should_query:
+						print "twitter_id"
 						profile = api.get_user(user_id=twitter_id)
 						try:
-							new_twitter_user, created = TwitterUser.objects.get_or_create(screen_name=profile.screen_name, twitter_id = twitter_id, friends_count=profile.friends_count, followers_count=profile.followers_count)
+							new_twitter_user = TwitterUser.objects.create(screen_name=profile.screen_name, twitter_id = twitter_id, friends_count=profile.friends_count, followers_count=profile.followers_count)
 							new_twitter_user.save()
 							get_twitter_instance = TwitterUser.objects.get(twitter_id=profile.id)
-						except Exception, TwitterUserExists:
-							start_page +=1
-							profile_instance.last_follower=start_page
-							profile_instance.save()
-							get_twitter_instance = TwitterUser.objects.get(twitter_id=twitter_id)
-						try:
 							profile_instance.add_follower(get_twitter_instance)
-						except Exception, AlreadyFollower:
-							print "AlreadyFollower"
-							print AlreadyFollower
-						
-					profile_instance.last_follower=start_page
-					profile_instance.save()
+							profile_instance.save()
+						except Exception, ratelimited:
+							print ratelimited
+							print "second"
+							self.sleep_action()
+				
 					self.sleep_action()
-					start_page +=1
-				except Exception, ratelimited:
-					times_rate_limited +=1
-					profile_instance.last_follower = times_rate_limited
+				if remaining:
+					get_object = self.get_twitter_user_instance(twitter_id=remaining)
+					profile_instance.add_follower(get_object)
 					profile_instance.save()
-					self.sleep_action()
-			else:
-				print "no followers"
-		
+
+				elif not remaining or not should_query:
+					ids = next(twitter_followers)
+					print "loopty loop"
+					should_query = [x for x in ids if x not in current_twitter_ids]
+					remaining = [x for x in ids if x in current_twitter_ids]
+					print should_query
+					print remaining
+					if should_query:
+						for x in should_query:
+							try:
+								new_twitter_user = TwitterUser.objects.create(screen_name=x.screen_name, twitter_id = x.id, friends_count=x.friends_count, followers_count=x.followers_count)
+								new_twitter_user.save()
+								get_twitter_instance = TwitterUser.objects.get(twitter_id=x.id)
+								profile_instance.add_follower(get_twitter_instance)
+								profile_instance.save()
+							except Exception, ratelimited:
+								print "third"
+								self.sleep_action()
+					if remaining:
+						try:
+							get_object = self.get_twitter_user_instance(twitter_id=remaining)
+							profile_instance.add_follower(get_object)
+							profile_instance.save()
+						except Exception, e:
+							print "fourth"
+							self.sleep_action()
+
+
+
+			except Exception, e:
+				print e
+				print "fifth"
+				self.sleep_action()
+			
 		
 	def unfollow_back(self, job):
 		#api = self.get_api()
@@ -207,14 +226,23 @@ class JobExecuter(Thread):
 			return twitter_profile
 		else:
 			return None
-	def get_twitter_user_instance(self, screen_name):
-		user = TwitterUser.objects.get(screen_name=screen_name)
-		if user:
-			user.is_queried = True
-			user.save()
-			return user
-		else:
-			return None
+	def get_twitter_user_instance(self, screen_name, twitter_id=False):
+		if twitter_id == False:
+			user = TwitterUser.objects.get(screen_name=screen_name)
+			if user:
+				user.is_queried = True
+				user.save()
+				return user
+			else:
+				return None
+		elif twitter_id != False:
+			user = TwitterUser.objects.get(twitter_id=twitter_id)
+			if user:
+				user.is_queried = True
+				user.save()
+				return user
+			else:
+				return None
 	def get_lists(self, job):
 		job_id = job.id
 		account = self.account
@@ -239,61 +267,9 @@ class JobExecuter(Thread):
 					self.sleep_action()
 		this = Job.objects.get(pk=job_id)
 		this.delete()
+		self.sleep_action()
 
 
-		
-		profile = job.twitter_list.get_profile_id()
-		get_profile = Profile.objects.get(pk=profile)
-		socialprofile = SocialProfile.objects.get(profile=get_profile)
-		account = get_profile
-		twitter_list_id = job.twitter_list.get_id()
-		api = self.get_api()
-		for owner in list_owners:
-			if owner:
-				screen_name = owner
-				twitter_lists = api.lists_all(owner)
-				flock_profile = get_profile
-			if twitter_lists:
-				try:
-					for i in twitter_lists:
-						if i.name not in TwitterList.objects.all():
-							print "getting twitter user object"
-							get_twitter_user_object = TwitterUser.objects.get(screen_name = screen_name)
-							print "got twitter user object successfully"
-							print "creating twitter list object"
-							object_ = TwitterList.objects.create(name=i.name, twitter_id=i.id, profile=flock_profile, owner=get_twitter_user_object)
-							print "created twitter list object successfully"
-							print "saving the object"
-							object_.save()
-							print "twitter list object saved successfully"
-							print "deleting old object"
-							delete_old_object = TwitterList.objects.get(pk=twitter_list_id).delete()
-							print "old object deleted"
-							print "creating new get list subscriber object"
-							create_new_get_list_subsriber_job = Job.objects.create(action="GET_LIST_SUBSCRIBERS", twitter_list=object_, socialprofile=socialprofile )
-							print "created new get list subscriber job"
-							print "saving the object"
-							create_new_get_list_subsriber_job.save()
-							print "object saved"
-							self.sleep_action()
-							print "now sleeping"
-						elif flock_profile not in TwitterList.objects.get(name=i.name):
-							print "flock profile not in twitter list"
-							print "fetching twitter list"
-							twitter_list = TwitterList.objects.get(name=i.name)
-							print "twitter list fetched"
-							print "updating model"
-							update_model = twitter_list.add(followers=flock_profile)
-							print "model updated"
-							print "saving model"
-							update_model.save()
-							print "model saved"
-							self.sleep_action()
-
-				except Exception, e:
-					print e
-		else:
-			self.sleep_action
 	
 	def get_list_subscribers(self, job):
 		job_id = job.id
@@ -371,7 +347,11 @@ class JobExecuter(Thread):
 		auth = tweepy.OAuthHandler(settings.TWITTER_KEY, settings.TWITTER_SECRET)
 		auth.set_access_token(self.account.token, self.account.secret)
 		return tweepy.API(auth)
-
+	def request_api(self):
+		i = 1
+		auth = tweepy.OAuthHandler(settings.Consumer_Keys["consumer_key%d" %(i)], settings.Consumer_Secrets["consumer_secret%d" %(i)])
+		auth.set_access_token(settings.Access_Tokens["acccess_token%d"%(i)], settings.Access_Secrets['access_secret%d' %(i)])
+		return tweepy.API(auth)
 	def track_followers(self, job, should_dm=False):
 		if job.number != 1:
 			try:

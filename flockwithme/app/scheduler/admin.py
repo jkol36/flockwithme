@@ -1,3 +1,4 @@
+
 from django.contrib import admin
 from .models import *
 
@@ -22,7 +23,11 @@ class JobAdmin(admin.ModelAdmin):
 class TwitterListAdmin(admin.ModelAdmin):
 	list_display = ['name', 'profile', 'owner', 'twitter_id',]
 
+class OauthSetAdmin(admin.ModelAdmin):
+	exclude= ["name"]
 
+
+admin.site.register(OauthSet, OauthSetAdmin)
 admin.site.register(Job, JobAdmin)
 admin.site.register(Hashtag)
 admin.site.register(Influencer, influencerAdmin)
@@ -31,4 +36,3 @@ admin.site.register(TwitterStatus, StatusAdmin)
 admin.site.register(TwitterUser)
 admin.site.register(TwitterRelationship, RelationshipAdmin)
 admin.site.register(TwitterList, TwitterListAdmin)
-

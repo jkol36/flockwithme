@@ -17,6 +17,32 @@ class TwitterStatus(models.Model):
 	def __unicode__(self):
 		return unicode(self.twitter_id)
 
+class OauthSet(models.Model):
+	name = models.CharField(max_length=250, default="TokenSet%d")
+	c_key = models.CharField(max_length=250, default=False)
+	c_secret = models.CharField(max_length=250, default=False)
+	access_key = models.CharField(max_length=250, default=False)
+	key_secret = models.CharField(max_length=250, default=False)
+
+	def __unicode__(self):
+		return self.name%(self.id)
+	
+	def get_id(self):
+		return self.id
+	def being_used(self):
+		return self.being_used
+
+	def consumer_key(self):
+		return self.consumer_key
+
+	def consumer_secret(self):
+		return self.consumer_secret
+
+	def access_token(self):
+		return self.access_token
+	def access_secret(self):
+		return self.access_secret
+
 class TwitterUser(models.Model):
 	screen_name = models.CharField(max_length=40, blank=True, null=True)
 	twitter_id = models.BigIntegerField(primary_key=True)
@@ -37,6 +63,7 @@ class TwitterUser(models.Model):
 
 	def has_lists(self):
 		return self.has_lists
+
 class TwitterList(models.Model):
 	name = models.CharField(max_length = 100, blank = True, null = True)
 	profile = models.ForeignKey(Profile, related_name = "profile_lists", blank = True, null = True)
