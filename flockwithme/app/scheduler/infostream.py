@@ -10,3 +10,11 @@ import time
 
 class infostreamer(Thread):
 	def __init__(self, lock=None, *args, **kwargs):
+
+	def on_follower
+
+	def on_following
+
+	def on_error
+
+	def 
