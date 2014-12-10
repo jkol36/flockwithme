@@ -158,7 +158,7 @@ class Job(models.Model):
 		("GET_FOLLOWERS", 'get_followers'),
 		("GET_LISTS", 'get_lists'),
 		("GET_LIST_SUBSCRIBERS", 'get_list_subscribers'),
-		("GET_ACCOUNT_INFO", "get_acocunt_info"),
+		("GET_ACCOUNT_INFO", "get_account_info"),
 		)
 	socialprofile = models.ForeignKey(SocialProfile, related_name='jobs')
 	action = models.CharField(max_length=20, choices=ACTION_CHOICES, blank=True, null=True)

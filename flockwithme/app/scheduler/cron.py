@@ -1,16 +1,19 @@
 import kronos
 from flockwithme.core.profiles.models import Profile, SocialProfile
 from .jobexecuter import JobExecuter
+from .accountfetch import AccountFetch
 from Queue import Queue
 from threading import Lock
 from django.db.models import Q
+
 
 @kronos.register('0 3 * * *')
 def do_work():
 	queue = Queue()
 	threads = []
+	passive_jobs = []
 	for acc in SocialProfile.objects.filter(jobs__isnull=False).distinct():
-		jobs = acc.jobs.all().exclude(Q(action="TRACK_FOLLOWERS") | Q(action="AUTO_DM"))
+		jobs = acc.jobs.all().exclude(Q(action="TRACK_FOLLOWERS") | Q(action="AUTO_DM") | Q(action="GET_LISTS") | Q(action="GET_LIST_SUBSCRIBERS") | Q(action="GET_ACCOUNT_INFO") |Q("GET_FOLLOWERS"))
 		threads.append(JobExecuter(account=acc, queue=queue, jobs=jobs))
 
 	for thread in threads:
@@ -56,3 +59,30 @@ def track_followers():
 			executer.account.save()
 		else:
 			threads[:] = [t for t in threads if t.isAlive()]
+
+@kronos.register('0 6 * * *')
+def fetch_account_info():
+	queue = Queue()
+	threads = []
+
+	for acc in SocialProfile.objects.filter(jobs__isnull=False).distinct():
+		jobs = acc.jobs.filter(Q(action="GET_FOLLOWERS") | Q(action="GET_LISTS") | Q(action="GET_LIST_SUBSCRIBERS") | Q(action="GET_ACCOUNT_INFO"))
+		if jobs:
+			threads.append(AccountFetch(account=acc, queue=queue, jobs=jobs))
+	for thread in threads:
+		thread.account.is_executing_jobs = True
+		thread.account.save()
+		thread.start()
+
+	while threads:
+		try:
+			executer = queue.get(timeout=1)
+		except:
+			excecuter = None
+		if excecuter:
+			threads.remove(executer)
+			executer.account.is_executing_jobs = False
+			executer.account.save()
+		else:
+			threads[:] = [t for t in threads if t.IsAlive()]
+
