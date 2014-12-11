@@ -32,13 +32,6 @@ class OauthSet(models.Model):
 	def __unicode__(self):
 		return self.name%(self.id)
 	
-	def get_status(self):
-		is_rate_limited = self.rate_limited
-		if is_rate_limited == False:
-			current_time = datetime.now().replace(tzinfo=psycopg2.tz.FixedOffsetTimezone(offset=0, name=None))
-			is_up = current_time - self.last_used
-			print is_up.seconds
-		print datetime.now()
 	def get_id(self):
 		return self.id
 	def being_used(self):

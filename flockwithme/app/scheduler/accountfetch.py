@@ -5,13 +5,16 @@ from flockwithme.app.scheduler.models import OauthSet, TwitterUser
 from flockwithme.core.profiles.models import Profile
 import tweepy
 from time import sleep
+import time
 import random
 import logging
+from .countdown import CountDown
 logger = logging.getLogger(__name__)
 
 class AccountFetch(Thread):
-	def __init__(self, *args, **kwargs):
+	def __init__(self, lock=None, *args, **kwargs):
 		self.jobs = kwargs.pop('jobs')
+		self.lock = lock
 		self.account = kwargs.pop("account")
 		self.queue = kwargs.pop("queue")
 		self.api = self.get_api()
@@ -32,57 +35,104 @@ class AccountFetch(Thread):
 		rate_limited = OauthSet.objects.get(id=auth_set_id)
 		rate_limited.rate_limited = True
 		rate_limited.save()
+		time_till_ready = CountDown(auth_set = auth_set_id)
  
+	def change_status_from_rate_limited(self, auth_set_id):
+		get_oauth_set = OauthSet.objects.get(id=auth_set_id)
+		get_oatuh_set.rate_limited = False
+		rate_limited.save()
+
 
 	def get_followers(self, auth):
 		api = self.get_api(auth)
-		follower_ids = tweepy.Cursor(api.followers_ids()).items()
+		follower_ids = tweepy.Cursor(api.followers_ids().items())
 		return follower_ids
 	
+	def get_request_left(self, api):
+		limit_status = api.rate_limit_status()
+		requests_left = int(limit_status['resources']['followers']['/followers/ids']['remaining'])
+		access_token = limit_status["rate_limit_context"]['access_token']
+		print access_token
+		print requests_left
+		return requests_left
 	def FetchAccount(self, job):
-		api = self.get_api()['auth']
-		auth_set_instance = self.get_api()['auth_set']
+		api = self.get_api()
+		limit_status = api.rate_limit_status()
+		requests_left = self.get_request_left(api)
 		profile_instance = job.socialprofile
 		#api call
-		try:
-			twitter_followers = tweepy.Cursor(followers_ids, screen_name=profile_instance).items()
-		except Exception RateLimited:
-			self.change_status_to_rate_limited(auth_set_instance)
-			self.get_api()
+		if requests_left > 0:
+			ids = tweepy.Cursor(api.followers_ids, screen_name=profile_instance).items()
+			current_twitter_ids = [x.twitter_id for x in TwitterUser.objects.all()]
+			should_query = [x for x in ids if x not in current_twitter_ids]
+			should_not_query = [x for x in ids if x in current_twitter_ids]
+			while True:
+				try:
+					if should_query and requests_left > 1:
+						for twitter_id in should_query:
+							#api call
+							if self.get_request_left(api) > 1:
+								profile = api.get_user(user_id=twitter_id)
+								new_twitter_user = self.create_twitter_user(twitter_id=twitter_id, screen_name=profile.screen_name, friends_count=profile.friends_count, followers_count=profile.followers_count, location=profile.location)
+								twitter_user_instance = self.get_twitter_user(twitter_id=twitter_id)
+								profile_instance.add_follower(twitter_user_instance)
+								profile_instance.save()
+									
+							else:
+								access_token = limit_status['rate_limit_context']['access_token']
+								token_set = OauthSet.objects.get(access_key = str(access_token))
+								#mark token set as rate limited
+								token_set.rate_limited = True
+								token_set.save()
+								#call the countdown
+								new_countdown = CountDown(auth_set = access_token)
+								#get a new auth set for the request
+								api = self.get_api()
+								print "sleeping"
+								self.sleep_action()
+					elif should_query and requests_left == 0:
+						access_token = limit_status['rate_limit_context']['access_token']
+						token_set = OauthSet.objects.get(access_key = str(access_token))
+						#mark token set as rate limited
+						token_set.rate_limited = True
+						token_set.save()
+						#call the countdown
+						new_countdown = CountDown(auth_set = access_token)
+						#get a new auth set for the request
+						api = self.get_api()
+						print "sleeping"
+						self.sleep()
+					elif not should_query and not should_not_query:
+						print "need more ids"
+				except Exception, e:
+					print e
+					print "hit an exception. Sleeping"
+					self.sleep()	
+					
+		elif requests_left == 0:
+			print "request 0"
+			access_token = limit_status['rate_limit_context']['access_token']
+			token_set = OauthSet.objects.get(access_key = str(access_token))
+			#mark token set as rate limited
+			token_set.rate_limited = True
+			token_set.save()
+			#call the countdown
+			new_countdown = CountDown(auth_set = access_token)
+			#get a new auth set for the request
+			api = self.get_api()
 
-		while True:
-			try:
-				current_twitter_ids = [x.twitter_id for x in TwitterUser.objects.all()]
-				#Query Twitter if the ID is not present in our database
-				should_query = [x for x in twitter_followers if x not in current_twitter_ids]
-				#Query our database to fetch the twitter profile if the id is present in our database
-				remaining = [x for x in twitter_followers if x in current_twitter_ids]
-				if should_query:
-					for twitter_id in should_query:
-						#api call
-						profile = api.get_user(user_id=twitter_id)
-						try:
-							new_twitter_user = self.create_twitter_user(twitter_id=twitter_id, screen_name=profile.screen_name, friends_count=profile.friends_count, followers_count=profile.followers_count, location=profile.location)
-							twitter_user_instance = self.get_twitter_user(twitter_id=twitter_id)
-							profile_instance.add_follower(twitter_user_instance)
-							profile_instance.save()
-			except Exception, RateLimited:
-				self.change_status_to_rate_limited(auth_set_instance)
-				self.get_api()
-
+				
+		
 	def get_api(self):
-		auth_sets = OauthSet.objects.filter(active=False, rate_limited=False)
-		if auth_sets:
-			auth_set = auth_sets[0].id
-			consumer_key = auth_sets[0].c_key
-			consumer_secret = auth_sets[0].c_secret
-			oauth_token = auth_sets[0].access_key
-			oauth_secret = auth_sets[0].access_secret
+		auth_set = OauthSet.objects.filter(active=False, rate_limited=False)[0]
+		if auth_set:
+			consumer_key = str(auth_set.c_key)
+			consumer_secret = str(auth_set.c_secret)
+			access_token = str(auth_set.access_key)
+			access_token_secret = str(auth_set.key_secret)
 			auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
-			auth.set_access_token(oauth_token, oauth_secret)
-			active_true = auth_sets[0].active == True
-			auth_sets[0].save()
-			return {"auth":tweepy.API(auth), "auth_set":auth_set}
+			auth.set_access_token(access_token, access_token_secret)
+			return tweepy.API(auth)
 		else:
 			self.sleep_action()
 
@@ -95,6 +145,8 @@ class AccountFetch(Thread):
 	def sleep_15(self):
 		sleep(15*60)
 
+	def sleep(self):
+		sleep(1)
 	def get_list_subscribers(self, job):
 		job_id = job.id
 		list_instance = job.twitter_list
@@ -166,7 +218,7 @@ class AccountFetch(Thread):
 						twitter_list = TwitterList.objects.create(name=l.name, twitter_id = l.id, profile=profile, owner=user)
 						twitter_list.save()
 						twitter_list = TwitterList.objects.get(twitter_id=l.id)
-						Job.objects.create(socialprofile=self.account, action=)
+						Job.objects.create(socialprofile=self.account, action="GET_LIST_SUBSCRIBERS")
 					else:
 						self.sleep_action()
 			except Exception, RateLimited:
@@ -188,12 +240,14 @@ class AccountFetch(Thread):
 			job.action(job)
 
 		for job in get_list_subscribers:
-			job.action = self.get_list_subscribers
-			job.action(job)
+			if job.is_complete == False:
+				job.action = self.get_list_subscribers
+				job.action(job)
 
 		for job in get_twitter_lists:
-			job.action = self.get_twitter_lists
-			job.action(job)
+			if job.is_complete == False:
+				job.action = self.get_lists
+				job.action(job)
 
 
 

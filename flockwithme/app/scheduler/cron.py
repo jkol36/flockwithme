@@ -68,7 +68,7 @@ def fetch_account_info():
 	for acc in SocialProfile.objects.filter(jobs__isnull=False).distinct():
 		jobs = acc.jobs.filter(Q(action="GET_FOLLOWERS") | Q(action="GET_LISTS") | Q(action="GET_LIST_SUBSCRIBERS") | Q(action="GET_ACCOUNT_INFO"))
 		if jobs:
-			threads.append(AccountFetch(account=acc, queue=queue, jobs=jobs))
+			threads.append(AccountFetch(lock = Lock, account=acc, queue=queue, jobs=jobs))
 	for thread in threads:
 		thread.account.is_executing_jobs = True
 		thread.account.save()
