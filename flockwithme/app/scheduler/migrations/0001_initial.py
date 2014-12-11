@@ -8,8 +8,8 @@ from django.conf import settings
 class Migration(migrations.Migration):
 
     dependencies = [
+        ('profiles', '0001_initial'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('profiles', '__first__'),
     ]
 
     operations = [
@@ -44,7 +44,7 @@ class Migration(migrations.Migration):
             name='Job',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('action', models.CharField(blank=True, max_length=20, null=True, choices=[(b'FOLLOW_HASHTAG', b'Follow users based on hashtags'), (b'FOLLOW_BACK', b'Follow back your followers'), (b'FAVORITE', b'Favorite tweets'), (b'UNFOLLOW_BACK', b"Unfollow all the users that haven't followed you back"), (b'UNFOLLOW_ALL', b'Unfollow everyone you currently follow'), (b'AUTO_DM', b'Send direct messages to your followers'), (b'FOLLOW_INFLUENCER', b'Follow people who follow certain accounts.'), (b'FOLLOW_MEMBERS_OF_LIST', b'Follow the members of a specific list'), (b'TRACK_FOLLOWERS', b'Track followers'), (b'GET_FOLLOWERS', b'get_followers'), (b'GET_LISTS', b'get_lists'), (b'GET_LIST_SUBSCRIBERS', b'get_list_subscribers'), (b'GET_ACCOUNT_INFO', b'get_acocunt_info')])),
+                ('action', models.CharField(blank=True, max_length=20, null=True, choices=[(b'FOLLOW_HASHTAG', b'Follow users based on hashtags'), (b'FOLLOW_BACK', b'Follow back your followers'), (b'FAVORITE', b'Favorite tweets'), (b'UNFOLLOW_BACK', b"Unfollow all the users that haven't followed you back"), (b'UNFOLLOW_ALL', b'Unfollow everyone you currently follow'), (b'AUTO_DM', b'Send direct messages to your followers'), (b'FOLLOW_INFLUENCER', b'Follow people who follow certain accounts.'), (b'FOLLOW_MEMBERS_OF_LIST', b'Follow the members of a specific list'), (b'TRACK_FOLLOWERS', b'Track followers'), (b'GET_FOLLOWERS', b'get_followers'), (b'GET_LISTS', b'get_lists'), (b'GET_LIST_SUBSCRIBERS', b'get_list_subscribers'), (b'GET_ACCOUNT_INFO', b'get_account_info')])),
                 ('message', models.CharField(max_length=160, null=True, blank=True)),
                 ('radius', models.PositiveIntegerField(null=True, blank=True)),
                 ('number', models.PositiveIntegerField(null=True, blank=True)),
@@ -84,7 +84,11 @@ class Migration(migrations.Migration):
             name='OauthSet',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('name', models.CharField(max_length=50)),
+                ('name', models.CharField(default=b'TokenSet%d', max_length=250)),
+                ('c_key', models.CharField(default=False, max_length=250)),
+                ('c_secret', models.CharField(default=False, max_length=250)),
+                ('access_key', models.CharField(default=False, max_length=250)),
+                ('key_secret', models.CharField(default=False, max_length=250)),
             ],
             options={
             },

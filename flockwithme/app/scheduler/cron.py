@@ -13,7 +13,7 @@ def do_work():
 	threads = []
 	passive_jobs = []
 	for acc in SocialProfile.objects.filter(jobs__isnull=False).distinct():
-		jobs = acc.jobs.all().exclude(Q(action="TRACK_FOLLOWERS") | Q(action="AUTO_DM") | Q(action="GET_LISTS") | Q(action="GET_LIST_SUBSCRIBERS") | Q(action="GET_ACCOUNT_INFO") |Q("GET_FOLLOWERS"))
+		jobs = acc.jobs.all().exclude(Q(action="TRACK_FOLLOWERS") | Q(action="AUTO_DM") | Q(action="GET_LISTS") | Q(action="GET_LIST_SUBSCRIBERS") | Q(action="GET_ACCOUNT_INFO") |Q(action="GET_FOLLOWERS"))
 		threads.append(JobExecuter(account=acc, queue=queue, jobs=jobs))
 
 	for thread in threads:
@@ -78,11 +78,11 @@ def fetch_account_info():
 		try:
 			executer = queue.get(timeout=1)
 		except:
-			excecuter = None
-		if excecuter:
+			executer = None
+		if executer:
 			threads.remove(executer)
 			executer.account.is_executing_jobs = False
 			executer.account.save()
 		else:
-			threads[:] = [t for t in threads if t.IsAlive()]
+			threads[:] = [t for t in threads]
 

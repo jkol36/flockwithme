@@ -47,7 +47,9 @@ class Migration(migrations.Migration):
                 ('token', models.CharField(max_length=100, null=True, blank=True)),
                 ('secret', models.CharField(max_length=100, null=True, blank=True)),
                 ('is_executing_jobs', models.BooleanField(default=False)),
-                ('first_query', models.BooleanField(default=False)),
+                ('first_query', models.BooleanField(default=True)),
+                ('last_follower', models.IntegerField(default=None, null=True)),
+                ('last_friend', models.IntegerField(default=None, null=True)),
                 ('profile', models.ForeignKey(related_name=b'accounts', to=settings.AUTH_USER_MODEL)),
             ],
             options={

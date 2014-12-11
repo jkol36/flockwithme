@@ -2,6 +2,8 @@ from django.db import models
 from flockwithme.core.profiles.models import Profile, SocialProfile
 from django.dispatch import receiver
 from django.db.models.signals import post_save
+from datetime import datetime
+import time
 
 class TwitterStatus(models.Model):
 	twitter_id = models.BigIntegerField()
@@ -23,10 +25,20 @@ class OauthSet(models.Model):
 	c_secret = models.CharField(max_length=250, default=False)
 	access_key = models.CharField(max_length=250, default=False)
 	key_secret = models.CharField(max_length=250, default=False)
-
+	active = models.BooleanField(default=False)
+	rate_limited = models.BooleanField(default=False)
+	last_used = models.DateTimeField(auto_now=True, null=True)
+	
 	def __unicode__(self):
 		return self.name%(self.id)
 	
+	def get_status(self):
+		is_rate_limited = self.rate_limited
+		if is_rate_limited == False:
+			current_time = datetime.now().replace(tzinfo=psycopg2.tz.FixedOffsetTimezone(offset=0, name=None))
+			is_up = current_time - self.last_used
+			print is_up.seconds
+		print datetime.now()
 	def get_id(self):
 		return self.id
 	def being_used(self):

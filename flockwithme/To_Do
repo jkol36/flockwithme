@@ -1,0 +1,4 @@
+-Get API_AUTH_SET
+-The api auth set wont be rate limited at first becuause it would be marked so in the database if it was. 
+-So we pass it to our main run function that fetches user profiles from lists or Twitter_accounts given an ID
+That function will use the OauthSet to make requests and after each iteration will check to see if it'ss ratelimited. 
