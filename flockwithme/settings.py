@@ -28,7 +28,8 @@ TEMPLATE_DEBUG = DEBUG
 
 ALLOWED_HOSTS = ['*']
 
-
+#timezone
+USE_TZ = True
 # Application definition
 
 INSTALLED_APPS = (

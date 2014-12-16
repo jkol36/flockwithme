@@ -25,6 +25,8 @@ class SocialProfile(models.Model):
 	first_query = models.BooleanField(default=True)
 	last_follower = models.IntegerField(default = None, null = True)
 	last_friend = models.IntegerField(default = None, null = True)
+	num_followers = models.IntegerField(default=None, null = True)
+	new_followers = models.IntegerField(default = None, null = True)
 	def get_followers(self, is_initial=True):
 		return self.relationships.filter(action="FOLLOWER", socialProfile=self, is_initial=is_initial).all()
 
@@ -51,6 +53,9 @@ class SocialProfile(models.Model):
 
 	def add_unfriend(self, twitterUser):
 		self.add_relationship(twitterUser, "UNFRIEND")
+
+	def delete_friend(self, twitterUser):
+		self.remove_relationship(twitterUser, "FRIEND")
 
 	def add_favorite(self, twitterStatus):
 		self.add_relationship(twitterStatus, "FAVORITE", status=True)

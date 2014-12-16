@@ -32,6 +32,8 @@ class OauthSet(models.Model):
 	def __unicode__(self):
 		return self.name%(self.id)
 	
+	def get_last_used(self):
+		print dir(last_used)
 	def get_id(self):
 		return self.id
 	def being_used(self):
