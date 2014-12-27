@@ -147,6 +147,7 @@ class InfluencerForm(forms.Form):
 
 
 class TwitterListForm(forms.Form):
+	#get the list owners submitted
 	list_owners = forms.CharField(required = False)
 
 	def __init__(self, profile, *args, **kwargs):
@@ -155,7 +156,7 @@ class TwitterListForm(forms.Form):
 
 	def save(self, *args, **kwargs):
 		print dir(self.profile)
-		lists = self.cleaned_data.get('lists').split(',')
+		list_owners = self.cleaned_data.get('TwitterListOwners').split(',')
 		should_delete = [x for x in my_lists if x not in lists]
 		should_add = [x for x in lists if x not in my_lists]
 		for name in should_add:

@@ -73,7 +73,7 @@ class TwitterUser(models.Model):
 
 class TwitterList(models.Model):
 	name = models.CharField(max_length = 100, blank = True, null = True)
-	owner = models.ForeignKey(TwitterUser, related_name = "Owner_Of_List", default = None)
+	owner = models.ForeignKey('TwitterListOwner', related_name = "Owner_Of_List", default = None)
 	#members of the list on twitter
 	subscribers = models.ManyToManyField(TwitterUser, through="TwitterRelationship", related_name = "List_Subscribers", default = None)
 	created_at = models.DateTimeField(auto_now_add = True)

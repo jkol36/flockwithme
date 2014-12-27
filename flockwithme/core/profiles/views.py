@@ -126,8 +126,8 @@ def my_lists(request):
 	except Exception, NoAccounts:
 		messages.error(request, "Please add a twitter account first")
 		return redirect("my_accounts")
-	return render(request, 'my_lists.jade', {'list_owner':','.join([str(x.owner) for x in TwitterList.objects.filter(profile=request.user)]),
-		'all_list_owners': json.dumps([x.name for x in TwitterList.objects.all()]), "twitter_lists":TwitterList.objects.filter(profile=request.user), 'list_followers': ','.join([str(x.owner) for x in request.user.twitterlist_set.all()])})
+	return render(request, 'my_lists.jade', {'list_owner':','.join([str(x.owner) for x in TwitterList.objects.filter(followers=request.user)]),
+		'all_list_owners': json.dumps([x.name for x in TwitterList.objects.all()]), "twitter_lists":TwitterList.objects.filter(followers=request.user), 'list_followers': ','.join([str(x.owner) for x in TwitterList.objects.filter(followers=request.user)])})
 
 def logout_view(request):
 	logout(request)
