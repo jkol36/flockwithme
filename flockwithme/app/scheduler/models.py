@@ -157,6 +157,7 @@ class TwitterListOwner(models.Model):
 
 	def __unicode__(self):
 		return self.screen_name
+		
 class Job(models.Model):
 	ACTION_CHOICES = (
 		("FOLLOW_HASHTAG", "Follow users based on hashtags"),
