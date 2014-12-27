@@ -63,18 +63,6 @@ def my_hashtags(request):
 
 
 def my_locations(request):
-	if request:
-		try:
-			accounts = request.user.account.all()
-			pk = accounts[0].id
-			return render(request, 'my_locations.jade', {
-				'locations': ','.join([x.name for x in request.user.locations.all()]),
-				'all_locations': json.dumps([x.name for x in Location.objects.filter(profiles__isnull=False)])
-				})
-		except Exception, e:
-			messages.error(request, "Please add a Twitter Account First")
-			return redirect("my_accounts")
-	
 	if request.POST:
 		form = LocationForm(request.user, request.POST)
 		if form.is_valid():
@@ -83,6 +71,20 @@ def my_locations(request):
 		else:
 			messages.error(request, "Uh Oh. Something went wrong on our end. Feel free to harrass Jon.")
 			print form.errors
+
+	
+	try:
+		accounts = request.user.account.all()
+		pk = accounts[0].id
+		return render(request, 'my_locations.jade', {
+			'locations': ','.join([x.name for x in request.user.locations.all()]),
+			'all_locations': json.dumps([x.name for x in Location.objects.filter(profiles__isnull=False)])
+			})
+	except Exception, e:
+		messages.error(request, "Please add a Twitter Account First")
+		return redirect("my_accounts")
+	
+	
 
 
 def my_influencers(request):
