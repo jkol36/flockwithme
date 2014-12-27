@@ -73,11 +73,13 @@ class TwitterUser(models.Model):
 
 class TwitterList(models.Model):
 	name = models.CharField(max_length = 100, blank = True, null = True)
-	owner = models.ForeignKey(TwitterUser, related_name = "Twitter_List_Owner", default = None)
+	owner = models.ForeignKey(TwitterUser, related_name = "Owner_Of_List", default = None)
+	#members of the list on twitter
 	subscribers = models.ManyToManyField(TwitterUser, through="TwitterRelationship", related_name = "List_Subscribers", default = None)
 	created_at = models.DateTimeField(auto_now_add = True)
 	twitter_id = models.IntegerField(null = True, blank = True)
-	followers = models.ManyToManyField(Profile)
+	#user instances that have this list as a source for following accounts
+	followers = models.ManyToManyField(Profile, related_name="user_instances_who_follow_this_list", )
 
 	def __unicode__(self):
 		return self.name
