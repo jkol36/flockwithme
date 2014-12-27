@@ -76,13 +76,14 @@ def my_locations(request):
 
 
 	try:
-		accounts = request.user.account.all()
+		accounts = request.user.accounts.all()
 		pk = accounts[0].id
 		return render(request, 'my_locations.jade', {
 			'locations': ','.join([x.name for x in request.user.locations.all()]),
 			'all_locations': json.dumps([x.name for x in Location.objects.filter(profiles__isnull=False)])
 			})
 	except Exception, e:
+		print e
 		messages.error(request, "Please add a Twitter Account First")
 		return redirect("my_accounts")
 	

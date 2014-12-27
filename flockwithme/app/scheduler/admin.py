@@ -20,7 +20,7 @@ class JobAdmin(admin.ModelAdmin):
 	list_display = ['action', 'is_complete']
 
 class TwitterListAdmin(admin.ModelAdmin):
-	list_display = ['name', 'profile', 'owner', 'twitter_id',]
+	list_display = ['name', 'owner', 'twitter_id',]
 
 class OauthSetAdmin(admin.ModelAdmin):
 	exclude= ["name"]

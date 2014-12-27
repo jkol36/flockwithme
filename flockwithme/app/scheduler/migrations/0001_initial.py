@@ -8,7 +8,7 @@ from django.conf import settings
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('profiles', '0001_initial'),
+        ('profiles', '0008_socialprofile_new_followers'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
@@ -58,16 +58,6 @@ class Migration(migrations.Migration):
             bases=(models.Model,),
         ),
         migrations.CreateModel(
-            name='list_owner',
-            fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('screen_name', models.CharField(max_length=250)),
-            ],
-            options={
-            },
-            bases=(models.Model,),
-        ),
-        migrations.CreateModel(
             name='Location',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
@@ -89,6 +79,9 @@ class Migration(migrations.Migration):
                 ('c_secret', models.CharField(default=False, max_length=250)),
                 ('access_key', models.CharField(default=False, max_length=250)),
                 ('key_secret', models.CharField(default=False, max_length=250)),
+                ('active', models.BooleanField(default=False)),
+                ('rate_limited', models.BooleanField(default=False)),
+                ('last_used', models.DateTimeField(auto_now=True, null=True)),
             ],
             options={
             },
@@ -108,6 +101,16 @@ class Migration(migrations.Migration):
             bases=(models.Model,),
         ),
         migrations.CreateModel(
+            name='TwitterListOwner',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('screen_name', models.CharField(max_length=250)),
+            ],
+            options={
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
             name='TwitterRelationship',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
@@ -115,6 +118,7 @@ class Migration(migrations.Migration):
                 ('message', models.CharField(max_length=160, null=True, blank=True)),
                 ('is_initial', models.BooleanField(default=False)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
+                ('TwitterListOwner', models.ForeignKey(blank=True, to='scheduler.TwitterListOwner', null=True)),
                 ('socialProfile', models.ForeignKey(related_name=b'relationships', blank=True, to='profiles.SocialProfile', null=True)),
                 ('twitterList', models.ForeignKey(blank=True, to='scheduler.TwitterList', null=True)),
             ],
@@ -176,15 +180,15 @@ class Migration(migrations.Migration):
             preserve_default=True,
         ),
         migrations.AddField(
-            model_name='twitterlist',
-            name='owner',
-            field=models.ForeignKey(related_name=b'Twitter_List_Owner', default=None, to='scheduler.TwitterUser'),
+            model_name='twitterlistowner',
+            name='twitter_profile',
+            field=models.ForeignKey(related_name=b'twitter_list_owners', blank=True, to='scheduler.TwitterUser', null=True),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='twitterlist',
-            name='profile',
-            field=models.ForeignKey(related_name=b'profile_lists', blank=True, to=settings.AUTH_USER_MODEL, null=True),
+            name='owner',
+            field=models.ForeignKey(related_name=b'Twitter_List_Owner', default=None, to='scheduler.TwitterUser'),
             preserve_default=True,
         ),
         migrations.AddField(

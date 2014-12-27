@@ -73,7 +73,6 @@ class TwitterUser(models.Model):
 
 class TwitterList(models.Model):
 	name = models.CharField(max_length = 100, blank = True, null = True)
-	profile = models.ForeignKey(Profile, related_name = "profile_lists", blank = True, null = True)
 	owner = models.ForeignKey(TwitterUser, related_name = "Twitter_List_Owner", default = None)
 	subscribers = models.ManyToManyField(TwitterUser, through="TwitterRelationship", related_name = "List_Subscribers", default = None)
 	created_at = models.DateTimeField(auto_now_add = True)
@@ -157,7 +156,7 @@ class TwitterListOwner(models.Model):
 
 	def __unicode__(self):
 		return self.screen_name
-		
+
 class Job(models.Model):
 	ACTION_CHOICES = (
 		("FOLLOW_HASHTAG", "Follow users based on hashtags"),
