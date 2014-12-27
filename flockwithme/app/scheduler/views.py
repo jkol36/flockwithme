@@ -19,8 +19,15 @@ def analytics_view(request):
 			data[until.strftime("%Y-%m-%d")] = socialprofile.relationships.filter(action="FOLLOWER", created_at__range=[since, until]).count()
 			until += timedelta(days=1)
 	else:
-		data = {}
-	return render(request, 'analytics.jade', {'data': data})
+		try:
+			accounts = request.user.accounts.all()
+			account = accounts[0]
+			data = {}
+			return render(request, 'analytics.jade', {'data': data})
+
+		except Exception, AccountDoesNotExist:
+			messages.error(request, "please add an account first")
+			return redirect("my_accounts")
 
 def handle_form(request):
 	form = JobCreationForm(request.POST)
@@ -31,25 +38,20 @@ def handle_form(request):
 		messages.error(request, "Something went wrong...")
 		print form.errors
 
-def check_account(request):
+
+@login_required
+def auto_favorite(request):
+	if request.POST:
+		handle_form(request)
+		return render(request, 'auto_favorite.jade')
+
 	try:
 		accounts = request.user.accounts.all()
 		pk = accounts[0].id
-		return pk
+		return render(request, 'auto_favorite.jade')
 	except Exception, e:
-		messages.error(request, "Please add a twitter account first.")
+		messages.error(request, "Please add a Twitter Account first")
 		return redirect("my_accounts")
-@login_required
-def auto_favorite(request):
-	if request:
-		try:
-			accounts = request.user.accounts.all()
-			pk = accounts[0].id
-			handle_form(request)
-			return render(request, 'auto_favorite.jade')
-		except Exception, e:
-			messages.error(request, "Please add a Twitter Account first")
-			return redirect("my_accounts")
 
 @login_required
 def auto_follow(request):
@@ -75,7 +77,14 @@ def auto_unfollow(request):
 			print 'bla'
 			new_job = Job.objects.create(action="UNFOLLOW_BACK", socialprofile=account)
 			new_job.save()
-	return render(request, "auto_unfollow.jade")
+	try:
+		accounts = request.user.accounts.all()
+		pk = accounts[0].id
+		return render(request, "auto_unfollow.jade")
+	except Exception, NoAccounts:
+		messages.error(request, "please add a Twitter Account first")
+		return redirect("my_accounts")
+		
 		
 @login_required
 def auto_dm(request):
