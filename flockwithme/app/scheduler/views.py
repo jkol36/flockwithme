@@ -79,20 +79,23 @@ def auto_unfollow(request):
 		
 @login_required
 def auto_dm(request):
-	if request:
-		try:
-			accounts = request.user.accounts.all()
-			pk = accounts[0].id
-			return render(request, "auto_dm.jade")
-		except Exception, e:
-			messages.error("Please add a Twitter Account First.")
-
 	if request.POST:
 		try:
 			handle_form(request)
 			return render(request, 'auto_dm.jade')
 		except Exception, e:
 			messages.error(request, "Something went wrong. If the problem persists please email us.")
+
+
+	try:
+		accounts = request.user.accounts.all()
+		pk = accounts[0].id
+		return render(request, "auto_dm.jade")
+	except Exception, NoAccounts:
+		messages.error(request, "Please add a Twitter Account First.")
+		return redirect("my_accounts")
+
+	
 			
 
 
