@@ -110,6 +110,7 @@ class TwitterRelationship(models.Model):
 	twitterUser = models.ForeignKey(TwitterUser, blank=True, null=True)
 	twitterStatus = models.ForeignKey(TwitterStatus, blank=True, null=True)
 	twitterList = models.ForeignKey(TwitterList, blank=True, null = True)
+	TwitterListOwner = models.ForeignKey('TwitterListOwner', blank = True, null = True)
 	message = models.CharField(max_length=160, null=True, blank=True)
 	is_initial = models.BooleanField(default=False)
 	created_at = models.DateTimeField(auto_now_add=True)
@@ -145,9 +146,14 @@ class Influencer(models.Model):
 		return unicode(self.screen_name)
 
 
-
-class list_owner(models.Model):
+ 
+class TwitterListOwner(models.Model):
+	#The Screen name is what the profile will submit
 	screen_name = models.CharField(max_length=250)
+	#the twitter profile is the twitter_user_instance in our database
+	#By default this will be left blank
+	twitter_profile = models.ForeignKey(TwitterUser, related_name="twitter_list_owners", blank=True, null=True)
+
 
 	def __unicode__(self):
 		return self.screen_name

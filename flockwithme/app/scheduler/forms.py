@@ -7,7 +7,7 @@ from geopy import GoogleV3
 from flockwithme.core.profiles.models import SocialProfile, Profile
 import logging
 
-
+#Called in scheduler/views
 class JobCreationForm(forms.Form):
 	action = forms.ChoiceField(required=True, choices=Job.ACTION_CHOICES)
 	socialProfile = forms.IntegerField(required=True)
@@ -16,6 +16,7 @@ class JobCreationForm(forms.Form):
 	hashtag = forms.IntegerField(required=False)
 	influencer = forms.IntegerField(required = False)
 	twitter_username = forms.CharField(required=False)
+	twitterlistowner = forms.CharField(required = False)
 	location = forms.IntegerField(required=False)
 	radius = forms.IntegerField(required=False)
 
@@ -28,7 +29,7 @@ class JobCreationForm(forms.Form):
 		self.cleaned_data['location'] = self.cleaned_data['location'] or None
 		self.cleaned_data['hashtag'] = self.cleaned_data['hashtag'] or None
 		self.cleaned_data['influencer'] = self.cleaned_data['influencer'] or None
-		self.cleaned_data['list_owner'] = self.cleaned_data['list_owner'] or None
+		self.cleaned_data['TwitterListOwner'] = self.cleaned_data['twitterlistowner'] or None
 		return self.cleaned_data
 
 
@@ -64,15 +65,15 @@ class JobCreationForm(forms.Form):
 		except Influencer.DoesNotExist:
 			self._errors['influencer'] = "There is no such influencer"
 			return False
-		"""	
+
 		try: 
-			if self.cleaned_data['list_owner']:
-				self.list_name= TwitterList.objects.get(pk=
+			if self.cleaned_data['TwitterListOwner']:
+				print self.cleaned_data['TwitterListOwner']
 			else:
 				self.list_name = None
 		except List_.DoesNotExist:
 			self.errors['lists']= 'There is no such list'
-		'''	
+		
 		try:
 			self.profile = Profile.objects.get(pk=self.cleaned_data.get('profile'))
 			self.socialProfile = self.profile.accounts.get(pk=self.cleaned_data.get('socialProfile'))
@@ -93,7 +94,7 @@ class JobCreationForm(forms.Form):
 
 		job.save()
 		return job
-	"""
+	
 
 
 
@@ -145,15 +146,15 @@ class InfluencerForm(forms.Form):
 		self.profile.save()
 
 
-class listForm(forms.Form):
-	lists = forms.CharField(required = False)
+class TwitterListForm(forms.Form):
+	list_owners = forms.CharField(required = False)
 
 	def __init__(self, profile, *args, **kwargs):
 		self.profile = profile
-		return super(list_form, self).__init__(*args, **kwargs)
+		return super(TwitterListForm, self).__init__(*args, **kwargs)
 
 	def save(self, *args, **kwargs):
-		my_lists = [h.name for h in self.profile.lists.all()]
+		print dir(self.profile)
 		lists = self.cleaned_data.get('lists').split(',')
 		should_delete = [x for x in my_lists if x not in lists]
 		should_add = [x for x in lists if x not in my_lists]
