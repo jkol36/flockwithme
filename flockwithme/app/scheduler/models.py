@@ -79,7 +79,7 @@ class TwitterList(models.Model):
 	created_at = models.DateTimeField(auto_now_add = True)
 	twitter_id = models.IntegerField(null = True, blank = True)
 	#user instances that have this list as a source for following accounts
-	followers = models.ManyToManyField(Profile, related_name="user_instances_who_follow_this_list", )
+	followers = models.ManyToManyField(Profile, related_name="List_following", )
 
 	def __unicode__(self):
 		return self.name
