@@ -47,7 +47,7 @@ script.
 					form#list-owner-form(method='POST', action="{% url 'my_lists' %}")
 						-csrf_token
 						.form-group
-							input#list-owner-input(type="hidden", name='TwitterListOwner', value="{{list_owner}}")
+							input#list-owner-input(type="hidden", name='list_owner', value="{{list_owner}}")
 						.form-group
 							button.btn.btn-info.btn-lg.form-submit#listowner(type="submit")
 								i.fa.fa-lists
@@ -77,23 +77,7 @@ script.
 						{%endfor%}
 
 					
-	.row 
-		.col-md-4
-			.panel.panel-default.content.text-center
-				.panel-body(style = "min-height: 300px;")
-					p.text-muted.content-header.lead
-						i.fa.fa-list
-						| List owners you follow
-					hr.divider
-					p.text-muted If you submit a list owners who's already in our database, they'll appear here.
-					form#list-owner-form(method='POST', action="{% url 'my_lists' %}")
-						-csrf_token
-						.form-group
-							input#list-follower-input(type="hidden", name='TwitterFollower', disabled, value="{{list_followers}}")
-						.form-group
-							button.btn.btn-info.btn-lg.form-submit#listowner(type="submit")
-								i.fa.fa-lists
-								| Update 
+	
 
 
 

@@ -2,7 +2,7 @@
 from django import forms
 from django.conf import settings
 import tweepy
-from .models import Hashtag, Location, Job, Influencer, TwitterList, TwitterUser
+from .models import Hashtag, Location, Job, Influencer, TwitterList, TwitterUser, TwitterListOwner
 from geopy import GoogleV3
 from flockwithme.core.profiles.models import SocialProfile, Profile
 import logging
@@ -148,26 +148,26 @@ class InfluencerForm(forms.Form):
 
 class TwitterListForm(forms.Form):
 	#get the list owners submitted
-	list_owners = forms.CharField(required = False)
+	list_owner = forms.CharField(required = False)
 
 	def __init__(self, profile, *args, **kwargs):
 		self.profile = profile
 		return super(TwitterListForm, self).__init__(*args, **kwargs)
 
 	def save(self, *args, **kwargs):
-		print dir(self.profile)
-		list_owners = self.cleaned_data.get('TwitterListOwners').split(',')
-		should_delete = [x for x in my_lists if x not in lists]
-		should_add = [x for x in lists if x not in my_lists]
+		my_owners = [x.screen_name for x in self.profile.owners.all()]
+		submitted_list_owners = self.cleaned_data.get('list_owner').split(',')
+		should_delete = [x for x in my_owners if x not in submitted_list_owners]
+		should_add = [x for x in submitted_list_owners if x not in my_owners]
 		for name in should_add:
-			if name:
-				list_, _ = Lists.objects.get_or_create(name = name.lstrip('').lower())
-				list_.profiles.add(self.profile)
-				list_.save()
+			owner, _ = TwitterListOwner.objects.get_or_create(screen_name=name)
+			owner.save
+			self.profile.owners.add(owner)
 		for name in should_delete:
 			if name:
-				list_, _ = Lists.objects.get_or_create(name = name.lstrip('').lower())
-				self.profile.lists.remove(list_)
+				owner, _ = TwitterListOwner.objects.get_or_create(screen_name=name)
+				owner.save()
+				self.profile.owners.remove(owner)
 		self.profile.save()
 		
 
