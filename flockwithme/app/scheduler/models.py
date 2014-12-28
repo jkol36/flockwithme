@@ -151,6 +151,10 @@ class Influencer(models.Model):
 class TwitterListOwner(models.Model):
 	#The Screen name is what the profile will submit
 	screen_name = models.CharField(max_length=250)
+	#Used by the ListFetcher to determine which ListOwners have been queiried for lists and which ones haven't
+	is_queried = models.BooleanField(default=False)
+	#if the user submits a twitterlist owner that doesn't actually have any lists. This will change to False. 
+	owns_lists = models.BooleanField(default=True)
 	#we want twitterlistowners to be accessible through profile. Users are either following TwitterListOwners (and as a result the lists they own) or not
 	followers = models.ManyToManyField(Profile, related_name="owners", blank=True, null=True)
 	#the twitter profile is the twitter_user_instance in our database
