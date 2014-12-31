@@ -66,7 +66,7 @@ ROOT_URLCONF = 'flockwithme.urls'
 
 WSGI_APPLICATION = 'flockwithme.wsgi.application'
 
-STATIC_ROOT = os.path.join(PROJECT_DIR, 'static')
+STATIC_ROOT = '/webapps/flock_django/static'
 MEDIA_ROOT = '/webapps/flock_django/uploads'
 
 # Database
