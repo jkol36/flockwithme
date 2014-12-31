@@ -92,7 +92,7 @@ else:
             'PORT': '',                      # Set to empty string for default.
         }
     }
-    STATIC_ROOT = '/webapps/flock_django/static'
+    STATIC_ROOT = os.path.join(PROJECT_DIR, 'static')
     MEDIA_ROOT = '/webapps/flock_django/uploads'
 
 # Templates
