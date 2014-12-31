@@ -128,6 +128,7 @@ class JobExecuter(Thread):
 				self.sleep_status()
 		
 		self.account.save()
+	
 	def get_twitter_id(self, job, screen_name):
 		twitter_id = self.api.get_user(screen_name=screen_name)
 		print twitter_id
@@ -150,12 +151,14 @@ class JobExecuter(Thread):
 					break
 
 		self.account.save()
+	
 	def get_profile_instance(self, profile_id):
 		twitter_profile = Profile.objects.get(pk=profile_id)
 		if twitter_profile:
 			return twitter_profile
 		else:
 			return None
+	
 	def get_twitter_user_instance(self, screen_name, twitter_id=False):
 		if twitter_id == False:
 			user = TwitterUser.objects.get(screen_name=screen_name)
@@ -173,86 +176,7 @@ class JobExecuter(Thread):
 				return user
 			else:
 				return None
-	def get_lists(self, job):
-		job_id = job.id
-		account = self.account
-		print job_id
-		list_owners = job.owner.split(',')
-		profile_id = job.socialprofile.profile_id
-		profile = self.get_profile_instance(profile_id)
-		api = self.get_api()
-		for owner in list_owners:
-			print owner
-			user = self.get_twitter_user_instance(owner)
-			all_lists = api.lists_all(owner)
-			for l in all_lists:
-				if l:
-					user.has_list = True
-					user.save()
-					twitter_list = TwitterList.objects.create(name=l.name, twitter_id = l.id, profile=profile, owner=user)
-					twitter_list.save()
-					twitter_list = TwitterList.objects.get(twitter_id=l.id)
-					Job.objects.create(socialprofile=self.account, action="GET_LIST_SUBSCRIBERS", twitter_list=twitter_list)
-				else:
-					self.sleep_action()
-		this = Job.objects.get(pk=job_id)
-		this.delete()
-		self.sleep_action()
-
-
-	
-	def get_list_subscribers(self, job):
-		job_id = job.id
-		list_instance = job.twitter_list
-		list_name = job.twitter_list.name.split(',')
-		list_owner = job.twitter_list.owner
-		twitter_list_id = job.twitter_list.twitter_id
-		api = self.get_api()
-		for name in list_name:
-			print name
-			twitter_list_name = name
-			list_instance = list_instance
-			owner = list_owner
-			subscribers = api.list_members(list_id=twitter_list_id)
-			for subscriber in subscribers:
-				try:
-					screen_name = subscriber.screen_name
-					twitter_id = subscriber.id
-					followers_count = subscriber.followers_count
-					location = subscriber.location
-					twitter_user, created = TwitterUser.objects.get_or_create(screen_name=screen_name, twitter_id=twitter_id, followers_count=followers_count, location=location)
-					twitter_user.save()
-					twitter_user = TwitterUser.objects.get(pk=twitter_id)
-					new_relationship, created = TwitterRelationship.objects.get_or_create(twitterUser=twitter_user, action="SUBSCRIBE", twitterList=list_instance)
-					relationship_id = new_relationship.id
-					new_relationship.save()
-					get_relationship = TwitterRelationship.objects.get(pk=relationship_id)
-					add_subscriber = twitter_user.twitterrelationship_set.add(get_relationship, 'SUBSCRIBE')
-					add_subscriber.save()
-				except Exception, e:
-					print e
-			this_job = Job.objects.get(pk=job_id)
-			this_job.is_complete=True
-			this_job.save()
-
-			
-
-
-
-				
-		
-
-		
-			
-		
-
-
-
-
-
-			
-
-		
+					
 
 	def follow_influencer(self, job):
 		screen_names = []
@@ -359,14 +283,6 @@ class JobExecuter(Thread):
 			elif job.action == "GET_TWITTER_ID":
 				job.action = self.get_twitter_id
 				job.action(job)
-			elif job.action =="GET_LISTS":
-				job.action = self.get_lists
-				job.action(job)
-			elif job.action == "GET_LIST_SUBSCRIBERS":
-				if job.is_complete == False:
-					job.action = self.get_list_subscribers
-					job.action(job)
-			
 			#logger.error("\nUSER: %s, ERROR: %s" % (self.account.handle, e))
 		self.queue.put(self)
 

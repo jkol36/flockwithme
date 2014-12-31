@@ -92,9 +92,10 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('name', models.CharField(max_length=100, null=True, blank=True)),
+                ('quiried', models.BooleanField(default=False)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('twitter_id', models.IntegerField(null=True, blank=True)),
-                ('followers', models.ManyToManyField(to=settings.AUTH_USER_MODEL)),
+                ('followers', models.ManyToManyField(related_name=b'List_following', to=settings.AUTH_USER_MODEL)),
             ],
             options={
             },
@@ -105,6 +106,9 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('screen_name', models.CharField(max_length=250)),
+                ('is_queried', models.BooleanField(default=False)),
+                ('owns_lists', models.BooleanField(default=True)),
+                ('followers', models.ManyToManyField(related_name=b'owners', null=True, to=settings.AUTH_USER_MODEL, blank=True)),
             ],
             options={
             },
@@ -188,7 +192,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='twitterlist',
             name='owner',
-            field=models.ForeignKey(related_name=b'Twitter_List_Owner', default=None, to='scheduler.TwitterUser'),
+            field=models.ForeignKey(related_name=b'Owner_Of_List', default=None, to='scheduler.TwitterListOwner'),
             preserve_default=True,
         ),
         migrations.AddField(
