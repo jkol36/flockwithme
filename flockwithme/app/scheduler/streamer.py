@@ -90,6 +90,7 @@ class Worker:
 		while 1:
 			hashtags = Hashtag.objects.filter(profiles__isnull=False).distinct()
 			if not hashtags:
+				print "no hashtags"
 				time.sleep(10)
 			stream = tweepy.Stream(self.auth, Streamer(hashtags=hashtags))
 			stream.filter(track=['#'+h.name for h in hashtags], languages=['en',])
