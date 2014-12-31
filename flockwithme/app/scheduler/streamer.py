@@ -89,6 +89,7 @@ class Worker:
 	def stream(self):
 		while 1:
 			hashtags = Hashtag.objects.filter(profiles__isnull=False).distinct()
+			print hashtags
 			if not hashtags:
 				print "no hashtags"
 				time.sleep(10)
