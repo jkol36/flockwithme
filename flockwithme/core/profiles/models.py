@@ -23,7 +23,7 @@ class SocialProfile(models.Model):
 	secret = models.CharField(max_length=100, blank=True, null=True)
 	is_executing_jobs = models.BooleanField(default=False)
 	first_query = models.BooleanField(default=True)
-	last_query = models.DateTimeField(auto_now=True, default=None)
+	last_query = models.DateTimeField(auto_now=True, default=None, null = True, blank=True)
 	friend_count = models.IntegerField(default = None, null = True)
 	last_follower = models.IntegerField(default = None, null = True)
 	follower_count = models.IntegerField(default=None, null = True)
