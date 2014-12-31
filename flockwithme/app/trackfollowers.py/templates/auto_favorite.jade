@@ -1,0 +1,103 @@
+extends base
+
+- load staticfiles
+- block title
+| Auto favorite
+- endblock
+
+- block include
+script(type="text/javascript", src="//maps.google.com/maps/api/js?sensor=true")
+script(type='text/javascript', src="{% static 'gmaps/gmaps.js' %}")
+script.
+	$(function() {
+		circle = null;
+		map = new GMaps({
+			div: '#map',
+			zoom: 8,
+			lat: 40.7127840,
+			lng: -74.0059410,
+		});
+		$('#location-select, #number-input').change(function(e) {
+			if (circle) {
+				circle.setMap(null);
+				map.removeMarkers();
+			}
+			var current = $('#location-select').find(':selected');
+			if (current.val() == 0) {
+				return;
+			}
+			var latitude = current.attr('latitude');
+			var longitude = current.attr('longitude');
+			map.setCenter(latitude, longitude);
+			map.addMarker({
+				lat: latitude,
+				lng: longitude,
+			});
+			circle = map.drawCircle({
+				lat: latitude,
+				lng: longitude,
+				radius: Number($('#number-input').val())*1609
+			});
+		});
+	});
+- endblock
+
+- block content
+.container-fluid
+	.row
+		.col-md-6
+			.panel.panel-default.content
+				.panel-body
+					p.lead.content-header
+						i.fa.fa-star.fa-fw
+						| &nbsp; AUTO FAVORITE TWEETS
+					p.text-muted Favorite tweets from potential customers, and let them notice you! Soon there will be engagement.
+					hr.divider
+					form(action="{% url 'auto_favorite' %}", method="POST")
+						- csrf_token
+						input(type="hidden", name="action", value="FAVORITE")
+						input(type="hidden", name="profile", value="{{ user.pk }}")
+						.form-group
+							p.text-muted 
+								| Select a hashtag. Add more in 
+								a(href="{% url 'my_hashtags' %}") my hashtags.
+							.input-group
+								span.input-group-addon
+									i.fa.fa-slack.fa-fw
+								select.form-control(name='hashtag')
+									for hashtag in user.hashtags.all
+										option(value="{{ hashtag.pk }}") {{ hashtag.name }}
+						.form-group
+							p.text-muted 
+								| Select a location and put the radius in miles below. Add more in 
+								a(href="{% url 'my_locations' %}") my locations.
+
+							.input-group
+								span.input-group-addon
+									i.fa.fa-location-arrow.fa-fw
+								select.form-control#location-select(name='location')
+									option(value="0") Everywhere
+									for location in user.locations.all
+										option(value="{{ location.pk }}", latitude="{{ location.latitude }}", longitude="{{ location.longitude }}") {{ location.name}}
+								input.form-control#number-input(name='radius', type='number', value="20")
+						.form-group
+							p.text-muted
+								| Select the account that should favorite the tweets. Add more in 
+								a(href="{% url 'my_accounts' %}") my accounts.
+							.input-group
+								span.input-group-addon
+									i.fa.fa-user.fa-fw
+								select.form-control(name='socialProfile')
+									for account in user.accounts.all
+										option(value="{{ account.pk }}") {{ account.handle}}
+						p.text-center
+							button.btn.btn-info.btn-lg.form-submit(type="submit")
+								i.fa.fa-star.fa-fw
+								| AUTO FAVORITE
+
+		.col-md-6
+			.panel.panel-default.panel-content
+				.panel-body(style='height: 490px;')
+					p.text-muted See the exposure of your targeting.
+					#map(style='height: 95%;')
+- endblock

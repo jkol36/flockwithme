@@ -1,0 +1,189 @@
+extends base
+
+- load staticfiles
+- block title
+| Auto follow
+- endblock
+
+- block include
+script(type="text/javascript", src="//maps.google.com/maps/api/js?sensor=true")
+script(type='text/javascript', src="{% static 'gmaps/gmaps.js' %}")
+script.
+	$(function() {
+		circle = null;
+		map = new GMaps({
+			div: '#map',
+			zoom: 8,
+			lat: 40.7127840,
+			lng: -74.0059410,
+		});
+		$('#location-select, #number-input').change(function(e) {
+			if (circle) {
+				circle.setMap(null);
+				map.removeMarkers();
+			}
+			var current = $('#location-select').find(':selected');
+			if (current.val() == 0) {
+				return;
+			}
+			var latitude = current.attr('latitude');
+			var longitude = current.attr('longitude');
+			map.setCenter(latitude, longitude);
+			map.addMarker({
+				lat: latitude,
+				lng: longitude,
+			});
+			circle = map.drawCircle({
+				lat: latitude,
+				lng: longitude,
+				radius: Number($('#number-input').val())*1609
+			});
+		});
+	});
+- endblock
+
+- block content
+.container-fluid
+	.row
+		.col-md-6
+			.panel.panel-default.content
+				.panel-body
+					p.lead.content-header
+						i.fa.fa-twitter.fa-fw
+						| &nbsp; AUTO FOLLOW USERS
+					p.text-muted Following potential customers is the best way to get them to notice you. Use in conjunction with Auto-Fav for best results.
+					hr.divider
+
+					.panel-group#accordion
+						.panel.panel-default
+							.panel-heading
+								h4.panel-title
+									a(data-toggle="collapse", href="#collapseFOLLOWHASHTAGS", data-parent="#accordion") Follow people based on hashtags
+							.panel-collapse.collapse.out#collapseFOLLOWHASHTAGS
+								.panel-body
+									
+
+									form(action="{% url 'auto_follow' %}", method="POST")
+										- csrf_token
+										input(type="hidden", name="action", value="FOLLOW_HASHTAG")
+										input(type='hidden', name='profile', value='{{ user.pk }}')
+										.form-group
+											p.text-muted 
+												| Select a hashtag. Add more in 
+												a(href="{% url 'my_hashtags' %}") my Hashtags.
+											.input-group
+												span.input-group-addon
+													i.fa.fa-slack.fa-fw
+												select.form-control(name='hashtag')
+													for hashtag in user.hashtags.all
+														option(value="{{ hashtag.pk }}") {{ hashtag.name }}
+										.form-group
+											p.text-muted 
+												| Select a location and put the radius in miles below. Add more in 
+												a(href="{% url 'my_locations' %}") my locations.
+
+											.input-group
+												span.input-group-addon
+													i.fa.fa-location-arrow.fa-fw
+												select.form-control#location-select(name='location')
+													option(value="0") Everywhere
+													for location in user.locations.all
+														option(value="{{ location.pk }}", latitude="{{ location.latitude }}", longitude="{{ location.longitude }}") {{ location.name}}
+												input.form-control#number-input(type='number', name='radius', value="20")
+										.form-group
+											p.text-muted
+												| Select the account that should follow the users. Add more in 
+												a(href="{% url 'my_accounts' %}") my accounts.
+											.input-group
+												span.input-group-addon
+													i.fa.fa-user.fa-fw
+												select.form-control(name='socialProfile')
+													for account in user.accounts.all
+														option(value="{{ account.pk }}") {{ account.handle}}
+										p.text-center
+											button.btn.btn-info.btn-lg.form-submit(type="submit")
+												i.fa.fa-twitter.fa-fw
+												| Follow Hashtag
+					.panel-group#accordion
+						.panel.panel-default
+							.panel-heading
+								h4.panel-title
+									a(data-toggle="collapse", href="#collapseFOLLOWINFLUENCER", data-parent="#accordion") Follow people who follow a certain Twitter Account
+							.panel-collapse.collapse.out#collapseFOLLOWINFLUENCER
+								.panel-body
+
+									form(action="{% url 'auto_follow' %}", method="POST")
+										- csrf_token
+										input(type="hidden", name="action", value="FOLLOW_INFLUENCER")
+										input(type='hidden', name='profile', value='{{ user.pk }}')
+										.form-group
+											p.text-muted 
+												| Select a influencer. Add more in 
+												a(href="{% url 'my_influencers' %}") my influencers.
+											.input-group
+												span.input-group-addon
+													i.fa.fa-twitter
+												select.form-control(name='influencer')
+													for influencer in user.influencers.all
+														option(value="{{ influencer.pk }}") {{ influencer.screen_name }}
+										
+										.form-group
+											p.text-muted
+												| Select the account that should follow the users. Add more in 
+												a(href="{% url 'my_accounts' %}") my accounts.
+											.input-group
+												span.input-group-addon
+													i.fa.fa-user.fa-fw
+												select.form-control(name='socialProfile')
+													for account in user.accounts.all
+														option(value="{{ account.pk }}") {{ account.handle}}
+										p.text-center
+											button.btn.btn-info.btn-lg.form-submit(type="submit")
+												i.fa.fa-twitter.fa-fw
+												| Follow Influencer
+					.panel-group#accordion
+						.panel.panel-default
+							.panel-heading
+								h4.panel-title
+									a(data-toggle="collapse", href="#collapseMOL", data-parent="#accordion") Follow members of a twitter list
+							.panel-collapse.collapse.out#collapseMOL
+								.panel-body
+
+									form(action="{% url 'auto_follow' %}", method="POST")
+										- csrf_token
+										input(type="hidden", name="action", value="FOLLOW_INFLUENCER")
+										input(type='hidden', name='profile', value='{{ user.pk }}')
+										.form-group
+											p.text-muted 
+												| Select a list. Add more in  
+												a(href="{% url 'my_lists' %}") my lists.
+											.input-group
+												span.input-group-addon
+													i.fa.fa-twitter
+												select.form-control(name='influencer')
+													for influencer in user.influencers.all
+														option(value="{{ influencer.pk }}") {{ influencer.screen_name }}
+										
+										.form-group
+											p.text-muted
+												| Select the account that should follow the users. Add more in 
+												a(href="{% url 'my_accounts' %}") my accounts.
+											.input-group
+												span.input-group-addon
+													i.fa.fa-user.fa-fw
+												select.form-control(name='socialProfile')
+													for account in user.accounts.all
+														option(value="{{ account.pk }}") {{ account.handle}}
+										p.text-center
+											button.btn.btn-info.btn-lg.form-submit(type="submit")
+												i.fa.fa-twitter.fa-fw
+												| Go
+							
+
+
+		.col-md-6
+			.panel.panel-default.panel-content
+				.panel-body(style='height: 490px;')
+					p.text-muted Followers will be targeted within this area
+					#map(style='height: 95%;')
+- endblock
