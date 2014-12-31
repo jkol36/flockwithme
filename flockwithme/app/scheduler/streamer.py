@@ -93,7 +93,11 @@ class Worker:
 				time.sleep(10)
 			stream = tweepy.Stream(self.auth, Streamer(hashtags=hashtags))
 			stream.filter(track=['#'+h.name for h in hashtags], languages=['en',])
- 
+ 	
+
+
+
+ 				
  
 if __name__ == '__main__':
 	usage = "usage: %prog -s PATH | --path=PATH"
@@ -108,7 +112,10 @@ if __name__ == '__main__':
 	
 	
 	####################### IMPORTS ########################
-	from flockwithme.app.scheduler.models import Hashtag, TwitterUser, TwitterStatus
+	from flockwithme.app.scheduler.models import Hashtag, TwitterUser, TwitterStatus, TwitterListOwner, TwitterList
+	from flockwithme.core.profiles.models import Profile
+	from django.core.wsgi import get_wsgi_application
+	application = get_wsgi_application()
 	########################################################
 	a = Worker()
 	a.stream()
