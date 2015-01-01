@@ -28,7 +28,7 @@ class Worker:
 				time.sleep(20)
 			try:
 				for tlist in twitterlists:
-					api = tweepy.api(self.auth)
+					api = tweepy.API(self.auth)
 					list_members = [x for x in api.list_members(list_id = tlist)]
 					tuser_dbase_ids = [x.twitter_id for x in TwitterUser.objects.all()]
 					for member in list_members:
