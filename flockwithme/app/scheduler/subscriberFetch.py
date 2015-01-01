@@ -5,7 +5,7 @@ import tweepy
 from optParse import OptionParser
 
 class subscriberFetcher(object):
-	def __init__(self, twitterlists, *args, **kwargs):
+	def __init__(self, *args, **kwargs):
 		self.twitterlists = kwargs.pop('TwitterLists')
 		return super(subscriberFetcher, self).__init__(*args, **kwargs)
 
@@ -30,12 +30,18 @@ class Worker:
 				for tlist in twitterlists:
 					api = tweepy.api(self.auth)
 					list_members = [x for x in api.list_members(list_id = tlist)]
+					tuser_dbase_ids = [x.twitter_id for x in TwitterUser.objects.all()]
 					for member in list_members:
-						tuser, created = TwitterUser.objects.get_or_create(screen_name= x.screen_name, followers_count = x.followers_count, location=x.location, friends_count = x.friends_count)
-						tuser.save()
-						tlist.subscribers.add(tuser)
-						tlist.subscribers.save()
-						tlist.save()
+						if member.id not in tuser_dbase_ids:
+							tuser, created = TwitterUser.objects.get_or_create(screen_name= member.screen_name, followers_count = member.followers_count, location=member.location, friends_count = member.friends_count)
+							tuser.save()
+							new_trelationship = TwitterRelationship.objects.create(action="SUBSCRIBE", twitterList=tlist)
+							new_trelationship.save()
+							#add twitter user as a subscriber
+							tuser.twitterrelationship_set.add(new_trelationship, 'SUBSCRIBE')
+							tuser.save()
+					tlist.is_queried = True
+					tlist.save()
 				self.fetch()
 			except Exception, e:
 				self.handle_error(e)
@@ -58,7 +64,7 @@ class Worker:
 		os.environ['DJANGO_SETTINGS_MODULE'] = "flockwithme.settings"
 		sys.path.append(options.path)
 
-		from flockwithme.app.scheduler.models import TwitterUser, TwitterList
+		from flockwithme.app.scheduler.models import TwitterUser, TwitterList, TwitterRelationship
 		from django.core.wsgi import get_wsgi_application
 		application = get_wsgi_application()
 
