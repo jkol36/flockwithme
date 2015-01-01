@@ -47,12 +47,7 @@ class Worker:
 				self.handle_error(e)
 	
 	def handle_error(self, e):
-		if e.args[0][0]['code'] == 34:
-			pass
-		elif e.args[0][0]['code'] == 88:
-			time.sleep(20)
-		else:
-			print e
+		print e
 
 if __name__ == "__main__":
 	usage = 'usage: %prog -s PATH | --path=PATH'
