@@ -51,7 +51,6 @@ class Worker:
 						tlistowner_twitter_profile = TwitterListOwner.objects.filter(screen_name=i).update(twitter_profile=new_twitter_user)
 						#Get the twitter list owner from the database using the screen_name for lookup
 						tlistowner = TwitterListOwner.objects.get(screen_name=i)
-						tlistowner.is_queried = True
 						tlistowner.save()
 						all_lists = self.get_lists(owner=i)
 						if len(all_lists)> 0:
@@ -72,7 +71,6 @@ class Worker:
 						#get the twitter list owner using the screen_name
 						tlistowner = TwitterListOwner.objects.get(screen_name=i)
 						#Mark the Twitter list owner as querried
-						tlistowner.is_queried = True
 						#save the list owner
 						tlistowner.save()
 						#Get all the lists associated with the screen_name
