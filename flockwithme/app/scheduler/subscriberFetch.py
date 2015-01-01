@@ -2,7 +2,7 @@ import os
 import time
 import sys
 import tweepy
-from optParse import OptionParser
+from optparse import OptionParser
 
 class subscriberFetcher(object):
 	def __init__(self, *args, **kwargs):
