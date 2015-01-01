@@ -54,19 +54,19 @@ class Worker:
 		else:
 			print e
 
-	if __name__ == "__main__":
-		usage = 'usage: %prog -s PATH | --path=PATH'
-		parser = OptionParser(usage)
-		parser.add_option('-s', '--path', dest='path', metavar='PATH', help="The path to the django environment")
-		(options, args) = parser.parse_args()
-		if not options.path:
-			parser.error("Specify the path where manage.py is.")
-		os.environ['DJANGO_SETTINGS_MODULE'] = "flockwithme.settings"
-		sys.path.append(options.path)
+if __name__ == "__main__":
+	usage = 'usage: %prog -s PATH | --path=PATH'
+	parser = OptionParser(usage)
+	parser.add_option('-s', '--path', dest='path', metavar='PATH', help="The path to the django environment")
+	(options, args) = parser.parse_args()
+	if not options.path:
+		parser.error("Specify the path where manage.py is.")
+	os.environ['DJANGO_SETTINGS_MODULE'] = "flockwithme.settings"
+	sys.path.append(options.path)
 
-		from flockwithme.app.scheduler.models import TwitterUser, TwitterList, TwitterRelationship
-		from django.core.wsgi import get_wsgi_application
-		application = get_wsgi_application()
+	from flockwithme.app.scheduler.models import TwitterUser, TwitterList, TwitterRelationship
+	from django.core.wsgi import get_wsgi_application
+	application = get_wsgi_application()
 
-		a = Worker()
-		a.fetch()
+	a = Worker()
+	a.fetch()
