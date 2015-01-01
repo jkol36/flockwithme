@@ -38,7 +38,7 @@ class Worker:
 							tuser.save()
 							tlist_object = TwitterList.objects.get(twitter_id=tlist)
 							tlist_object.is_queried = True
-							new_trelationship = TwitterRelationship.objects.create(action="SUBSCRIBE", twitterList=tlist_object)
+							new_trelationship = TwitterRelationship.objects.create(action="SUBSCRIBE", twitterUser=user, twitterList=tlist_object)
 							tlist.save()
 							#add twitter user as a subscriber
 							tuser.twitterrelationship_set.add(new_trelationship, 'SUBSCRIBE')
@@ -49,7 +49,7 @@ class Worker:
 							tuser = TwitterUser.objects.get(twitter_id=member.id)
 							tlist_object = TwitterList.objects.get(twitter_id=tlist)
 							tlist_object.is_queried = True
-							new_trelationship = TwitterRelationship.objects.create(action="SUBSCRIBE", twitterList=tlist_object)
+							new_trelationship = TwitterRelationship.objects.create(action="SUBSCRIBE", twitterUser=tuser, twitterList=tlist_object)
 							tlist_object.save()
 							tuser.twitterrelationship_set.add(new_trelationship, 'SUBSCRIBE')
 							new_trelationship.save()
