@@ -34,7 +34,7 @@ class Worker:
 					tuser_dbase_ids = [x.twitter_id for x in TwitterUser.objects.all()]
 					for member in list_members:
 						if member.id not in tuser_dbase_ids:
-							tuser, created = TwitterUser.objects.get_or_create(screen_name= member.screen_name, followers_count = member.followers_count, location=member.location, friends_count = member.friends_count)
+							tuser, created = TwitterUser.objects.get_or_create(screen_name= member.screen_name, twitter_id = member.id, followers_count = member.followers_count, location=member.location, friends_count = member.friends_count)
 							tuser.save()
 							tlist_object = TwitterList.objects.get(twitter_id=tlist)
 							tlist_object.is_queried = True
