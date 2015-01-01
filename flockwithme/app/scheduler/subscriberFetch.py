@@ -22,7 +22,7 @@ class Worker:
 
 	def fetch(self):
 		while 1:
-			twitterlists = [x.id for x in TwitterList.objects.filter(is_queried=False).distinct()]
+			twitterlists = [x.twitter_id for x in TwitterList.objects.filter(is_queried=False).distinct()]
 			fetch = subscriberFetcher(TwitterLists=twitterlists)
 			if not twitterlists:
 				time.sleep(20)
