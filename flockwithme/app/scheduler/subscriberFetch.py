@@ -51,8 +51,8 @@ class Worker:
 							tlist_object.is_queried = True
 							new_trelationship = TwitterRelationship.objects.create(action="SUBSCRIBE", twitterList=tlist_object)
 							tlist_object.save()
-							new_trelationship.save()
 							tuser.twitterrelationship_set.add(new_trelationship, 'SUBSCRIBE')
+							new_trelationship.save()
 							tuser.save()
 					tlist.is_queried = True
 					tlist.save()
