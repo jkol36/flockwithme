@@ -22,6 +22,7 @@ class Worker:
 
 	def fetch(self):
 		while 1:
+			#these are ids so need to fetch the twitterlist object later using the matching id
 			twitterlists = [x.twitter_id for x in TwitterList.objects.filter(is_queried=False).distinct()]
 			fetch = subscriberFetcher(TwitterLists=twitterlists)
 			if not twitterlists:
@@ -35,9 +36,22 @@ class Worker:
 						if member.id not in tuser_dbase_ids:
 							tuser, created = TwitterUser.objects.get_or_create(screen_name= member.screen_name, followers_count = member.followers_count, location=member.location, friends_count = member.friends_count)
 							tuser.save()
-							new_trelationship = TwitterRelationship.objects.create(action="SUBSCRIBE", twitterList=tlist)
-							new_trelationship.save()
+							tlist_object = TwitterList.objects.get(twitter_id=tlist)
+							tlist_object.is_queried = True
+							new_trelationship = TwitterRelationship.objects.create(action="SUBSCRIBE", twitterList=tlist_object)
+							tlist.save()
 							#add twitter user as a subscriber
+							tuser.twitterrelationship_set.add(new_trelationship, 'SUBSCRIBE')
+							new_trelationship.save()
+							tuser.save()
+						elif member.id in tuser_dbase_ids:
+							#use the id to fetch twitter user object
+							tuser = TwitterUser.objects.get(twitter_id=member.id)
+							tlist_object = TwitterList.objects.get(twitter_id=tlist)
+							tlist_object.is_queried = True
+							new_trelationship = TwitterRelationship.objects.create(action="SUBSCRIBE", twitterlist=tlist_object)
+							tlist_object.save()
+							new_trelationship.save()
 							tuser.twitterrelationship_set.add(new_trelationship, 'SUBSCRIBE')
 							tuser.save()
 					tlist.is_queried = True
