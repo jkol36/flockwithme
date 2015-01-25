@@ -115,11 +115,11 @@ def fetch_account_info():
 		acc.save()
 
 	for acc in SocialProfile.objects.filter().exclude(job_status='Fetch_Account_Info').distinct():
-		threads.append(Fetch_Twitter_Account(twitter_id=acc.twitter_id, screen_name=acc, lock=Lock, queue=queue, action="GET_FAVORITES", model="SocialProfile"))
+		threads.append(Fetch_Twitter_Account(twitter_id=acc.twitter_id, lock=Lock, queue=queue, action="GET_FAVORITES", model="SocialProfile"))
 	
 
 	for acc in SocialProfile.objects.filter().exclude(job_status="Fetch_Account_Info").distinct():
-		threads.append(Fetch_Twitter_Account(screen_name=acc, twitter_id=acc.twitter_id, lock=Lock, queue=queue, action="Check_Ratio"))
+		threads.append(Fetch_Twitter_Account(twitter_id=acc.twitter_id, lock=Lock, queue=queue, action="Check_Ratio"))
 	
 	for thread in threads:
 		thread.start()
