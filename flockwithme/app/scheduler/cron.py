@@ -119,7 +119,7 @@ def fetch_account_info():
 	
 
 	for acc in SocialProfile.objects.filter().exclude(job_status="Fetch_Account_Info").distinct():
-		threads.append(Fetch_Twitter_Account(twitter_id=acc.twitter_id, lock=Lock, queue=queue, action="Check_Ratio"))
+		threads.append(Fetch_Twitter_Account(twitter_id=acc.twitter_id, lock=Lock, queue=queue, action="Check_Ratio", model="SocialProfile"))
 	
 	for thread in threads:
 		thread.start()
