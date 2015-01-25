@@ -41,6 +41,7 @@ class Fetch_Twitter_Account(Thread):
 		self.action = kwargs.pop('action')
 		self.queue = kwargs.pop('queue')
 		self.lock = lock
+		self.api = self.get_api()
 		return super(Fetch_Twitter_Account, self).__init__(*args, **kwargs)
 
 	def get_api(self):
@@ -59,28 +60,28 @@ class Fetch_Twitter_Account(Thread):
 		self.api = tweepy.API(self.auth)
 		return self.api
 	def get_follower_count(self):
-		api = self.get_api()
+		api = self.api()
 		return api.get_user(user_id=self.twitter_id).followers_count
 		
 
 	def get_friend_count(self):
-		api = self.get_api()
+		api = self.api()
 		return api.get_user(user_id=self.twitter_id).friends_count
 
 	def get_twitter_id(self):
-		api = self.get_api()
+		api = self.api()
 		return api.get_user(user_id=self.twitter_id).id
 
 	def get_follower_ids(self, twitter_id=None):
-		api = self.get_api()
+		api = self.api()
 		return set(api.followers_ids(user_id=self.twitter_id))
 
 	def get_friend_ids(self, twitter_id=None):
-		api = self.get_api()
+		api = self.api()
 		return set(api.friends_ids(user_id=twitter_id))
 
 	def get_favorited_tweets(self, twitter_id=None):
-		api = self.get_api()
+		api = self.api()
 		statuses = []
 		try:
 			for i in tweepy.Cursor(api.favorites, user_id=self.twitter_id).items():
@@ -132,7 +133,7 @@ class Fetch_Twitter_Account(Thread):
 		return mstatus
 
 	def check_ratio(self):
-		api = self.get_api()
+		api = self.api()
 		friend_count = api.get_user(user_id=self.twitter_id).friends_count
 		follower_count = api.get_user(user_id=self.twitter_id).followers_count
 		self.socialprofile.followers_count = follower_count
