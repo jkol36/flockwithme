@@ -65,7 +65,7 @@ class SocialProfileCreationForm(forms.ModelForm):
 
 
 	def save(self, *args, **kwargs):
-		#kwargs['commit'] = False
+		kwargs['commit'] = False
 		socialprofile = super(SocialProfileCreationForm, self).save(*args, **kwargs)
 		socialprofile.profile = self.profile
 		#socialprofile.profile_status = 'pending'
