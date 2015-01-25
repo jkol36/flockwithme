@@ -48,7 +48,9 @@ class Testing(Thread):
 		except Exception, NoAuthSet:
 			print 'No Auth Sets. All are limited.'
 			time.sleep(200)
+
 		consumer_key = self.auth_set.c_key
+		print consumer_key
 		consumer_secret = self.auth_set.c_secret
 		Access_Token = self.auth_set.access_key
 		Access_Token_Secret = self.auth_set.key_secret
