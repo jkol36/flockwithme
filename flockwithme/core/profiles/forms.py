@@ -2,7 +2,7 @@ from django import forms
 from .models import SocialProfile, Profile
 from flockwithme.app.scheduler.models import Job
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
-from flockwithme.app.scheduler.Fetcher import Fetch_Twitter_Account
+from flockwithme.app.scheduler.Fetcher import Fetch_Social_Profile
 
 
 class ProfileCreationForm(UserCreationForm):
@@ -55,11 +55,13 @@ class SocialProfileCreationForm(forms.ModelForm):
 
 	def is_valid(self):
 		valid = super(SocialProfileCreationForm, self).is_valid()
+		print valid
 		if not valid:
 			return valid
-		
+	
 		if SocialProfile.objects.filter(profile=self.profile, handle=self.cleaned_data.get('handle'), provider=self.cleaned_data.get('provider')).count() > 0:
 			return False
+	
 		return True
 
 
@@ -68,10 +70,10 @@ class SocialProfileCreationForm(forms.ModelForm):
 		kwargs['commit'] = False
 		socialprofile = super(SocialProfileCreationForm, self).save(*args, **kwargs)
 		socialprofile.profile = self.profile
-		#socialprofile.profile_status = 'pending'
-		socialprofile.followers_count = Fetch_Twitter_Account(screen_name=self.cleaned_data['handle'], action='get_follower_count', model='SocialProfile').get_follower_count()
-		socialprofile.friend_count = Fetch_Twitter_Account(screen_name = self.cleaned_data['handle'], action="get_friend_count", model="SocialProfile").get_friend_count()
-		socialprofile.twitter_id = Fetch_Twitter_Account(screen_name=self.cleaned_data['handle'], action='get_twitter_id', model='SocialProfile').get_twitter_id()
+		socialprofile.profile_status = 'pending'
+		socialprofile.followers_count = Fetch_Social_Profile(token=self.cleaned_data['token'], token_secret=self.cleaned_data['secret']).get_follower_count()
+		socialprofile.friend_count = Fetch_Social_Profile(token = self.cleaned_data['token'], token_secret=self.cleaned_data['secret']).get_friend_count()
+		socialprofile.twitter_id = Fetch_Social_Profile(token=self.cleaned_data['token'], token_secret = self.cleaned_data['secret']).get_twitter_id()
 		socialprofile.save()
 		return socialprofile
 

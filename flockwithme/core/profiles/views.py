@@ -11,8 +11,6 @@ from django.conf import settings
 import json
 
 def my_accounts(request):
-	for i in request.user.accounts.all():
-		print dir(i.job_status)
 	return render(request, 'my_accounts.jade')
 
 def help(request):
