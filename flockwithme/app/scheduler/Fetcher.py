@@ -41,7 +41,6 @@ class Fetch_Twitter_Account(Thread):
 		self.action = kwargs.pop('action')
 		self.queue = kwargs.pop('queue')
 		self.lock = lock
-		self.api = self.get_api()
 		return super(Fetch_Twitter_Account, self).__init__(*args, **kwargs)
 
 	def get_api(self):
@@ -57,8 +56,8 @@ class Fetch_Twitter_Account(Thread):
 			time.sleep(200)
 		self.auth = tweepy.OAuthHandler(self.auth_set.c_key, self.auth_set.c_secret)
 		self.auth.set_access_token(self.auth_set.access_key, self.auth_set.key_secret)
-		api = tweepy.API(self.auth)
-		return api
+		self.api = tweepy.API(self.auth)
+		return self.api
 		
 	def get_follower_count(self):
 		api = self.api
