@@ -80,8 +80,8 @@ class Fetch_Twitter_Account(Thread):
 		try:
 			for i in tweepy.Cursor(api.favorites, user_id=self.twitter_id).items():
 				statuses.append(i)
-			except Exception, e:
-				process_e = self.process_exception(e)
+		except Exception, e:
+			process_e = self.process_exception(e)
 		return statuses
 
 	def is_good(self, user):
