@@ -38,6 +38,8 @@ class Fetch_Twitter_Account(Thread):
 	def __init__(self, lock=None, *args, **kwargs):
 		self.model = kwargs.pop('model')
 		self.twitter_id = kwargs.pop('twitter_id')
+		if self.model == 'SocialProfile':
+			self.socialprofile = SocialProfile.objects.get(twitter_id=self.twitter_id)
 		self.action = kwargs.pop('action')
 		self.queue = kwargs.pop('queue')
 		self.lock = lock
