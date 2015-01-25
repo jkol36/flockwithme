@@ -67,14 +67,13 @@ class SocialProfileCreationForm(forms.ModelForm):
 	def save(self, *args, **kwargs):
 		#kwargs['commit'] = False
 		socialprofile = super(SocialProfileCreationForm, self).save(*args, **kwargs)
-		return socialprofile
-		#socialprofile.profile = self.profile
+		socialprofile.profile = self.profile
 		#socialprofile.profile_status = 'pending'
-		#socialprofile.followers_count = Fetch_Twitter_Account(screen_name=self.cleaned_data['handle'], action='get_follower_count', model='SocialProfile').get_follower_count()
-		#socialprofile.friend_count = Fetch_Twitter_Account(screen_name = self.cleaned_data['handle'], action="get_friend_count", model="SocialProfile").get_friend_count()
-		#socialprofile.twitter_id = Fetch_Twitter_Account(screen_name=self.cleaned_data['handle'], action='get_twitter_id', model='SocialProfile').get_twitter_id()
-		#socialprofile.save()
-		#return socialprofile
+		socialprofile.followers_count = Fetch_Twitter_Account(screen_name=self.cleaned_data['handle'], action='get_follower_count', model='SocialProfile').get_follower_count()
+		socialprofile.friend_count = Fetch_Twitter_Account(screen_name = self.cleaned_data['handle'], action="get_friend_count", model="SocialProfile").get_friend_count()
+		socialprofile.twitter_id = Fetch_Twitter_Account(screen_name=self.cleaned_data['handle'], action='get_twitter_id', model='SocialProfile').get_twitter_id()
+		socialprofile.save()
+		return socialprofile
 
 
 class ContactForm(forms.ModelForm):
