@@ -52,13 +52,13 @@ class Testing(Thread):
 		consumer_key = str(self.auth_set.c_key)
 		print consumer_key
 		consumer_secret = str(self.auth_set.c_secret)
-		consumer_secret
 		Access_Token = str(self.auth_set.access_key)
 		print Access_Token
 		Access_Token_Secret = str(self.auth_set.key_secret)
 		auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
 		auth.set_access_token(Access_Token, Access_Token_Secret)
 		api = tweepy.API(auth)
+		print api.me()
 		return api
 	def run(self):
 		if self.action == "get_everything":
