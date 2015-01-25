@@ -14,6 +14,7 @@ class TwitterStatus(models.Model):
 	retweet_count = models.PositiveIntegerField(blank=True, null=True)
 	twitter_user = models.ForeignKey('TwitterUser', blank=True, null=True)
 	relationships = models.ManyToManyField(SocialProfile, through='TwitterRelationship')
+	favorited_by= models.ForeignKey(SocialProfile, related_name='Favorite_Statuses', blank=True, null=True)
 
 
 	def __unicode__(self):
@@ -110,6 +111,7 @@ class TwitterRelationship(models.Model):
 	action = models.CharField(choices=ACTION_CHOICES, max_length=20)
 	socialProfile = models.ForeignKey(SocialProfile, null=True, blank=True, related_name='relationships')
 	twitterUser = models.ForeignKey(TwitterUser, blank=True, null=True)
+	influencer = models.ForeignKey('Influencer', blank=True, null=True, related_name='relationships')
 	twitterStatus = models.ForeignKey(TwitterStatus, blank=True, null=True)
 	twitterList = models.ForeignKey(TwitterList, blank=True, null = True)
 	TwitterListOwner = models.ForeignKey('TwitterListOwner', blank = True, null = True)
@@ -140,6 +142,7 @@ class Influencer(models.Model):
 	twitter_id = models.BigIntegerField(blank = True, null = True)
 	screen_name = models.CharField(max_length = 250, blank = False, null = False)
 	followers_count = models.PositiveIntegerField(blank = True, null = True)
+	friends_count = models.PositiveIntegerField(blank=True, null=True)
 	favorites_count = models.PositiveIntegerField(blank = True, null = True)
 	tweet_count = models.PositiveIntegerField(blank = True, null = True)
 	created_at = models.DateTimeField(auto_now_add = True)
@@ -168,22 +171,24 @@ class TwitterListOwner(models.Model):
 
 class Job(models.Model):
 	ACTION_CHOICES = (
-		("FOLLOW_HASHTAG", "Follow users based on hashtags"),
-		("FOLLOW_BACK", "Follow back your followers"),
+		("FOLLOW", 'Follow'),
 		("FAVORITE", "Favorite tweets"),
-		("UNFOLLOW_BACK", "Unfollow all the users that haven't followed you back"),
-		("UNFOLLOW_ALL", "Unfollow everyone you currently follow"),
+		("UNFOLLOW", "Unfollow all the users that haven't followed you back"),
 		("AUTO_DM", "Send direct messages to your followers"),
-		("FOLLOW_INFLUENCER", "Follow people who follow certain accounts."),
-		("FOLLOW_MEMBERS_OF_LIST", "Follow the members of a specific list"),
 		("TRACK_FOLLOWERS", "Track followers"),
-		("GET_FOLLOWERS", 'get_followers'),
-		("GET_LISTS", 'get_lists'),
-		("GET_LIST_SUBSCRIBERS", 'get_list_subscribers'),
 		("GET_ACCOUNT_INFO", "get_account_info"),
 		)
+	STATUS_TYPES = (
+		('complete', 'complete'),
+		('interrupted', 'interrupted'),
+		('paused', 'paused'),
+		('started', 'started'),
+		)
+	
+
 	socialprofile = models.ForeignKey(SocialProfile, related_name='jobs')
 	action = models.CharField(max_length=20, choices=ACTION_CHOICES, blank=True, null=True)
+	status = models.CharField(max_length=20, choices=STATUS_TYPES, blank=True, null=True)
 	message = models.CharField(max_length=160, blank=True, null=True)
 	hashtag = models.ForeignKey(Hashtag, related_name='hashtags', blank=True, null=True)
 	location = models.ForeignKey(Location, related_name='locations', blank=True, null=True)

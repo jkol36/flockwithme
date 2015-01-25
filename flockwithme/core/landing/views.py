@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from django.contrib import auth
 from django.core.urlresolvers import reverse
 from flockwithme.core.profiles.forms import ProfileCreationForm
+from django.contrib import messages
 
 def index(request):
 	if request.user.is_authenticated():
@@ -15,10 +16,10 @@ def index(request):
 			if user:
 				auth.login(request, user)
 				return redirect(reverse('dashboard'))
-			else:
-				return HttpResponse("A user with that username and password does not exist:(")
-		else:
-			return HttpResponse("password's don't match")
+		for x, z in form.errors.viewitems():
+			messages.error(request, x + z.as_text())
+		return render(request, 'landing.jade')
+
 	return render(request, 'landing.jade')
 
 def login(request):

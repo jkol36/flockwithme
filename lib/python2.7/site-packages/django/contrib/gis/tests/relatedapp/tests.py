@@ -207,6 +207,8 @@ class RelatedGeoModelTest(TestCase):
             self.assertEqual(val_dict['id'], c_id)
             self.assertEqual(val_dict['location__id'], l_id)
 
+    # TODO: fix on Oracle -- qs2 returns an empty result for an unknown reason
+    @no_oracle
     def test10_combine(self):
         "Testing the combination of two GeoQuerySets.  See #10807."
         buf1 = City.objects.get(name='Aurora').location.point.buffer(0.1)
@@ -253,6 +255,10 @@ class RelatedGeoModelTest(TestCase):
         self.assertEqual(1, len(vqs))
         self.assertEqual(3, vqs[0]['num_books'])
 
+    # TODO: fix on Oracle -- get the following error because the SQL is ordered
+    # by a geometry object, which Oracle apparently doesn't like:
+    #  ORA-22901: cannot compare nested table or VARRAY or LOB attributes of an object type
+    @no_oracle
     def test13c_count(self):
         "Testing `Count` aggregate with `.values()`.  See #15305."
         qs = Location.objects.filter(id=5).annotate(num_cities=Count('city')).values('id', 'point', 'num_cities')

@@ -4,6 +4,7 @@ from django.conf import settings
 from flockwithme.app.scheduler.models import OauthSet, TwitterUser
 from flockwithme.core.profiles.models import Profile
 import tweepy
+from optparse import OptionParser
 from tweepy.error import TweepError
 from time import sleep
 import datetime
@@ -13,7 +14,7 @@ import logging
 from .countdown import CountDown
 logger = logging.getLogger(__name__)
 
-class AccountFetch(Thread):
+class AccountFetch(object):
 	def __init__(self, lock=None, *args, **kwargs):
 		self.jobs = kwargs.pop('jobs')
 		self.lock = lock
@@ -21,8 +22,6 @@ class AccountFetch(Thread):
 		self.queue = kwargs.pop("queue")
 		self.api = self.get_api()
 		return super(AccountFetch, self).__init__(*args, **kwargs)
-		self.daemon = True
-		self.queue.put(self)
 	#
 	def create_twitter_user(self, twitter_id, screen_name, friends_count, followers_count, location):
 		new_twitter_user, created = TwitterUser.objects.get_or_create(twitter_id=twitter_id, screen_name = screen_name, friends_count=friends_count, followers_count=followers_count)
@@ -193,38 +192,6 @@ class AccountFetch(Thread):
 
 	def sleep(self):
 		sleep(1)
-	def get_list_subscribers(self, job):
-		job_id = job.id
-		list_instance = job.twitter_list
-		list_name = job.twitteR_list.name.split(',')
-		list_owner = job.twitter_list.owner
-		twitter_list_id = job.twitter_list.twitter_id
-		api = self.get_api()
-		for name in list_name:
-			twitter_list_name = name
-			list_instance = list_instance
-			owner = list_owner
-			subscribers = api.list_members(list_id = twitter_list_id)
-			for subscriber in subscribers:
-				try:
-					screen_name = subscriber.screen_name
-					twitter_id = subscriber.id
-					followers_count = subscriber.followers_count
-					friends_count = subscriber.friends_count
-					location = subscriber.location
-					twitter_user, created = TwitterUser.objects.get_or_create(screen_name = screen_name, twitter_id=twitter_id, followers_count = followers_count, freinds_count = friends_count)
-					twitter_user.save()
-					twitter_user = TwitterUser.objects.get(pk=twitter_id)
-					new_relationship, created = TwitterRelationship.objects.get_or_create(twitterUser=twitter_user, action="SUBSCRIBE", twitter_list= list_instance)
-					relationship_id = new_relationship.id
-					get_relationship = TwitterRelationship.objects.get(pk=relationship_id)
-					add_subscriber = twitter_user.twitterrelationship_set.add(get_relationship, "SUBSCRIBE")
-					add_subscriber.save()
-				except Exception, e:
-					print e
-			this_job = Job.objects.get(pk=job_id)
-			this_job.is_complete = True
-			this_job.save()
 
 	def get_profile_instance(self, profile_id):
 		twitter_profile = Profile.objects.get(pk=profile_id)

@@ -32,7 +32,6 @@ body
 					li
 						a.icon-social-twitter(href='http://twitter.com/realflockwithme')
 		section#intro
-			- include "display_messages.jade"
 			.container
 				.row
 					.col-lg-6.col-md-6.col-sm-6
@@ -41,6 +40,7 @@ body
 							h3.wow.fadeInLeft(data-wow-delay='0.9s', data-wow-duration='0.5s') Might as well not exist in the first place.
 							p.wow.fadeInRight(data-wow-delay='1.2s')
 					.col-lg-4.col-lg-offset-2.col-md-5.col-sm-6
+						- include "display_messages.jade"
 						form#register_form(role='form', method='POST', action="{% url 'landingpage' %}")
 							- csrf_token
 							.title.wow.flipInX(data-wow-duration='0.6s') Get Discovered!
@@ -75,11 +75,11 @@ body
 					.col-md-6.service
 						i.fa.fa-user
 						h4 Follow the followers of a specific twitter account
-						p Identify your competition, put in the @handle of their twitter account, and follow the accounts followers.
+						p Identify your competition, put in the @handle of their twitter account, and follow the accounts that follow them.
 					.col-md-6.service
 						i.fa.fa-location-arrow
 						h4 Location based following
-						p Target users who only live in a certain geographical area 
+						p Target users who only live in a certain geographical area. 
 		section#contact
 			.container
 				.row

@@ -33,6 +33,7 @@ USE_TZ = True
 # Application definition
 
 INSTALLED_APPS = (
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -47,6 +48,7 @@ INSTALLED_APPS = (
     'flockwithme.app',
     'flockwithme.app.scheduler',
     'flockwithme.app.subscribe',
+    'flockwithme.app.scheduler.Fetcher',
     # 'flockwithme.app.notification',
     
     'django_ajax',

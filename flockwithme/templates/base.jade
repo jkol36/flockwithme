@@ -57,23 +57,7 @@ body
 						a(href="{% url 'my_accounts' %}")
 							i.fa.fa-users.fa-fw
 							strong &nbsp; ACCOUNTS
-					li
-						a(href="{% url 'auto_follow' %}")
-							i.fa.fa-twitter.fa-fw
-							strong &nbsp; AUTO FOLLOW
-					li
-						a(href="{% url 'auto_favorite' %}")
-							i.fa.fa-star.fa-fw
-							strong &nbsp; AUTO FAVORITE
-
-					li 
-						a(href ="{% url 'auto_unfollow' %}")
-							i.fa.fa-times-circle.fa-fw
-							strong &nbsp; AUTO UNFOLLOW
-					li
-						a(href="{% url 'auto_dm' %}")
-							i.fa.fa-envelope.fa-fw
-							strong &nbsp; AUTO DM
+	
 					li
 						a(href="{% url 'analytics' %}")
 							i.fa.fa-bar-chart-o.fa-fw
@@ -178,6 +162,71 @@ body
 											span(style = 'font-size: 1.2em;')
 												| Want to be able to Follow the followers of a specific Twitter Account? Add some influencers on the left, or click 
 												a(href = "{% url 'my_influencers' %}") here
+					elif user.accounts.all
+						.container-fluid
+							.row
+								.col-lg-12
+									for i in user.accounts.all
+										if i.job_status == "Just_Favorited"
+											.alert.alert-dismissable(class="alert-info")
+												button.close(type="button", data-dismiss="alert", aria-hidden="true") x
+												span(style="font-size: 1.2em;")
+													a(href="#"){{i.handle}}, 
+													| just favorited tweets! Next up is to auto_dm you're followers.
+										elif i.job_status == "Just_Cleaned"
+											.alert.alert-dismissable(class="alert-info")
+												span(style="font-size: 1.2em;")
+													a(href="#"){{i.handle}}'s,
+													| following to follower ratio was all fixed up. Next up is to follow people and favorite tweets.
+										elif i.job_status == "DM_Skipped"
+											.alert.alert-dismissable(class="alert-warning")
+												button.close(type="button", data-dismiss="alert", aria-hidden="true") X
+												span(style="font-size:1.2em;")
+													| direct messages could not be sent to {{i.handle}}'s followers because you did not specify a message
+										elif i.job_status == "Follow_Limit_Reached"
+											.alert.alert-dismissable(class="alert-warning")
+												button.close(type="button", data-dismiss="alert", aria-hidden="true") x
+												span(style="font-size:1.2em;")
+													a(href="#") {{i.handle}}
+													| could not follow people because they were rate limited. We'll try again tomorrow.
+										elif i.job_status == "Follow_Ratio_Off"
+											.alert.alert-dismissable(class="alert-warning")
+												button.close(type="button", data-dismiss="alert", aria-hidden="true") x
+												span(style="font-size: 1.2em;")
+													a(href="#") {{i.handle}} 
+													| Could not follow people because they're following to many people already. We'll clean your Ratio!
+										elif i.job_status == "Fetch_Account_Info"
+											.alert.alert.dismissable(class="alert-info")
+												button.close(type="button", data-dismiss="alert", aria-hidden="true") x
+												span(style="font-size:1.2em;")
+													a(href="#") {{i.handle}}
+													| actions are pending while we fetch your followers, favorited tweets, and friends from Twitter.
+
+										elif i.job_status == "Fetching_Account_Info"
+											.alert.alert.dismissable(class="alert-info")
+												button.close(type="button", data-dismiss="alert", aria-hidden="true") x
+												span(style="font-size:1.2em;")
+													a(href="#") {{i.handle}}
+													| We're currently fetching your friends and followers and Favorited Tweets.
+										elif i.job_status == "Account_Info_Fetched"
+											.alert.alert.dismissable(class="alert-info")
+												button.close(type="button", data-dismiss="alert", aria-hidden="true") x
+												span(style="font-size:1.2em;")
+													a(href="#") {{i.handle}}
+													| We finished fetching your Followers, friends and favorited tweets. Next up is to follow people and favorite tweets.
+
+										elif i.job_status == "Ratio_Bad"
+											.alert.alert.dismissable(class="alert-info")
+												button.close(type="button", data-dismiss="alert", aria-hidden="true") x
+												span(style="font-size:1.2em;")
+													a(href="#") {{i.handle}}'s, 
+													| ratio needs cleaning. We'll unfollow people shortly.
+										elif i.job_status == "Just_Followed"
+											.alert.alert.dismissable(class="alert-info")
+												button.close(type="button", data-dismiss="alert", aria-hidden="true") x
+												span(style="font-size:1.2em;")
+													a(href="#") {{i.handle}}
+													| just followed some users. Next up is to favorite Tweets.
 
 				- include "display_messages.jade"
 				- block content

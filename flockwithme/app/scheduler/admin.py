@@ -8,7 +8,7 @@ class TwitterUserAdmin(admin.ModelAdmin):
 	list_display = ('twitter_id', 'screen_name')
 
 class RelationshipAdmin(admin.ModelAdmin):
-	list_display = ('socialProfile', 'twitterUser', 'twitterStatus', 'twitterList', 'created_at', 'action', 'is_initial')
+	list_display = ('socialProfile', 'twitterUser', 'twitterStatus', 'influencer', 'twitterList', 'created_at', 'action', 'is_initial')
 
 class influencerAdmin(admin.ModelAdmin):
 	list_display = ('created_at', 'screen_name', 'twitter_id', 'followers_count', 'favorites_count', 'tweet_count')

@@ -171,17 +171,6 @@ class Field(object):
         """
         return {}
 
-    def get_limit_choices_to(self):
-        """
-        Returns ``limit_choices_to`` for this form field.
-
-        If it is a callable, it will be invoked and the result will be
-        returned.
-        """
-        if callable(self.limit_choices_to):
-            return self.limit_choices_to()
-        return self.limit_choices_to
-
     def _has_changed(self, initial, data):
         """
         Return True if data differs from initial.
@@ -1079,7 +1068,11 @@ class MultiValueField(Field):
             if not isinstance(initial, list):
                 initial = self.widget.decompress(initial)
         for field, initial, data in zip(self.fields, initial, data):
-            if field._has_changed(field.to_python(initial), data):
+            try:
+                initial = field.to_python(initial)
+            except ValidationError:
+                return True
+            if field._has_changed(initial, data):
                 return True
         return False
 
