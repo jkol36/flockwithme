@@ -32,38 +32,27 @@ class Fetch_Social_Profile(object):
 		return self.api.me().friends_count
 
 
-class Testing(Thread):
+class Fetch_Account_Info(Thread):
 	def __init__(self, lock=None, *args, **kwargs):
-		self.model = kwargs.pop('model')
 		self.twitter_id = kwargs.pop('twitter_id')
 		self.action = kwargs.pop('action')
 		self.queue = kwargs.pop('queue')
+		self.socialprofile = SocialProfile.objects.get(twitter_id=self.twitter_id)
 		self.lock = lock
 		self.queue.put(self)
 		return super(Testing, self).__init__(*args, **kwargs)
 
 	def get_api(self):
-		try:
-			self.auth_set = OauthSet.objects.filter(rate_limited=False)[0]
-		except Exception, NoAuthSet:
-			print 'No Auth Sets. All are limited.'
-			time.sleep(200)
+		return self.socialprofile.token
+		
 
-		consumer_key = str(self.auth_set.c_key)
-		print consumer_key
-		consumer_secret = str(self.auth_set.c_secret)
-		Access_Token = str(self.auth_set.access_key)
-		print Access_Token
-		Access_Token_Secret = str(self.auth_set.key_secret)
-		auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
-		auth.set_access_token(Access_Token, Access_Token_Secret)
-		api = tweepy.API(auth)
-		print api.me()
-		return api
+	def get_everything(self):
+		api = self.get_api()
+		print api
+
 	def run(self):
 		if self.action == "get_everything":
-			api = self.get_api()
-			print api.me()
+			action = self.get_everything()
 		else:
 			print "use get everything"
 class Fetch_Twitter_Account(Thread):
