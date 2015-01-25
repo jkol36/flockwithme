@@ -52,7 +52,9 @@ class Testing(Thread):
 		consumer_key = self.auth_set.c_key
 		print consumer_key
 		consumer_secret = self.auth_set.c_secret
+		consumer_secret
 		Access_Token = self.auth_set.access_key
+		print Access_Token
 		Access_Token_Secret = self.auth_set.key_secret
 		auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
 		auth.set_access_token(Access_Token, Access_Token_Secret)
