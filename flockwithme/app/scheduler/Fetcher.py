@@ -37,7 +37,7 @@ class Testing(Thread):
 		self.model = kwargs.pop('model')
 		self.twitter_id = kwargs.pop('twitter_id')
 		self.action = kwargs.pop('action')
-		self.queue = kwargs.pop(queue)
+		self.queue = kwargs.pop('queue')
 		self.lock = lock
 		self.queue.put(self)
 		return super(Testing, self).__init__(*args, **kwargs)
