@@ -43,12 +43,17 @@ class Fetch_Account_Info(Thread):
 		return super(Fetch_Account_Info, self).__init__(*args, **kwargs)
 
 	def get_api(self):
-		return self.socialprofile.token
-		
-
+		access_token = self.socialprofile.token
+		access_token_secret = self.socialprofile.secret
+		consumer_key = '3Gsg8IIX95Wxq28pDEkA'
+		consumer_secret = "LjEPM4kQAC0XE81bgktdHAaND3am9tTllXghn0B639o"
+		auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
+		auth.set_access_token(access_token, access_token_secret)
+		api = tweepy.API(auth)
+		return api
 	def get_everything(self):
 		api = self.get_api()
-		print api
+		print api.me()
 
 	def run(self):
 		if self.action == "get_everything":
