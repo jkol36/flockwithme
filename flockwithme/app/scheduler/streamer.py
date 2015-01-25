@@ -12,6 +12,7 @@ class Streamer(tweepy.StreamListener):
 		self.hashtags = kwargs.pop('hashtags')
 		self.checker = time.time()
 		return super(Streamer, self).__init__(*args, **kwargs)
+		self.daemon = True
 
 	def on_status(self, status):
 		self.process_status(status)
@@ -95,6 +96,7 @@ class Worker:
 				time.sleep(10)
 			stream = tweepy.Stream(self.auth, Streamer(hashtags=hashtags))
 			stream.filter(track=['#'+h.name for h in hashtags], languages=['en',])
+	
  	
 
 
