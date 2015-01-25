@@ -3,7 +3,7 @@ from flockwithme.core.profiles.models import Profile, SocialProfile
 from flockwithme.app.scheduler.models import Influencer
 from .jobexecuter import JobExecuter
 from .accountfetch import AccountFetch
-from .Fetcher import Fetch_Twitter_Account
+from .Fetcher import Fetch_Twitter_Account, Testing
 from Queue import Queue
 from threading import Lock
 from django.db.models import Q
@@ -110,7 +110,7 @@ def fetch_account_info():
 	threads = []
 
 	for acc in SocialProfile.objects.filter(job_status='Fetch_Account_Info').distinct():
-		threads.append(Fetch_Twitter_Account(twitter_id=acc.twitter_id, lock = Lock, queue=queue, action="get_everything", model="SocialProfile"))
+		threads.append(Testing(twitter_id=acc.twitter_id, lock = Lock, queue=queue, action="get_everything", model="SocialProfile"))
 		acc.job_status = 'Fetching_Account_Info'
 		acc.save()
 
