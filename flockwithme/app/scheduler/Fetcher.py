@@ -51,7 +51,7 @@ class Fetch_Twitter_Account(Thread):
 		try:
 			self.auth_set = OauthSet.objects.filter(active=False, rate_limited=False)[0]
 			print self.auth_set.c_key
-			print self.auth_set.c_secret)
+			print self.auth_set.c_secret
 			print self.auth_set.access_key
 			print self.auth_set.key_secret
 		except Exception, NoAuthSets:
