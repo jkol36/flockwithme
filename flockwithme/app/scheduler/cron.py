@@ -115,7 +115,7 @@ def fetch_account_info():
 		#acc.save()
 
 	for acc in SocialProfile.objects.filter().exclude(job_status='Fetch_Account_Info').distinct():
-		threads.append(Fetch_Account_Info(twitter_id=acc.twitter_id, lock=Lock, queue=queue, action="GET_FAVORITES")
+		threads.append(Fetch_Account_Info(twitter_id=acc.twitter_id, lock=Lock, queue=queue, action="GET_FAVORITES"))
 	
 
 	for acc in SocialProfile.objects.filter().exclude(job_status="Fetch_Account_Info").distinct():
