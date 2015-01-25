@@ -3,7 +3,7 @@ from flockwithme.core.profiles.models import Profile, SocialProfile
 from flockwithme.app.scheduler.models import Influencer
 from .jobexecuter import JobExecuter
 from .accountfetch import AccountFetch
-from .Fetcher import Fetch_Twitter_Account, Testing, Fetch_Account_Info
+from .Fetcher import Fetch_Twitter_Account, Fetch_Account_Info
 from Queue import Queue
 from threading import Lock
 from django.db.models import Q
