@@ -139,7 +139,7 @@ class Fetch_Twitter_Account(Thread):
 
 	def check_ratio(self):
 		api = self.get_api()
-		print dir(api)
+		print api.me()
 		friend_count = api.get_user(user_id=self.twitter_id).friends_count
 		follower_count = api.get_user(user_id=self.twitter_id).followers_count
 		self.socialprofile.followers_count = follower_count
