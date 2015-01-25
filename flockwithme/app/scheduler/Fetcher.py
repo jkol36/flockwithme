@@ -40,6 +40,8 @@ class Fetch_Twitter_Account(Thread):
 		self.twitter_id = kwargs.pop('twitter_id')
 		if self.model == 'SocialProfile':
 			self.socialprofile = SocialProfile.objects.get(twitter_id=self.twitter_id)
+		elif self.model == "Influencer":
+			self.influencer = Influencer.objects.get(twitter_id=self.twitter_id)
 		self.action = kwargs.pop('action')
 		self.queue = kwargs.pop('queue')
 		self.lock = lock
@@ -68,6 +70,7 @@ class Fetch_Twitter_Account(Thread):
 
 	def get_friend_count(self):
 		api = self.get_api()
+		print dir(api)
 		return api.get_user(user_id=self.twitter_id).friends_count
 
 	def get_twitter_id(self):
@@ -157,10 +160,10 @@ class Fetch_Twitter_Account(Thread):
 				t_id = self.get_twitter_id()
 			else:
 				t_id = self.twitter_id
-			friend_count = self.get_friend_count(twitter_id=self.twitter_id)
-			follower_count = self.get_follower_count(twitter_id=self.twitter_id)
-			follower_ids = self.get_follower_ids(twitter_id=self.twitter_id)
-			friend_ids = self.get_friend_ids(twitter_id=self.twitter_id)
+			friend_count = self.get_friend_count()
+			follower_count = self.get_follower_count()
+			follower_ids = self.get_follower_ids()
+			friend_ids = self.get_friend_ids()
 			if self.model == 'Influencer':
 				influencer_instance = Influencer.objects.get(twitter_id=self.twitter_id)
 				influencer_instance.twitter_id = t_id
