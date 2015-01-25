@@ -57,8 +57,11 @@ class SocialProfileCreationForm(forms.ModelForm):
 		valid = super(SocialProfileCreationForm, self).is_valid()
 		if not valid:
 			return valid
-		if SocialProfile.objects.filter(profile=self.profile, handle=self.cleaned_data.get('handle'), provider=self.cleaned_data.get('provider')).count() > 0:
+		try:
+			if SocialProfile.objects.filter(profile=self.profile, handle=self.cleaned_data.get('handle'), provider=self.cleaned_data.get('provider')).count() > 0:
 			return False
+		except Exception,e:
+			print e
 		return True
 
 
