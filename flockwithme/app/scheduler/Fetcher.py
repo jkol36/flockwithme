@@ -34,117 +34,52 @@ class Fetch_Social_Profile(object):
 
 
 class Fetch_Twitter_Account(Thread):
-	def __init__(self, lock=None, is_initial=None, *args, **kwargs):
-		self.is_initial = is_initial
-		try:
-			self.action = kwargs.pop('action')
-		except Exception, NoAction:
-			self.action = None
+	#
+	def __init__(self, lock=None, *args, **kwargs):
+		self.model = kwargs.pop('model')
+		self.twitter_id = kwargs.pop('twitter_id')
+		self.queue = kwargs.pop('queue')
 		self.lock = lock
-		try:
-			self.queue = kwargs.pop('queue')
-		except Exception, NoQueue:
-			self.queue = None
-		try:
-			self.model = kwargs.pop('model')
-		except Exception, NoModel:
-			pass
-		try:
-			self.screen_name = kwargs.pop('screen_name')
-			print self.screen_name
-		except Exception, no_screename:
-			print no_screename
-
-		try:
-			self.twitter_id = kwargs.pop('twitter_id')
-		except Exception, NoTId:
-			self.twitter_id = None
-		if self.twitter_id != None:
-			try:
-				self.socialprofile = SocialProfile.objects.get(twitter_id=self.twitter_id)
-			except Exception, NoSocialProfile:
-				self.socialprofile = None
-		else:
-			try:
-				self.socialprofile = SocialProfile.objects.get(handle=self.screen_name)
-			except Exception, NoSocialProfile:
-				self.socialprofile = None
-		try:
-			self.auth_set = OauthSet.objects.filter(rate_limited=False, active=False)[0]
-		except Exception, NoAuthSet:
-			self.auth_set = None
-			process_e = self.process_exception(NoAuthSet)
-			
-		if self.queue is not None:	
-			self.queue.put(self)
 		return super(Fetch_Twitter_Account, self).__init__(*args, **kwargs)
 
 	def get_api(self):
-		auth_set = self.auth_set
 		try:
-			auth = tweepy.OAuthHandler(auth_set.c_key, auth_set.c_secret)
-		except Exception, NoneType:
-			for i in OauthSet.objects.filter(rate_limited=True):
-				i.rate_limited = False
-				i.save()
-		try:
-			auth.set_access_token(auth_set.access_key, auth_set.key_secret)
-		except Exception, e:
-			process_e = self.process_exception(e)
-
-		try:
-			api = tweepy.API(auth)
-		except Exception, e:
-			process_e = self.process_exception(e)
-		return api
-	def get_follower_count(self, twitter_id=None, is_initial=None):
+			self.auth_set = OauthSet.objects.filter(active=False, rate_limited=False)[0]
+		except Exception, NoAuthSets:
+			print 'No Auth Sets'
+			print 'sleeping'
+			time.sleep(200)
+		self.auth = tweepy.OAuthHandler(self.auth_set.c_key, self.auth_set.c_secret)
+		self.auth.set_access_token(self.auth_set.access_key, self.auth_set.key_secret)
+		self.api = tweepy.API(self.auth)
+		return self.api
+	def get_follower_count(self):
 		api = self.get_api()
-		if self.is_initial != None:
-			return api.get_user(screen_name=self.is_initial).followers_count
-		elif twitter_id == None and self.is_initial == None:
-			return api.get_user(screen_name=self.screen_name).followers_count
-		else:
-			return api.get_user(user_id=twitter_id).followers_count
+		return api.get_user(user_id=self.twitter_id).followers_count
+		
 
-	def get_friend_count(self, twitter_id=None):
+	def get_friend_count(self):
 		api = self.get_api()
-		if twitter_id == None:
-			return api.get_user(screen_name=self.screen_name).friends_count
-		else:
-			return api.get_user(user_id=twitter_id).friends_count
+		return api.get_user(user_id=self.twitter_id).friends_count
 
 	def get_twitter_id(self):
 		api = self.get_api()
-		return api.get_user(screen_name=self.screen_name).id
+		return api.get_user(user_id=self.twitter_id).id
 
 	def get_follower_ids(self, twitter_id=None):
 		api = self.get_api()
-		if twitter_id == None:
-			return set(api.followers_ids(screen_name=self.screen_name))
-		else:
-			return set(api.followers_ids(user_id=twitter_id))
+		return set(api.followers_ids(user_id=self.twitter_id))
 
 	def get_friend_ids(self, twitter_id=None):
 		api = self.get_api()
-		if twitter_id == None:
-			return set(api.friends_ids(screen_name=self.screen_name))
-		else:
-			return set(api.friends_ids(user_id=twitter_id))
+		return set(api.friends_ids(user_id=twitter_id))
 
 	def get_favorited_tweets(self, twitter_id=None):
 		api = self.get_api()
 		statuses = []
-		if twitter_id == None:
-			try:
-				for i in tweepy.Cursor(api.favorites, user_id=self.screen_name).items():
-					statuses.append(i)
-			except Exception, e:
-				process_e = self.process_exception(e)
-	
-		else:
-			try:
-				for i in tweepy.Cursor(api.favorites, user_id=self.twitter_id).items():
-					statuses.append(i)
+		try:
+			for i in tweepy.Cursor(api.favorites, user_id=self.twitter_id).items():
+				statuses.append(i)
 			except Exception, e:
 				process_e = self.process_exception(e)
 		return statuses
@@ -219,7 +154,7 @@ class Fetch_Twitter_Account(Thread):
 			follower_ids = self.get_follower_ids(twitter_id=self.twitter_id)
 			friend_ids = self.get_friend_ids(twitter_id=self.twitter_id)
 			if self.model == 'Influencer':
-				influencer_instance = Influencer.objects.get(screen_name=self.screen_name)
+				influencer_instance = Influencer.objects.get(twitter_id=self.twitter_id)
 				influencer_instance.twitter_id = t_id
 				influencer_instance.friend_count = friend_count
 				influencer_instance.followers_count = follower_count
