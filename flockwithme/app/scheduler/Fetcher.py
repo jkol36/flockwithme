@@ -50,16 +50,16 @@ class Fetch_Twitter_Account(Thread):
 	def get_api(self):
 		try:
 			self.auth_set = OauthSet.objects.filter(active=False, rate_limited=False)[0]
-			print type(self.auth_set.c_key)
-			print type(self.auth_set.c_secret)
+			print self.auth_set.c_key
+			print self.auth_set.c_secret)
 			print self.auth_set.access_key
 			print self.auth_set.key_secret
 		except Exception, NoAuthSets:
 			print 'No Auth Sets'
 			print 'sleeping'
 			time.sleep(200)
-		self.auth = tweepy.OAuthHandler(self.auth_set.c_key, self.auth_set.c_secret)
-		self.auth.set_access_token(self.auth_set.access_key, self.auth_set.key_secret)
+		self.auth = tweepy.OAuthHandler(str(self.auth_set.c_key), str(self.auth_set.c_secret))
+		self.auth.set_access_token(str(self.auth_set.access_key), str(self.auth_set.key_secret))
 		self.api = tweepy.API(self.auth)
 		return self.api
 		
