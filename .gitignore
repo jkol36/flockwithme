@@ -1,1 +1,4 @@
 mysite.log
+lib/
+include/
+bin/
