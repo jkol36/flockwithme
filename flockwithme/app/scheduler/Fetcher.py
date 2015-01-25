@@ -49,13 +49,13 @@ class Testing(Thread):
 			print 'No Auth Sets. All are limited.'
 			time.sleep(200)
 
-		consumer_key = self.auth_set.c_key
+		consumer_key = str(self.auth_set.c_key)
 		print consumer_key
-		consumer_secret = self.auth_set.c_secret
+		consumer_secret = str(self.auth_set.c_secret)
 		consumer_secret
-		Access_Token = self.auth_set.access_key
+		Access_Token = str(self.auth_set.access_key)
 		print Access_Token
-		Access_Token_Secret = self.auth_set.key_secret
+		Access_Token_Secret = str(self.auth_set.key_secret)
 		auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
 		auth.set_access_token(Access_Token, Access_Token_Secret)
 		api = tweepy.API(auth)
