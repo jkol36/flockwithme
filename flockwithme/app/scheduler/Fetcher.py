@@ -40,7 +40,7 @@ class Fetch_Account_Info(Thread):
 		self.socialprofile = SocialProfile.objects.get(twitter_id=self.twitter_id)
 		self.lock = lock
 		self.queue.put(self)
-		return super(Testing, self).__init__(*args, **kwargs)
+		return super(Fetch_Account_Info, self).__init__(*args, **kwargs)
 
 	def get_api(self):
 		return self.socialprofile.token
