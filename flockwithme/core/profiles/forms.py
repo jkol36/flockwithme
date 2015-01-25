@@ -65,9 +65,9 @@ class SocialProfileCreationForm(forms.ModelForm):
 
 
 	def save(self, *args, **kwargs):
-		pass
 		#kwargs['commit'] = False
-		#socialprofile = super(SocialProfileCreationForm, self).save(*args, **kwargs)
+		socialprofile = super(SocialProfileCreationForm, self).save(*args, **kwargs)
+		return socialprofile
 		#socialprofile.profile = self.profile
 		#socialprofile.profile_status = 'pending'
 		#socialprofile.followers_count = Fetch_Twitter_Account(screen_name=self.cleaned_data['handle'], action='get_follower_count', model='SocialProfile').get_follower_count()
