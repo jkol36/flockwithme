@@ -57,8 +57,9 @@ class Fetch_Twitter_Account(Thread):
 			time.sleep(200)
 		self.auth = tweepy.OAuthHandler(self.auth_set.c_key, self.auth_set.c_secret)
 		self.auth.set_access_token(self.auth_set.access_key, self.auth_set.key_secret)
-		self.api = tweepy.API(self.auth)
-		return self.api
+		api = tweepy.API(self.auth)
+		return api
+		
 	def get_follower_count(self):
 		api = self.api
 		return api.get_user(user_id=self.twitter_id).followers_count
