@@ -72,11 +72,6 @@ class SocialProfileCreationForm(forms.ModelForm):
 		socialprofile.friend_count = Fetch_Twitter_Account(screen_name = self.cleaned_data['handle'], action="get_friend_count", model="SocialProfile").get_friend_count()
 		socialprofile.twitter_id = Fetch_Twitter_Account(screen_name=self.cleaned_data['handle'], action='get_twitter_id', model='SocialProfile').get_twitter_id()
 		socialprofile.save()
-		get_id = socialprofile.id
-		get_social_profile = SocialProfile.objects.get(pk=get_id)
-		new_get_account_info_job = Job.objects.create(socialprofile=get_social_profile, action="GET_ACCOUNT_INFO")
-		new_get_account_info_job.save()
-
 		return socialprofile
 
 
