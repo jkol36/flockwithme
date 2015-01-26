@@ -117,15 +117,17 @@ class AutoPilot(Thread):
 	def unfollow(self):
 		self.api = self.get_api()
 		self.user = self.socialprofile.twitter_id
-		self.following = self.get_friends()
+		self.friends = self.get_friends()
 		print "following"
 		print self.following
 		self.followers = self.get_followers()
 		print "followers"
 		print self.followers
-		self.following_ids = [x.twitterUser.twitter_id for x in self.following]
-		self.friend_ids = [x.twitterUser.twitter_id for x in self.followers]
-		self.non_followers = [x for x in self.friend_ids if x not in self.following_ids]
+		#People following the user
+		self.followers_ids = [x.twitterUser.twitter_id for x in self.followers]
+		#people the user is following
+		self.friend_ids = [x.twitterUser.twitter_id for x in self.friends]
+		self.non_followers = [x for x in self.friend_ids if x not in self.followers_ids]
 		print "non followers"
 		self.unfollowed = []
 		if self.non_followers > 1:
