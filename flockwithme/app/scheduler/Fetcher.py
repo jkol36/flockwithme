@@ -51,7 +51,10 @@ class Fetch_Influencers_Followers(Thread):
 		
 
 	def run(self):
-		self.twitter_followers = self.api.followers_ids(screen_name=self.screen_name)
+		try:
+			self.twitter_followers = self.api.followers_ids(screen_name=self.screen_name)
+		except Exception, e:
+			self.process_e = self.process_exception(e)
 		print self.twitter_followers
 		self.db_followers = [x.twitterUser.twitter_id for x in TwitterRelationship.objects.filter(influencer=self.influencer, action="FOLLOWER")]
 		self.should_add = [x for x in self.twitter_followers if x not in self.db_followers]
