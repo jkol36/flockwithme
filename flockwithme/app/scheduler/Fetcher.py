@@ -84,7 +84,7 @@ class Fetch_Account_Info(Thread):
 			process_e = self.process_exception(e)
 		
 		for tweet in favorites:
-			favorited_tweets.append(tweet)
+			favorited_tweets_to_be_added.append(tweet)
 
 		########CLEANING TIME ###########
 		#1. Clean Favorites
