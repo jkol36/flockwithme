@@ -130,7 +130,7 @@ def fetch_account_info():
 			executer = queue.get(timeout=1)
 		except:
 			executer = None
-		if executer:
+		if executer != None:
 			print 'executer needs to bre removied'
 			#threads.remove(executer)
 		else:

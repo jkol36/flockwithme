@@ -146,7 +146,7 @@ class Influencer(models.Model):
 	favorites_count = models.PositiveIntegerField(blank = True, null = True)
 	tweet_count = models.PositiveIntegerField(blank = True, null = True)
 	created_at = models.DateTimeField(auto_now_add = True)
-
+	is_queried = models.BooleanField(default=False)
 	def __unicode__(self):
 		return unicode(self.screen_name)
 
