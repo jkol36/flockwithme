@@ -82,7 +82,7 @@ class AutoPilot(Thread):
 		following = self.get_friends()
 		followers = self.get_followers()
 		following_ids = [x.twitterUser.twitter_id for x in following)
-		friend_ids = [x.twitterUser.twitter_id for x in followers)
+		friend_ids = [x.twitterUser.twitter_id for x in followers]
 		non_followers = [x for x in friend_ids if x not in following_ids]
 		if non_followers > 1:
 			try:
