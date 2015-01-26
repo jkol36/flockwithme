@@ -81,7 +81,7 @@ def track_followers():
 
 
 
-@kronos.register('15 * * *')
+@kronos.register('45 * * *')
 def Fetch_Influencer_Followers():
 	queue = Queue()
 	threads = []
