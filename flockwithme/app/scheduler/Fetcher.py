@@ -50,7 +50,7 @@ class Fetch_Influencers_Followers(Thread):
 	
 		
 
-	def fetch(self):
+	def run(self):
 		self.twitter_followers = self.api.followers_ids(screen_name=self.screen_name)
 		print self.twitter_followers
 		self.db_followers = [x.twitterUser.twitter_id for x in TwitterRelationship.objects.filter(influencer=self.influencer, action="FOLLOWER")]
