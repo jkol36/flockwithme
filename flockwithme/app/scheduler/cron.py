@@ -115,12 +115,12 @@ def fetch_account_info():
 		#acc.job_status = 'Fetching_Account_Info'
 		#acc.save()
 
-	for acc in SocialProfile.objects.filter().exclude(job_status='Fetch_Account_Info').distinct():
-		threads.append(Fetch_Account_Info(twitter_id=acc.twitter_id, lock=Lock, queue=queue, action="GET_FAVORITES"))
+	#for acc in SocialProfile.objects.filter().exclude(job_status='Fetch_Account_Info').distinct():
+		#threads.append(Fetch_Account_Info(twitter_id=acc.twitter_id, lock=Lock, queue=queue, action="GET_FAVORITES"))
 	
 
-	for acc in SocialProfile.objects.filter().exclude(job_status="Fetch_Account_Info").distinct():
-		threads.append(Fetch_Twitter_Account(twitter_id=acc.twitter_id, lock=Lock, queue=queue, action="Check_Ratio", model="SocialProfile"))
+	#for acc in SocialProfile.objects.filter().exclude(job_status="Fetch_Account_Info").distinct():
+		#threads.append(Fetch_Twitter_Account(twitter_id=acc.twitter_id, lock=Lock, queue=queue, action="Check_Ratio", model="SocialProfile"))
 	
 	for thread in threads:
 		thread.start()
