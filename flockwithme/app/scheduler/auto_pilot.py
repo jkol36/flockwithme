@@ -131,35 +131,7 @@ class AutoPilot(Thread):
 		if self.non_followers > 1:
 			print "true"
 			for twitter_id in self.non_followers:
-				try:
-					self.api.destroy_friendship(twitter_id)
-				except Exception, e:
-					self.process_e = self.process_exception(e)
-				self.unfollowed.append(twitter_id)
-		
-			if len(self.unfollowed) > 0:
-				for twitter_id in self.unfollowed:
-					try:
-						self.tuser = TwitterUser.objects.get(twitter_id=twitter_id)
-					except Exception, e:
-						self.process_e = self.process_exception(e)
-				#add the twitter user to the social profiles unfollowed lists
-					try:
-						self.socialprofile.add_unfriend(self.tuser)
-					except Exception, e:
-						self.process_e = self.process_exception(e)
-					self.socialprofile.save()
-				#removie the twitter user from the socialprofiles list of following
-					try:
-						self.socialprofile.delete_friend(self.tuser)
-					except Exception, e:
-						self.process_e = self.process_exception(e)
-					self.socialprofile.save()
-				
-				self.socialprofile.save()
-
-				#return unfollowed
-				return "unfollowed"
+				print twitter_id
 			else:
 				print "No one was unfollowed"
 		#if the user has no non-followers
