@@ -11,7 +11,7 @@ class RelationshipAdmin(admin.ModelAdmin):
 	list_display = ('socialProfile', 'twitterUser', 'twitterStatus', 'influencer', 'twitterList', 'created_at', 'action', 'is_initial')
 
 class influencerAdmin(admin.ModelAdmin):
-	list_display = ('created_at', 'screen_name', 'twitter_id', 'followers_count', 'favorites_count', 'tweet_count')
+	list_display = ('created_at', 'screen_name', 'twitter_id', 'followers_count', 'favorites_count', 'tweet_count', 'been_queried')
 
 class TwitterListAdmin(admin.ModelAdmin):
 	list_display = ('name', 'owner', 'profile', )
