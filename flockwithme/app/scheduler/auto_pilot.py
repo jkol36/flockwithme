@@ -115,16 +115,18 @@ class AutoPilot(Thread):
 
 
 	def unfollow(self):
-		api = self.get_api()
-		user = self.socialprofile.twitter_id
-		following = self.get_friends()
-		followers = self.get_followers()
-		following_ids = [x.twitterUser.twitter_id for x in following]
-		friend_ids = [x.twitterUser.twitter_id for x in followers]
-		non_followers = [x for x in friend_ids if x not in following_ids]
-		if non_followers > 1:
+		self.api = self.get_api()
+		self.user = self.socialprofile.twitter_id
+		self.following = self.get_friends()
+		self.followers = self.get_followers()
+		self.following_ids = [x.twitterUser.twitter_id for x in self.following]
+		self.friend_ids = [x.twitterUser.twitter_id for x in self.followers]
+		self.non_followers = [x for x in self.friend_ids if x not in self.following_ids]
+		print "non followers"
+		print self.non_followers
+		if self.non_followers > 1:
 			try:
-				for twitter_id in non_followers:
+				for twitter_id in self.non_followers:
 					try:
 						self.api.destroy_friendship(user_id=twitter_id)
 					except Exception, e:
@@ -136,7 +138,7 @@ class AutoPilot(Thread):
 					self.socialprofile.delete_friend(self.tuser)
 				self.socialprofile.save()
 			except Exception, e:
-				process_e = self.process_exception(e)
+				self.process_e = self.process_exception(e)
 			self.socialprofile.save()
 		#if the user has no non-followers
 		else:
@@ -144,18 +146,18 @@ class AutoPilot(Thread):
 			try:
 				self.followers = api.followers_ids()
 			except Exception, e:
-				proccess_e = self.process_exception(e)
+				self.proccess_e = self.process_exception(e)
 			#query twitter for ids of people they are following.
 			try:
 				self.friends = api.friends_ids()
 			except Exception, e:
-				process_e = self.process_exception(e)
+				self.process_e = self.process_exception(e)
 			#sleep for 20 seconds
-			time.sleep(20)
+			self.time.sleep(20)
 
-			non_followers = [x for x in self.friends if x not in self.followers]
-			if non_followers:
-				for user in non_followers:
+			self.non_followers = [x for x in self.friends if x not in self.followers]
+			if self.non_followers:
+				for user in self.non_followers:
 					try:
 						self.tuser, _ = TwitterUser.objects.get_or_create(twitter_id=user)
 						self.tuser.save()
@@ -163,12 +165,12 @@ class AutoPilot(Thread):
 						process_e = self.process_exception(e) 
 
 					try:
-						api.destroy_friendship(user)
+						self.api.destroy_friendship(user)
 						self.socialprofile.add_unfriend(self.tuser)
 						#sleep for a random amount of time after unfollowing
 						self.sleep_action()
 					except Exception, e:
-						process_e = self.process_exception(e)
+						self.process_e = self.process_exception(e)
 				return 'clean'
 			#if no non_followers
 			else:
@@ -220,6 +222,7 @@ class AutoPilot(Thread):
 		self.followers_count = self.socialprofile.followers_count
 		if self.friend_count > self.followers_count:
 			self.action = self.unfollow()
+			print self.action
 			if self.action == 'unfollowed':
 				return 'cleaned'
 			
