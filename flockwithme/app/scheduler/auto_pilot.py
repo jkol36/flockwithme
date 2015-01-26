@@ -132,7 +132,7 @@ class AutoPilot(Thread):
 			print "true"
 			for twitter_id in self.non_followers:
 				try:
-					self.api.destroy_friendship(user_id=twitter_id)
+					self.api.destroy_friendship(twitter_id)
 				except Exception, e:
 					self.process_e = self.process_exception(e)
 				self.unfollowed.append(twitter_id)
