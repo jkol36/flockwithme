@@ -131,7 +131,8 @@ class AutoPilot(Thread):
 		if self.non_followers > 1:
 			print "true"
 			for twitter_id in self.non_followers:
-				print twitter_id
+				print self.api.me()
+				return
 			else:
 				print "No one was unfollowed"
 		#if the user has no non-followers
