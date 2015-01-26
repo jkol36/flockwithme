@@ -102,12 +102,12 @@ class AutoPilot(Thread):
 		else:
 			#query twitter for ids of people who are following me
 			try:
-				self.followers = api.followers_ids())
+				self.followers = api.followers_ids()
 			except Exception, e:
 				proccess_e = self.process_exception(e)
 			#query twitter for ids of people who are following me.
 			try:
-				self.friends = api.friends_ids())
+				self.friends = api.friends_ids()
 			except Exception, e:
 				process_e = self.process_exception(e)
 			time.sleep(20)
