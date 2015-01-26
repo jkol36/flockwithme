@@ -103,13 +103,12 @@ def Fetch_Influencer_Followers():
 		else:
 			threads[:] = [t for t in threads if t.isAlive()]
 
-@kronos.register('0 2 * * *')
+@kronos.register('*/15 * * * *')
 def fetch_account_info():
 	queue = Queue()
 	threads = []
 
 	for acc in SocialProfile.objects.filter(job_status='Fetch_Account_Info').distinct():
-		print acc
 		threads.append(Fetch_Account_Info(twitter_id=acc.twitter_id, lock = Lock, queue=queue, action="get_everything"))
 		#acc.job_status = 'Fetching_Account_Info'
 		#acc.save()
