@@ -71,7 +71,13 @@ class Fetch_Influencers_Followers(Thread):
 			self.influencer.save()
 		else:
 			print 'Followers Fetched..'
-	
+
+	def process_exception(self, e):
+		if "Rate limit exceeded" in str(e):
+			print "rate limit exceeded"
+			time.sleep(900)
+		else:
+			print e
 
 
 
