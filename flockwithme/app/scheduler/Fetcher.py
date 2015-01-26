@@ -52,12 +52,12 @@ class Fetch_Account_Info(Thread):
 		api = tweepy.API(auth)
 		return api
 	def get_everything(self):
-		api = self.get_api()
-			
+		api = self.get_api()	
 		#get_my_followers
 		followers_to_be_added = []
 		try:
 			self.twitter_followers = set(tweepy.Cursor(api.followers_ids).items())
+			print self.twitter_followers
 		except Exception, e:
 			process_e = self.process_exception(e)
 		
