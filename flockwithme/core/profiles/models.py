@@ -59,6 +59,8 @@ class SocialProfile(models.Model):
 	is_executing_jobs = models.BooleanField(default=False)
 	followers_count = models.IntegerField(default=None, null=True)
 	friend_count = models.IntegerField(default = None, null = True)
+	dont_unfollow = models.ManyToManyField(TwitterUser, related_name="dont_unfollow", blank=True)
+	
 	def get_followers(self):
 		return self.relationships.filter(action="FOLLOWER", socialProfile=self).all()
 

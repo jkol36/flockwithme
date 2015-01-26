@@ -128,6 +128,18 @@ def my_lists(request):
 		messages.error(request, "Please add a twitter account first")
 		return redirect("my_accounts")
 		
+def dont_unfollow(request):
+	if request.POST:
+		form = dont_unfollow_form(request.POST)
+		if form.is_valid():
+			messages.success(request, "Success!!")
+			return render(request, 'dont_unfollow.jade')
+
+		else:
+			for t, z in form.errors:
+				messages.error(request, t + z.as_text())
+			return render(request, 'dont_unfollow.jade')
+	return render(request, "dont_unfollow.jade")
 
 def logout_view(request):
 	logout(request)
