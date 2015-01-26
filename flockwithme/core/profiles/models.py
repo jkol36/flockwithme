@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from flockwithme.app.scheduler.models import TwitterUser
 
 
 class Profile(AbstractUser):
