@@ -98,8 +98,8 @@ class Fetch_Account_Info(Thread):
 				self.socialprofile.save()
 		#3 Clean Followers
 		elif len(self.followers_to_be_added) > 1:
-			self.db_followers = set(self.socialprofile.get_followers())
-			self.should_add = self.db_followers.difference(set(self.followers_to_be_added))
+			self.db_followers = [x.twitterUSer.twitter_id for x in self.socialprofile.get_followers()]
+			self.should_add = [x for x in self.followers_to_be_added if x not in self.db_followers]
 			for user in should_add:
 				tuser, _ = TwitterUser.objects.get_or_create(twitter_id = user)
 				tuser.save()
