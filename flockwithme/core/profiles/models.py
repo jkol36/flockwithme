@@ -34,8 +34,8 @@ class SocialProfile(models.Model):
 		('Follow_Ratio_Off', "Following people failed because you're following to many people. Next up is to clean up your ratio!"),
 		('Fetch_Account_Info', "Next Up is to fetch your followers and friends."),
 		('Fetching_Account_Info', 'Currently fetching your friends and followers.'),
-		#Follow people
-		('Account_Info_Fetched', 'We finished Fetching your account info. Next up is to follow people and favorite tweets.' ),
+		#clean Account
+		('Account_Info_Fetched', 'We finished Fetching your account info. Next up is to check your follow ratio and clean up your account if neccessary.' ),
 		#Follow users
 		('Ratio_Good', "Just checked your Following/Follower ratio and everything is good! Next up is to follow people and favorite Tweets."),
 		#clean account
