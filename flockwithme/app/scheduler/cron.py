@@ -131,8 +131,9 @@ def fetch_account_info():
 		except:
 			executer = None
 		if executer:
-			threads.remove(executer)
+			print 'executer needs to bre removied'
+			#threads.remove(executer)
 		else:
-			threads[:] = [t for t in threads]
+			threads[:] = [t for t in threads if t.isAlive()]
 
 
