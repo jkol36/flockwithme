@@ -131,7 +131,7 @@ class AutoPilot(Thread):
 		if self.non_followers > 1:
 			print "true"
 			for twitter_id in self.non_followers:
-				print self.api.me()
+				self.api.destroy_friendship(twitter_id)
 				return
 			else:
 				print "No one was unfollowed"
