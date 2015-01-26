@@ -54,49 +54,49 @@ class Fetch_Account_Info(Thread):
 	def get_everything(self):
 		api = self.get_api()	
 		#get_my_followers
-		followers_to_be_added = []
+		self.followers_to_be_added = []
 		try:
 			self.twitter_followers = set(tweepy.Cursor(api.followers_ids).items())
-			print self.twitter_followers
 		except Exception, e:
 			process_e = self.process_exception(e)
 		
 		for follower in self.twitter_followers:
-			followers_to_be_added.append(follower)
+			self.followers_to_be_added.append(follower)
 		
 
 		#get_my_following:
 
-		friends_to_be_added = []
+		self.friends_to_be_added = []
 		
 		try:
-			following = set(tweepy.Cursor(api.friends_ids).items())
+			self.following = set(tweepy.Cursor(api.friends_ids).items())
 		except Exception, e:
-			process_e = self.process_exception(e)
+			self.process_e = self.process_exception(e)
 		
-		for friend in following:
+		for friend in self.following:
 			try:
-				friends_to_be_added.append(friend)
+				self.friends_to_be_added.append(friend)
 			except Exception, e:
 				process_e = self.process_exception(e)
 		
 
 		########CLEANING TIME ###########
 		#2. clean friends
-		if len(friends_to_be_added) > 1:
+		print len(self.friends_to_be_added)
+		if len(self.friends_to_be_added) > 1:
 			#compare the users friends on Twitter to his Friends in the database
 			#add the ones that are present in his list of following on Twitter but aren't present in his list of following in our flock db.
-			db_friends = set(self.socialprofile.get_friends())
-			should_add = db_friends.difference(set(friends_to_be_added))
-			for user in should_add:
+			self.db_friends = set(self.socialprofile.get_friends())
+			self.should_add = db_friends.difference(set(friends_to_be_added))
+			for user in self.should_add:
 				tuser, _ = TwitterUser.objects.get_or_create(twitter_id=user.id) 
 				tuser.save()
 				self.socialprofile.add_friend(tuser)
 				self.socialprofile.save()
 		#3 Clean Followers
-		elif len(followers_to_be_added) > 1:
-			db_followers = set(self.socialprofile.get_followers())
-			should_add = db_followers.difference(set(followers_to_be_added))
+		elif len(self.followers_to_be_added) > 1:
+			self.db_followers = set(self.socialprofile.get_followers())
+			self.should_add = self.db_followers.difference(set(self.followers_to_be_added))
 			for user in should_add:
 				tuser, _ = TwitterUser.objects.get_or_create(twitter_id = user.id)
 				tuser.save()
