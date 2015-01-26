@@ -31,7 +31,7 @@ class Fetch_Social_Profile(object):
 	def get_friend_count(self):
 		return self.api.me().friends_count
 
-class Fetch_Influencers_Followers(object):
+class Fetch_Influencers_Followers(Thread):
 	def __init__(self, lock=None, *args, **kwargs):
 		self.influencer = kwargs.pop('influencer')
 		self.screen_name = kwargs.pop('screen_name')
