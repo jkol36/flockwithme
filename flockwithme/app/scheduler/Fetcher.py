@@ -53,13 +53,83 @@ class Fetch_Account_Info(Thread):
 		return api
 	def get_everything(self):
 		api = self.get_api()
-		print api.me()
+			
+		#get_my_followers
+		followers_to_be_added = []
+		try:
+			twitter_followers = set(tweepy.Cursor(api.followers_ids).items())
+		except Exception, e:
+			process_e = self.process_exception(e)
+		
+		for follower in twitter_followers:
+			followers_to_be_added.append(follower)
+		
+
+		#get_my_following:
+
+		friends_to_be_added = []
+		
+		try:
+			following = set(tweepy.Cursor(api.friends_ids).items())
+		except Exception, e:
+			process_e = self.process_exception(e)
+		
+		for friend in following:
+			friends_to_be_added.append(friend)
+		#get my favorited tweets
+		favorited_tweets_to_be_added = []
+		try:
+			favorites = tweepy.Cursor(api.favorites).items()
+		except Exception, e:
+			process_e = self.process_exception(e)
+		
+		for tweet in favorites:
+			favorited_tweets.append(tweet)
+
+		########CLEANING TIME ###########
+		#1. Clean Favorites
+		if len(favorited_tweets_to_be_added) > 1:
+			#compare the tweets in my favorited tweets on twitter to my favorited tweets in the database
+			#my_database_tweets
+			database_favorites = set(self.socialprofile.get_favorites())
+			should_add = database_favorites.difference(set(favorited_tweets_to_be_added))
+			for tweet in should_add:
+				tstatus, _ = TwitterStatus.objects.get_or_create(twitter_id=tweet.id, text=tweet.text.encode('utf-8'), favorite_count=tweet.favorite_count, retweet_count=tweet.retweet_count)
+				tstatus.save()
+				self.socialprofile.add_favorite(tstatus)
+				self.socialprofile.save()
+		#2. clean friends
+		elif len(friends_to_be_added) > 1:
+			#compare the users friends on Twitter to his Friends in the database
+			#add the ones that are present in his list of following on Twitter but aren't present in his list of following in our flock db.
+			db_friends = set(self.socialprofile.get_friends())
+			should_add = db_friends.difference(set(friends_to_be_added))
+			for user in should_add:
+				tuser, _ = TwitterUser.objects.get_or_create(twitter_id=user.id) 
+				tuser.save()
+				self.socialprofile.add_friend(tuser)
+				self.socialprofile.save()
+		#3 Clean Followers
+		elif len(followers_to_be_added) > 1:
+			db_followers = set(self.socialprofile.get_followers())
+			should_add = db_followers.difference(set(followers_to_be_added))
+			for user in should_add:
+				tuser, _ = TwitterUser.objects.get_or_create(twitter_id = user.id)
+				tuser.save()
+				self.socialprofile.add_follower(tuser)
+				self.socialprofile.save()
+
 
 	def run(self):
 		if self.action == "get_everything":
 			action = self.get_everything()
 		else:
 			print "use get everything"
+
+	def process_exception(e):
+		if "Rate limit exceeded" in str(e):
+			print 'rate limited, sleeping'
+			time.sleep(900)
 class Fetch_Twitter_Account(Thread):
 	#
 	def __init__(self, lock=None, *args, **kwargs):
