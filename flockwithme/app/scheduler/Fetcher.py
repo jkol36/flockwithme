@@ -71,7 +71,7 @@ class Fetch_Influencers_Followers(object):
 			self.influencer.save()
 		else:
 			print 'Followers Fetched..'
-	self.fetch()
+	
 
 
 
