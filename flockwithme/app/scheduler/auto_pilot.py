@@ -157,6 +157,9 @@ class AutoPilot(Thread):
 					self.socialprofile.save()
 				
 				self.socialprofile.save()
+
+				#return unfollowed
+				return "unfollowed"
 			else:
 				print "No one was unfollowed"
 		#if the user has no non-followers
