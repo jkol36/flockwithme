@@ -114,14 +114,18 @@ class Fetch_Account_Info(Thread):
 		#get_my_followers
 		self.followers_to_be_added = []
 		try:
-			self.twitter_followers = set(tweepy.Cursor(api.followers_ids).items())
+			self.twitter_followers = tweepy.Cursor(api.followers_ids).items()
 		except Exception, e:
 			process_e = self.process_exception(e)
 		
-		for follower in self.twitter_followers:
-			self.followers_to_be_added.append(follower)
-		
-
+		if len(self.followers_to_be_added) > 0:
+			try:
+				for follower in self.twitter_followers:
+					self.followers_to_be_added.append(follower)
+			except Exception, e:
+				self.process_e = self.process_exception(e)
+		else:
+			print "No Followers to add"
 		#get_my_following:
 
 		self.friends_to_be_added = []

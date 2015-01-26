@@ -59,8 +59,8 @@ class SocialProfile(models.Model):
 	is_executing_jobs = models.BooleanField(default=False)
 	followers_count = models.IntegerField(default=None, null=True)
 	friend_count = models.IntegerField(default = None, null = True)
-	def get_followers(self, is_initial=True):
-		return self.relationships.filter(action="FOLLOWER", socialProfile=self, is_initial=is_initial).all()
+	def get_followers(self):
+		return self.relationships.filter(action="FOLLOWER", socialProfile=self).all()
 
 	def get_friends(self):
 		return self.relationships.filter(action="FRIEND", socialProfile=self).all()
