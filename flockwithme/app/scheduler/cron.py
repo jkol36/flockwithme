@@ -82,7 +82,7 @@ def track_followers():
 
 
 @kronos.register('0 5 * * *')
-def Fetch_Influencers_Followers():
+def Fetch_Influencer_Followers():
 	queue = Queue()
 	threads = []
 
