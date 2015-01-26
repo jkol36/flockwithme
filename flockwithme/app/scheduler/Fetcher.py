@@ -85,10 +85,10 @@ class Fetch_Account_Info(Thread):
 		if len(self.friends_to_be_added) > 1:
 			#compare the users friends on Twitter to his Friends in the database
 			#add the ones that are present in his list of following on Twitter but aren't present in his list of following in our flock db.
-			self.db_friends = set(self.socialprofile.get_friends())
+			self.db_friends = [x.twitterUser.twitter_id for x in self.socialprofile.get_friends()]
 			print 'database friends'
 			print self.db_friends
-			self.should_add = self.db_friends.difference(set(self.friends_to_be_added))
+			self.should_add = [x for x in self.friends_to_be_added if x not in self.db_friends]
 			print 'should add'
 			print self.should_add
 			for user in self.should_add:
