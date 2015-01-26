@@ -135,11 +135,22 @@ class AutoPilot(Thread):
 						self.api.destroy_friendship(user_id=twitter_id)
 					except Exception, e:
 						self.process_e = self.process_exception(e)
-					self.tuser = TwitterUser.objects.get(twitter_id=twitter_id)
+					try:
+						self.tuser = TwitterUser.objects.get(twitter_id=twitter_id)
+					except Exception, e:
+						self.process_e = self.process_exception(e)
 				#add the twitter user to the social profiles unfollowed lists
-					self.socialprofile.add_unfriend(self.tuser)
+					try:
+						self.socialprofile.add_unfriend(self.tuser)
+					except Exception, e:
+						self.process_e = self.process_exception(e)
+					self.socialprofile.save()
 				#removie the twitter user from the socialprofiles list of following
-					self.socialprofile.delete_friend(self.tuser)
+					try:
+						self.socialprofile.delete_friend(self.tuser)
+					except Exception, e:
+						self.process_e = self.process_exception(e)
+					self.socialprofile.save()
 				self.socialprofile.save()
 			except Exception, e:
 				self.process_e = self.process_exception(e)
@@ -284,7 +295,8 @@ class AutoPilot(Thread):
 			print e
 			print "sleeping"
 			self.time.sleep(900)	
-		print e
+		else:
+			print e
 		
 		
 		
