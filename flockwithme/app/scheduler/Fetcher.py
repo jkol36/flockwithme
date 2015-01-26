@@ -68,9 +68,9 @@ class Fetch_Influencers_Followers(Thread):
 				try:
 					self.add_relationship, _ = TwitterRelationship.objects.get_or_create(twitterUser=self.tuser, action="FOLLOWER")
 					self.add_relationship.save()
+					self.influencer.relationships.add(self.add_relationship)
 				except Exception, e:
 					self.process_e = self.process_exception(e)
-				self.influencer.relationships.add(self.add_relationship)
 				self.influencer.save()
 			self.influencer.save()
 		else:
