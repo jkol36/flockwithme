@@ -57,11 +57,11 @@ class Fetch_Account_Info(Thread):
 		#get_my_followers
 		followers_to_be_added = []
 		try:
-			twitter_followers = set(tweepy.Cursor(api.followers_ids).items())
+			self.twitter_followers = set(tweepy.Cursor(api.followers_ids).items())
 		except Exception, e:
 			process_e = self.process_exception(e)
 		
-		for follower in twitter_followers:
+		for follower in self.twitter_followers:
 			followers_to_be_added.append(follower)
 		
 
@@ -114,6 +114,8 @@ class Fetch_Account_Info(Thread):
 		if "Rate limit exceeded" in str(e):
 			print 'rate limited, sleeping'
 			time.sleep(900)
+		else:
+			print e
 class Fetch_Twitter_Account(Thread):
 	#
 	def __init__(self, lock=None, *args, **kwargs):

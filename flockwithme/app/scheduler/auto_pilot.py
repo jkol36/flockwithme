@@ -84,21 +84,48 @@ class AutoPilot(Thread):
 		following_ids = set(x.twitterUser.twitter_id for x in following)
 		friend_ids = set(x.twitterUser.twitter_id for x in followers)
 		non_followers = following_ids.difference(friend_ids)
-		try:
-			for twitter_id in non_followers:
+		if non_followers > 1:
+			try:
+				for twitter_id in non_followers:
+					try:
+						api.destroy_friendship(user_id=twitter_id)
+					except Exception, e:
+						process_e = self.process_exception(e)
+					tuser = TwitterUser.objects.get(twitter_id=twitter_id)
+				#add the twitter user to the social profiles unfollowed lists
+					self.socialprofile.add_unfriend(tuser)
+				#removie the twitter user from the socialprofiles list of following
+					self.socialprofile.delete_friend(tuser)
+				self.socialprofile.save()
+			except Exception, e:
+				process_e = self.process_exception(e)
+		else:
+			#query twitter for ids of people who are following me
+			try:
+				self.followers = set(api.followers_ids())
+			except Exception, e:
+				proccess_e = self.process_exception(e)
+			#query twitter for ids of people who are following me.
+			try:
+				self.friends = set(api.friends_ids())
+			except Exception, e:
+				process_e = self.process_exception(e)
+			time.sleep(20)
+
+			non_followers = self.followers.difference(self.friends)
+			for user in non_followers:
 				try:
-					api.destroy_friendship(user_id=twitter_id)
+					self.tuser, _ = TwitterUser.objects.get_or_create(twitter_id=user)
+					self.tuser.save()
+				except Exception, e:
+					process_e = self.process_exception(e) 
+
+				try:
+					api.destroy_friendship(user)
+					self.socialprofile.add_unfriend(self.tuser)
 				except Exception, e:
 					process_e = self.process_exception(e)
-				tuser = TwitterUser.objects.get(twitter_id=twitter_id)
-			#add the twitter user to the social profiles unfollowed lists
-				self.socialprofile.add_unfriend(tuser)
-			#removie the twitter user from the socialprofiles list of following
-				self.socialprofile.delete_friend(tuser)
-			self.socialprofile.save()
-		except Exception, e:
-			process_e = self.process_exception(e)
-		return 'unfollowed'
+			return 'unfollowed'
 
 
 	def favorite(self):
