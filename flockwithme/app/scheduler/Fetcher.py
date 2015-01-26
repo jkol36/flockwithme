@@ -97,9 +97,9 @@ class Fetch_Account_Info(Thread):
 					tuser.save()
 					self.socialprofile.add_friend(tuser)
 					self.socialprofile.save()
-				continue
 			else:
-				continue
+				if len(self.followers_to_be_added) > 1:
+					print 'followers to be added'
 		#3 Clean Followers
 		elif len(self.followers_to_be_added) > 1:
 			print len(self.followers_to_be_added)
