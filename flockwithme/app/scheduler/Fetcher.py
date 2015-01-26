@@ -58,7 +58,7 @@ class Fetch_Influencers_Followers(Thread):
 		if len(self.should_add) > 1:
 			for user in self.should_add:
 				try:
-					self.tuser, _ = TwitterUser.objects.get_or_create(twitter_id=tuser)
+					self.tuser, _ = TwitterUser.objects.get_or_create(twitter_id=self.tuser)
 					self.tuser.save()
 				except Exception, e:
 					self.process_e = self.process_exception(e)
