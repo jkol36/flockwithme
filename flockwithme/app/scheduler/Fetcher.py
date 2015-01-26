@@ -87,7 +87,7 @@ class Fetch_Account_Info(Thread):
 			#compare the users friends on Twitter to his Friends in the database
 			#add the ones that are present in his list of following on Twitter but aren't present in his list of following in our flock db.
 			self.db_friends = set(self.socialprofile.get_friends())
-			self.should_add = self.db_friends.difference(set(friends_to_be_added))
+			self.should_add = self.db_friends.difference(set(self.friends_to_be_added))
 			for user in self.should_add:
 				tuser, _ = TwitterUser.objects.get_or_create(twitter_id=user.id) 
 				tuser.save()
