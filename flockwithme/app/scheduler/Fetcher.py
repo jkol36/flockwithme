@@ -92,7 +92,7 @@ class Fetch_Account_Info(Thread):
 			print 'should add'
 			print self.should_add
 			for user in self.should_add:
-				tuser, _ = TwitterUser.objects.get_or_create(twitter_id=user.id) 
+				tuser, _ = TwitterUser.objects.get_or_create(twitter_id=user) 
 				tuser.save()
 				self.socialprofile.add_friend(tuser)
 				self.socialprofile.save()
@@ -101,7 +101,7 @@ class Fetch_Account_Info(Thread):
 			self.db_followers = set(self.socialprofile.get_followers())
 			self.should_add = self.db_followers.difference(set(self.followers_to_be_added))
 			for user in should_add:
-				tuser, _ = TwitterUser.objects.get_or_create(twitter_id = user.id)
+				tuser, _ = TwitterUser.objects.get_or_create(twitter_id = user)
 				tuser.save()
 				self.socialprofile.add_follower(tuser)
 				self.socialprofile.save()
