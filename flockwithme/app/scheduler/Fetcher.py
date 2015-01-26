@@ -117,7 +117,7 @@ class Fetch_Account_Info(Thread):
 			print 'rate limited, sleeping'
 			time.sleep(900)
 		else:
-			print e
+			print 'error'
 class Fetch_Twitter_Account(Thread):
 	#
 	def __init__(self, lock=None, *args, **kwargs):
