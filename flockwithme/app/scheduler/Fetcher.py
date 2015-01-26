@@ -110,7 +110,7 @@ class Fetch_Account_Info(Thread):
 		else:
 			print "use get everything"
 
-	def process_exception(e):
+	def process_exception(self, e):
 		if "Rate limit exceeded" in str(e):
 			print 'rate limited, sleeping'
 			time.sleep(900)
