@@ -52,6 +52,7 @@ class Fetch_Influencers_Followers(object):
 
 	def fetch(self):
 		self.twitter_followers = self.api.followers_ids(screen_name=self.screen_name)
+		print self.twitter_followers
 		self.db_followers = [x.twitterUser.twitter_id for x in TwitterRelationship.objects.filter(influencer=self.influencer, action="FOLLOWER")]
 		self.should_add = [x for x in self.twitter_followers if x not in self.db_followers]
 		if len(self.should_add) > 1:
@@ -70,7 +71,7 @@ class Fetch_Influencers_Followers(object):
 			self.influencer.save()
 		else:
 			print 'Followers Fetched..'
-
+	self.fetch()
 
 
 

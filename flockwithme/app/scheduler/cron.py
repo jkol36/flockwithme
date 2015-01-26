@@ -87,8 +87,7 @@ def Fetch_Influencer_Followers():
 	threads = []
 
 	for influencer in Influencer.objects.filter(been_queried=False):
-		if influencer.twitter_id == None:
-			threads.append(Fetch_Twitter_Account(screen_name=influencer, queue=queue, action='get_everything', model='Influencer'))
+		threads.append(Fetch_Influencer_Followers(influencer=influencer, screen_name=influencer.screen_name queue=queue))
 		#threads.append(Fetch_Followers(twitter_account=influencer))
 
 	for thread in threads:
