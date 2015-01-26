@@ -91,15 +91,45 @@ class Fetch_Account_Info(Thread):
 			self.should_add = [x for x in self.friends_to_be_added if x not in self.db_friends]
 			print 'should add'
 			print self.should_add
+			#if there's friends to add do this
 			if len(self.should_add) > 1:
 				for user in self.should_add:
 					tuser, _ = TwitterUser.objects.get_or_create(twitter_id=user) 
 					tuser.save()
 					self.socialprofile.add_friend(tuser)
 					self.socialprofile.save()
+				if len(self.followers_to_be_added) > 1:
+					self.db_followers = [x.twitterUser.twitter_id for x in self.socialprofile.get_followers()]
+					self.should_add = [x for x in self.followers_to_be_added if x not in self.db_followers]
+					if len(self.should_add) > 1:
+						for user in self.should_add:
+							try:
+								self.tuser, _ = TwitterUser.objects.get_or_create(twitter_id=user)
+							except Exception, e:
+								self.process_e = self.process_exception(e)
+							self.tuser.save()
+							self.socialprofile.add_follower(self.tuser)
+							self.socialprofile.save()
+					else:
+						self.socialprofile.job_status = "Account_Info_Fetched"
+						self.socialprofile.save()
+				else:
+					self.socialprofile.job_status = 'Account_Info_Fetched'
+					self.socialprofile.save()
+			
+
+			#otherwise do this
 			else:
 				if len(self.followers_to_be_added) > 1:
-					print 'followers to be added'
+					self.db_followers = [x.twitterUser.twitter_id for x in self.socialprofile.get_followers()]
+					self.should_add = [x for x in self.followers_to_be_added if x not in self.db_followers]
+					if self.should_add > 1:
+						for user in self.should_add:
+							self.tuser, _ = TwitterUser.objects.get_or_create(twitter_id=user)
+							self.tuser.save()
+							self.socialprofile.add_follower(self.tuser)
+						self.socialprofile.save()
+
 		#3 Clean Followers
 		elif len(self.followers_to_be_added) > 1:
 			print len(self.followers_to_be_added)
@@ -107,13 +137,19 @@ class Fetch_Account_Info(Thread):
 			self.should_add = [x for x in self.followers_to_be_added if x not in self.db_followers]
 			print 'followers we should add'
 			print self.should_add
-			for user in should_add:
-				tuser, _ = TwitterUser.objects.get_or_create(twitter_id = user)
-				tuser.save()
-				self.socialprofile.add_follower(tuser)
+			if len(self.should_add) > 1:
+				for user in should_add:
+					tuser, _ = TwitterUser.objects.get_or_create(twitter_id = user)
+					tuser.save()
+					self.socialprofile.add_follower(tuser)
+					self.socialprofile.save()
+				self.socialprofile.save()
+			else:
+				self.socialprofile.job_status = "Account_Info_Fetched"
 				self.socialprofile.save()
 		else:
-			print 'nothing to add.'
+			self.socialprofile.job_status = "Account_Info_Fetched"
+			self.socialprofile.save()
 
 
 
