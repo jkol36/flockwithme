@@ -102,6 +102,8 @@ class Fetch_Account_Info(Thread):
 				tuser.save()
 				self.socialprofile.add_follower(tuser)
 				self.socialprofile.save()
+		else:
+			print 'nothing to add.'
 
 
 	def run(self):
