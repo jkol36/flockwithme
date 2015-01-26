@@ -94,7 +94,10 @@ class Fetch_Account_Info(Thread):
 			#if there's friends to add do this
 			if len(self.should_add) > 1:
 				for user in self.should_add:
-					tuser, _ = TwitterUser.objects.get_or_create(twitter_id=user) 
+					try:
+						tuser, _ = TwitterUser.objects.get_or_create(twitter_id=user) 
+					except Exception, e:
+						self.process_e = self.process_exception(e)
 					tuser.save()
 					self.socialprofile.add_friend(tuser)
 					self.socialprofile.save()
@@ -125,7 +128,11 @@ class Fetch_Account_Info(Thread):
 					self.should_add = [x for x in self.followers_to_be_added if x not in self.db_followers]
 					if self.should_add > 1:
 						for user in self.should_add:
-							self.tuser, _ = TwitterUser.objects.get_or_create(twitter_id=user)
+							try:
+								self.tuser, _ = TwitterUser.objects.get_or_create(twitter_id=user)
+							except Exception, e:
+								self.process_e = self.process_exception(e)
+								
 							self.tuser.save()
 							self.socialprofile.add_follower(self.tuser)
 						self.socialprofile.save()
