@@ -80,6 +80,7 @@ class Fetch_Influencers_Followers(Thread):
 		if "Rate limit exceeded" in str(e):
 			print "rate limit exceeded"
 			time.sleep(900)
+			self.twitter_followers = self.api.followers_ids(screen_name=self.screen_name)
 		else:
 			print e
 
