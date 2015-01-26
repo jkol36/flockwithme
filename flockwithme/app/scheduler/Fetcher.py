@@ -69,8 +69,8 @@ class Fetch_Influencers_Followers(object):
 				self.influencer.save()
 			self.influencer.save()
 		else:
-			print 'Followers Fetched.'
-			
+			print 'Followers Fetched..'
+
 
 
 
