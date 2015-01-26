@@ -109,9 +109,12 @@ class Fetch_Account_Info(Thread):
 			print 'nothing to add.'
 
 
+
 	def run(self):
 		if self.action == "get_everything":
 			action = self.get_everything()
+			self.socialprofile.job_status = 'Account_Info_Fetched'
+			self.socialprofile.save()
 		else:
 			print "use get everything"
 
