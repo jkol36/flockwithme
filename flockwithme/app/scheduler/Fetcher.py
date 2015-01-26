@@ -91,11 +91,15 @@ class Fetch_Account_Info(Thread):
 			self.should_add = [x for x in self.friends_to_be_added if x not in self.db_friends]
 			print 'should add'
 			print self.should_add
-			for user in self.should_add:
-				tuser, _ = TwitterUser.objects.get_or_create(twitter_id=user) 
-				tuser.save()
-				self.socialprofile.add_friend(tuser)
-				self.socialprofile.save()
+			if len(should_add) > 1:
+				for user in self.should_add:
+					tuser, _ = TwitterUser.objects.get_or_create(twitter_id=user) 
+					tuser.save()
+					self.socialprofile.add_friend(tuser)
+					self.socialprofile.save()
+				continue
+			else:
+				continue
 		#3 Clean Followers
 		elif len(self.followers_to_be_added) > 1:
 			print len(self.followers_to_be_added)
