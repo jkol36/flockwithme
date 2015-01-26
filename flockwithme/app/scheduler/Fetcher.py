@@ -75,29 +75,13 @@ class Fetch_Account_Info(Thread):
 			process_e = self.process_exception(e)
 		
 		for friend in following:
-			friends_to_be_added.append(friend)
-		#get my favorited tweets
-		favorited_tweets_to_be_added = []
-		try:
-			favorites = tweepy.Cursor(api.favorites).items()
-		except Exception, e:
-			process_e = self.process_exception(e)
+			try:
+				friends_to_be_added.append(friend)
+			except Exception, e:
+				process_e = self.process_exception(e)
 		
-		for tweet in favorites:
-			favorited_tweets_to_be_added.append(tweet)
 
 		########CLEANING TIME ###########
-		#1. Clean Favorites
-		if len(favorited_tweets_to_be_added) > 1:
-			#compare the tweets in my favorited tweets on twitter to my favorited tweets in the database
-			#my_database_tweets
-			database_favorites = set(self.socialprofile.get_favorites())
-			should_add = database_favorites.difference(set(favorited_tweets_to_be_added))
-			for tweet in should_add:
-				tstatus, _ = TwitterStatus.objects.get_or_create(twitter_id=tweet.id, text=tweet.text.encode('utf-8'), favorite_count=tweet.favorite_count, retweet_count=tweet.retweet_count)
-				tstatus.save()
-				self.socialprofile.add_favorite(tstatus)
-				self.socialprofile.save()
 		#2. clean friends
 		elif len(friends_to_be_added) > 1:
 			#compare the users friends on Twitter to his Friends in the database
