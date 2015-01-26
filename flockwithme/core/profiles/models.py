@@ -25,19 +25,29 @@ class SocialProfile(models.Model):
 		)
 	JOB_STATUS = (
 		('Just_Cleaned', 'We just fixed up your following/follower ratio. Next up, is to follow people and favorite tweets.'),
-		('Just_Followed', 'We just followed users. Next up, is to fetch your latest favorited tweets.'),
 		('Dm_Skipped', "We couldn't direct message your followers because you didn't set a message. This process was skipped today."),
+		#sleep until tomorrow
 		('Just_Dmed', "We just sent your message to your most recent followers. All actions complete for today."),
+		#favorite tweets and auto dm
 		('Follow_Limit_Reached', "Following people failed because you're rate limited. We'll try again tomorrow."),
+		#clean follow ratio
 		('Follow_Ratio_Off', "Following people failed because you're following to many people. Next up is to clean up your ratio!"),
 		('Fetch_Account_Info', "Next Up is to fetch your followers and friends."),
 		('Fetching_Account_Info', 'Currently fetching your friends and followers.'),
+		#Follow people
 		('Account_Info_Fetched', 'We finished Fetching your account info. Next up is to follow people and favorite tweets.' ),
+		#Follow users
 		('Ratio_Good', "Just checked your Following/Follower ratio and everything is good! Next up is to follow people and favorite Tweets."),
+		#clean account
 		('Ratio_Bad', 'Your Ratio needs cleaning.'),
+		#Favorite Tweets
 		('FAVORITES_FETCHED', 'ready to favorite tweets'),
+		#Send Direct Messages to followers
 		("Just_Favorited", 'We just favorited tweets. Next Step is to auto_dm your followers.'),
+		#prompt the user for action
 		("Ratio_Dirty_No_Unfollowers", "Your ratio is dirty and you have no one who is not following you."),
+		#try favoriting tweets.
+		("No_Users_To_Follow", "That's weird. Following users failed because we couldn't find people to follow."),
 		)
 	profile = models.ForeignKey(Profile, related_name="accounts")
 	job_status = models.CharField(max_length=150, choices=JOB_STATUS, default='Fetch_Account_Info')

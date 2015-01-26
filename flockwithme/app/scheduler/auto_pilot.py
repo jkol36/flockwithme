@@ -31,38 +31,76 @@ class AutoPilot(Thread):
 		api = tweepy.API(auth)
 		return api
 
+	def sleep_action(self):
+		return time.sleep(random.int(0,100))
 	def follow(self):
-		api = self.get_api()
-		following = self.get_friends()
-		followers = self.get_followers()
-		following_ids = set(x.twitterUser.twitter_id for x in following)
-		author_ids = [x.twitter_user.twitter_id for x in self.get_tweets()]
-		influencers = self.profile.influencers.all()
-		authors_and_followers = []
-		for i in influencers:
-			twitter_ids = self.get_followers_of_influencer(i.id)
-			for i in twitter_ids:
-				authors_and_followers.append(i)
-		for i in author_ids:
-			authors_and_followers.append(i)
-
-		to_follow_set = set(authors_and_followers)
-		should_follow = to_follow_set.difference(following_ids)
-		#################NOW TIME FOR THE FOLLOWING BITCHES ##############
-		followers_count = api.me().followers_count
-		friends_count = api.me().friends_count
-		followed = []
-		while followers_count > friends_count:
-			for i in should_follow:
+		self.api = self.get_api()
+		self.following = self.get_friends()
+		self.followers = self.get_followers()
+		self.following_ids = set(x.twitterUser.twitter_id for x in following)
+		self.author_ids = [x.twitter_user.twitter_id for x in self.get_tweets()]
+		self.influencers = self.profile.influencers.all()
+		self.authors_and_followers = []
+		if len(self.influencers) > 0:
+			try:
+				for i in self.influencers:
+					self.twitter_ids = self.get_followers_of_influencer(i.id)
+			except Exception, e:
+				self.process_e = self.process_exception(e)
+			if len(self.twitter_ids) > 0:
 				try:
-					api.create_friendship(user_id=i)
+					for i in self.twitter_ids:
+						self.authors_and_followers.append(i)
 				except Exception, e:
-					process_e = self.process_exception(e)
-				followed.append(i)
-		for i in followed:
-			tuser, _ = TwitterUser.objects.get_or_create(twitter_id=i)
-			tuser.save()
-			self.socialprofile.add_friend(tuser)
+					self.process_e = self.process_exception(e)
+		
+			else:
+				print 'no influencers'
+		else:
+			print "no influencers"
+		
+		if len(self.author_ids) > 0:
+			try:
+				for i in self.author_ids:
+					self.authors_and_followers.append(i)
+			except Exception, e:
+				self.process_e = self.process_exception(e)
+		else:
+			print "no author_ids"
+
+		self.should_follow = [x for x in self.authors_and_followers if x not in self.following_ids]
+		#################NOW TIME FOR THE FOLLOWING BITCHES ##############
+		self.followers_count = api.me().followers_count
+		self.friends_count = api.me().friends_count
+		self.followed = []
+		self.follow_limit = int(self.followers_count) - int(self.friends_count)
+		self.num_followed = 0
+		#if there's users to follow
+		if len(self.should_follow) > 0: 
+			while self.num_followed < self.follow_limit:
+				for i in self.should_follow:
+					try:
+						self.api.create_friendship(user_id=i)
+					except Exception, e:
+						process_e = self.process_exception(e)
+					self.followed.append(i)
+					self.sleep_action()
+			#if users were followed
+			if len(self.followed) > 0:
+				for i in self.followed:
+					try:
+						self.tuser, _ = TwitterUser.objects.get_or_create(twitter_id=i)
+					except Exception, e:
+						self.process_e = self.process_exception(e)
+					self.tuser.save()
+					self.socialprofile.add_friend(self.tuser)
+			else:
+				self.socialprofile.job_status = "No_Users_To_Follow"
+				self.socialprofile.save()
+		#if there are no users to follow
+		else:
+			self.socialprofile.job_status = "No_Users_To_Follow"
+			self.socialprofile.save()
 		self.socialprofile.job_status = 'Just_Followed'
 		self.socialprofile.friend_count = api.me().friends_count
 		self.socialprofile.follower_count = api.me().followers_count
@@ -99,17 +137,20 @@ class AutoPilot(Thread):
 				self.socialprofile.save()
 			except Exception, e:
 				process_e = self.process_exception(e)
+			self.socialprofile.save()
+		#if the user has no non-followers
 		else:
-			#query twitter for ids of people who are following me
+			#query twitter for ids of people who are following them
 			try:
 				self.followers = api.followers_ids()
 			except Exception, e:
 				proccess_e = self.process_exception(e)
-			#query twitter for ids of people who are following me.
+			#query twitter for ids of people they are following.
 			try:
 				self.friends = api.friends_ids()
 			except Exception, e:
 				process_e = self.process_exception(e)
+			#sleep for 20 seconds
 			time.sleep(20)
 
 			non_followers = [x for x in self.friends if x not in self.followers]
@@ -124,9 +165,12 @@ class AutoPilot(Thread):
 					try:
 						api.destroy_friendship(user)
 						self.socialprofile.add_unfriend(self.tuser)
+						#sleep for a random amount of time after unfollowing
+						self.sleep_action()
 					except Exception, e:
 						process_e = self.process_exception(e)
 				return 'clean'
+			#if no non_followers
 			else:
 				return 'no_unfollowers'
 
@@ -229,6 +273,10 @@ class AutoPilot(Thread):
 		
 
 	def process_exception(self, e):
+		if "Rate limit exceeded" in str(e):
+			print e
+			print "sleeping"
+			self.time.sleep(900)	
 		print e
 		
 		
