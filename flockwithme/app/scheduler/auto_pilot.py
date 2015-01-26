@@ -252,10 +252,10 @@ class AutoPilot(Thread):
 			elif self.action == "Ratio_Clean_No_Unfollowers":
 				self.socialprofile.job_status = "Ratio_Good"
 				self.socialprofile.save()
-			elif action == 'clean':
+			elif self.action == 'clean':
 				self.socialprofile.job_status = 'Ratio_Good'
 				self.socialprofile.save()
-			elif action == 'cleaned':
+			elif self.action == 'cleaned':
 				self.socialprofile.job_status = "Just_Cleaned"
 				self.socialprofile.save()
 			else:
@@ -263,11 +263,11 @@ class AutoPilot(Thread):
 				self.socialprofile.save()
 		
 		elif self.action == 'Follow':
-			action = self.follow()
+			self.action = self.follow()
 			self.socialprofile.job_status = "Just_Followed"
 			self.socialprofile.save()
 		elif self.action == 'FAVORITE':
-			action = self.favorite()
+			self.action = self.favorite()
 			self.socialprofile.job_status = "Just_Favorited"
 			self.socialprofile.save()
 		
