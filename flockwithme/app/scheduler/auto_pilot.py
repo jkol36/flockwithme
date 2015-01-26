@@ -119,7 +119,7 @@ class AutoPilot(Thread):
 		self.user = self.socialprofile.twitter_id
 		self.friends = self.get_friends()
 		print "following"
-		print self.following
+		print self.friends
 		self.followers = self.get_followers()
 		print "followers"
 		print self.followers
