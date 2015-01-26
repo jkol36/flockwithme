@@ -81,51 +81,54 @@ class AutoPilot(Thread):
 		user = self.socialprofile.twitter_id
 		following = self.get_friends()
 		followers = self.get_followers()
-		following_ids = set(x.twitterUser.twitter_id for x in following)
-		friend_ids = set(x.twitterUser.twitter_id for x in followers)
-		non_followers = following_ids.difference(friend_ids)
+		following_ids = [x.twitterUser.twitter_id for x in following)
+		friend_ids = [x.twitterUser.twitter_id for x in followers)
+		non_followers = [x for x in friend_ids if x not in following_ids]
 		if non_followers > 1:
 			try:
 				for twitter_id in non_followers:
 					try:
-						api.destroy_friendship(user_id=twitter_id)
+						self.api.destroy_friendship(user_id=twitter_id)
 					except Exception, e:
-						process_e = self.process_exception(e)
-					tuser = TwitterUser.objects.get(twitter_id=twitter_id)
+						self.process_e = self.process_exception(e)
+					self.tuser = TwitterUser.objects.get(twitter_id=twitter_id)
 				#add the twitter user to the social profiles unfollowed lists
-					self.socialprofile.add_unfriend(tuser)
+					self.socialprofile.add_unfriend(self.tuser)
 				#removie the twitter user from the socialprofiles list of following
-					self.socialprofile.delete_friend(tuser)
+					self.socialprofile.delete_friend(self.tuser)
 				self.socialprofile.save()
 			except Exception, e:
 				process_e = self.process_exception(e)
 		else:
 			#query twitter for ids of people who are following me
 			try:
-				self.followers = set(api.followers_ids())
+				self.followers = api.followers_ids())
 			except Exception, e:
 				proccess_e = self.process_exception(e)
 			#query twitter for ids of people who are following me.
 			try:
-				self.friends = set(api.friends_ids())
+				self.friends = api.friends_ids())
 			except Exception, e:
 				process_e = self.process_exception(e)
 			time.sleep(20)
 
-			non_followers = self.followers.difference(self.friends)
-			for user in non_followers:
-				try:
-					self.tuser, _ = TwitterUser.objects.get_or_create(twitter_id=user)
-					self.tuser.save()
-				except Exception, e:
-					process_e = self.process_exception(e) 
+			non_followers = [x for x in self.friends if x not in self.followers]
+			if non_followers:
+				for user in non_followers:
+					try:
+						self.tuser, _ = TwitterUser.objects.get_or_create(twitter_id=user)
+						self.tuser.save()
+					except Exception, e:
+						process_e = self.process_exception(e) 
 
-				try:
-					api.destroy_friendship(user)
-					self.socialprofile.add_unfriend(self.tuser)
-				except Exception, e:
-					process_e = self.process_exception(e)
-			return 'unfollowed'
+					try:
+						api.destroy_friendship(user)
+						self.socialprofile.add_unfriend(self.tuser)
+					except Exception, e:
+						process_e = self.process_exception(e)
+				return 'clean'
+			else:
+				return 'no_unfollowers'
 
 
 	def favorite(self):
@@ -175,6 +178,21 @@ class AutoPilot(Thread):
 			action = self.unfollow()
 			if action == 'unfollowed':
 				return 'cleaned'
+			
+			elif action == "no_unfollowers":
+				try:
+					self.followers_count = self.get_api().me().followers_count
+					self.friends_count = self.get_api().me().friends_count
+				except Exception, e:
+					self.process_e = self.process_exception(e)
+				try:
+					if self.followers_count and self.friends_count:
+						if self.followers_count < self.friends_count:
+							return "Ratio_Dirty_No_Unfollowers"
+						else:
+							return "Ratio_Clean_No_Unfollowers"
+				except Exception, e:
+					self.process_e = self.process_exception(e)
 			else:
 				return 'not_clean'
 		return 'clean'
@@ -183,8 +201,14 @@ class AutoPilot(Thread):
 
 	def run(self):
 		if self.action == 'clean_account':
-			action = self.clean_account()
-			if action == 'clean':
+			self.action = self.clean_account()
+			if self.action == "Ratio_Dirty_No_Unfollowers":
+				self.socialprofile.job_status = "Ratio_Dirty_No_Unfollowers"
+				self.socialprofile.save()
+			elif self.action == "Ratio_Clean_No_Unfollowers":
+				self.socialprofile.job_status = "Ratio_Good"
+				self.socialprofile.save()
+			elif action == 'clean':
 				self.socialprofile.job_status = 'Ratio_Good'
 				self.socialprofile.save()
 			elif action == 'cleaned':

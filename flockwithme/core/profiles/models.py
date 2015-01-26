@@ -37,6 +37,7 @@ class SocialProfile(models.Model):
 		('Ratio_Bad', 'Your Ratio needs cleaning.'),
 		('FAVORITES_FETCHED', 'ready to favorite tweets'),
 		("Just_Favorited", 'We just favorited tweets. Next Step is to auto_dm your followers.'),
+		("Ratio_Dirty_No_Unfollowers", "Your ratio is dirty and you have no one who is not following you."),
 		)
 	profile = models.ForeignKey(Profile, related_name="accounts")
 	job_status = models.CharField(max_length=150, choices=JOB_STATUS, default='Fetch_Account_Info')
