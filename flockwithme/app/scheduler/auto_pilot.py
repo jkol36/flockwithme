@@ -22,14 +22,14 @@ class AutoPilot(Thread):
 		
 
 	def get_api(self):
-		access_token = self.socialprofile.token
-		access_token_secret = self.socialprofile.secret
-		consumer_key = '3Gsg8IIX95Wxq28pDEkA'
-		consumer_secret = 'LjEPM4kQAC0XE81bgktdHAaND3am9tTllXghn0B639o'
-		auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
-		auth.set_access_token(access_token, access_token_secret)
-		api = tweepy.API(auth)
-		return api
+		self.access_token = self.socialprofile.token
+		self.access_token_secret = self.socialprofile.secret
+		self.consumer_key = '3Gsg8IIX95Wxq28pDEkA'
+		self.consumer_secret = 'LjEPM4kQAC0XE81bgktdHAaND3am9tTllXghn0B639o'
+		self.auth = tweepy.OAuthHandler(self.consumer_key, self.consumer_secret)
+		self.auth.set_access_token(self.access_token, self.access_token_secret)
+		self.api = tweepy.API(self.auth)
+		return self.api
 
 	def sleep_action(self):
 		return time.sleep(random.int(0,100))
@@ -127,14 +127,18 @@ class AutoPilot(Thread):
 		self.friend_ids = [x.twitterUser.twitter_id for x in self.followers]
 		self.non_followers = [x for x in self.friend_ids if x not in self.following_ids]
 		print "non followers"
-		print self.non_followers
+		self.unfollowed = []
 		if self.non_followers > 1:
-			try:
-				for twitter_id in self.non_followers:
-					try:
-						self.api.destroy_friendship(user_id=twitter_id)
-					except Exception, e:
-						self.process_e = self.process_exception(e)
+			print "true"
+			for twitter_id in self.non_followers:
+				try:
+					self.api.destroy_friendship(user_id=twitter_id)
+				except Exception, e:
+					self.process_e = self.process_exception(e)
+				self.unfollowed.append(twitter_id)
+		
+			if len(self.unfollowed) > 0:
+				for twitter_id in self.unfollowed:
 					try:
 						self.tuser = TwitterUser.objects.get(twitter_id=twitter_id)
 					except Exception, e:
@@ -151,10 +155,10 @@ class AutoPilot(Thread):
 					except Exception, e:
 						self.process_e = self.process_exception(e)
 					self.socialprofile.save()
+				
 				self.socialprofile.save()
-			except Exception, e:
-				self.process_e = self.process_exception(e)
-			self.socialprofile.save()
+			else:
+				print "No one was unfollowed"
 		#if the user has no non-followers
 		else:
 			#query twitter for ids of people who are following them
@@ -193,15 +197,15 @@ class AutoPilot(Thread):
 
 
 	def favorite(self):
-		api = self.get_api()
-		tweet_ids = set(x.twitter_id for x in self.get_tweets())
-		favorited_tweets = set(x.twitterStatus.twitter_id for x in self.socialprofile.get_favorites())
-		for i in tweet_ids:
-			if i not in favorited_tweets:
+		self.api = self.get_api()
+		self.tweet_ids = set(x.twitter_id for x in self.get_tweets())
+		self.favorited_tweets = set(x.twitterStatus.twitter_id for x in self.socialprofile.get_favorites())
+		for i in self.tweet_ids:
+			if i not in self.favorited_tweets:
 				try:
-					api.create_favorite(i)
+					self.api.create_favorite(i)
 				except Exception, e:
-					process_e = self.process_exception(e)
+					self.process_e = self.process_exception(e)
 				self.socialprofile.add_favorite(i)
 		self.socialprofile.job_status="Just_Favorited"
 		self.socialprofile.save()
@@ -211,16 +215,16 @@ class AutoPilot(Thread):
 		pass
 
 	def get_tweets(self):
-		hashtags = self.profile.hashtags.all()
-		already_favorited = self.socialprofile.get_favorites()
-		tweets = []
-		for i in hashtags:
-			return [x for x in TwitterStatus.objects.filter(hashtags=i) if x not in already_favorited]
+		self.hashtags = self.profile.hashtags.all()
+		self.already_favorited = self.socialprofile.get_favorites()
+		self.tweets = []
+		for i in self.hashtags:
+			return [x for x in TwitterStatus.objects.filter(self.hashtags=i) if x not in already_favorited]
 
 
 	def get_followers_of_influencer(self, influencer_id):
-		influencer = Influencer.objects.get(pk=influencer_id)
-		return [x.twitterUser.twitter_id for x in influencer.relationships.filter(action="FOLLOWER")]
+		self.influencer = Influencer.objects.get(pk=influencer_id)
+		return [x.twitterUser.twitter_id for x in self.influencer.relationships.filter(action="FOLLOWER")]
 
 	def get_friends(self):
 		return self.socialprofile.get_friends()
