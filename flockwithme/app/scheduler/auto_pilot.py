@@ -216,14 +216,14 @@ class AutoPilot(Thread):
 		return self.socialprofile.get_unfriended()
 
 	def clean_account(self):
-		friend_count = self.socialprofile.friend_count
-		followers_count = self.socialprofile.followers_count
-		if friend_count > followers_count:
-			action = self.unfollow()
-			if action == 'unfollowed':
+		self.friend_count = self.socialprofile.friend_count
+		self.followers_count = self.socialprofile.followers_count
+		if self.friend_count > self.followers_count:
+			self.action = self.unfollow()
+			if self.action == 'unfollowed':
 				return 'cleaned'
 			
-			elif action == "no_unfollowers":
+			elif self.action == "no_unfollowers":
 				try:
 					self.followers_count = self.get_api().me().followers_count
 					self.friends_count = self.get_api().me().friends_count
