@@ -11,7 +11,7 @@ from .auto_pilot import AutoPilot
 
 
 
-@kronos.register('0 3 * * *')
+@kronos.register('0 10 * * *')
 def do_work():
 	queue = Queue()
 	threads = []
@@ -81,7 +81,7 @@ def track_followers():
 
 
 
-@kronos.register('45 * * * *')
+@kronos.register('*/5 * * * *')
 def Fetch_Influencer_Followers():
 	queue = Queue()
 	threads = []
