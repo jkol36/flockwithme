@@ -73,9 +73,11 @@ class Fetch_Influencers_Followers(Thread):
 					self.process_e = self.process_exception(e)
 				self.influencer.save()
 			self.influencer.been_queried = True
+			print self.influencer.been_queried
 			self.influencer.save()
 		else:
 			self.influencer.been_queried = True
+			print self.influencer.been_queried
 			print 'Followers Fetched..'
 
 	def process_exception(self, e):
