@@ -118,7 +118,11 @@ class AutoPilot(Thread):
 		self.api = self.get_api()
 		self.user = self.socialprofile.twitter_id
 		self.following = self.get_friends()
+		print "following"
+		print self.following
 		self.followers = self.get_followers()
+		print "followers"
+		print self.followers
 		self.following_ids = [x.twitterUser.twitter_id for x in self.following]
 		self.friend_ids = [x.twitterUser.twitter_id for x in self.followers]
 		self.non_followers = [x for x in self.friend_ids if x not in self.following_ids]
@@ -208,10 +212,10 @@ class AutoPilot(Thread):
 		return [x.twitterUser.twitter_id for x in influencer.relationships.filter(action="FOLLOWER")]
 
 	def get_friends(self):
-		return set(self.socialprofile.get_friends())
+		return self.socialprofile.get_friends()
 
 	def get_followers(self):
-		return set(self.socialprofile.get_followers())
+		return self.socialprofile.get_followers()
 
 
 	def get_unfollowed(self):
