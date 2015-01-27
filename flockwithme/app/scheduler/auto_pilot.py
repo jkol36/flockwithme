@@ -36,9 +36,9 @@ class AutoPilot(Thread):
 	def follow(self):
 		print "starting follow function"
 		self.api = self.get_api()
-		self.following = self.get_friends()
-		self.followers = self.get_followers()
-		self.following_ids = [x.twitterUser.twitter_id for x in self.following]
+		#self.following = self.get_friends()
+		#self.followers = self.get_followers()
+		#self.following_ids = [x.twitterUser.twitter_id for x in self.following]
 		self.author_ids = self.get_author_ids()
 		print self.author_ids
 		self.influencers = self.profile.influencers.all()
@@ -70,8 +70,8 @@ class AutoPilot(Thread):
 		else:
 			print "no author_ids"
 
-		self.should_follow = [x for x in self.authors_and_followers if x not in self.following_ids]
-		print self.should_follow
+		#self.should_follow = [x for x in self.authors_and_followers if x not in self.following_ids]
+		#print self.should_follow
 		#################NOW TIME FOR THE FOLLOWING BITCHES ##############
 		self.followers_count = self.get_api().me().followers_count
 		self.friends_count = self.get_api().me().friends_count
@@ -82,35 +82,34 @@ class AutoPilot(Thread):
 		print self.follow_limit
 		self.num_followed = 0
 		#if there's users to follow
-		if len(self.should_follow) > 0: 
-			while self.num_followed < self.follow_limit:
-				for i in self.should_follow:
-					try:
-						self.api.create_friendship(i)
-					except Exception, e:
-						process_e = self.process_exception(e)
-					self.followed.append(i)
-					self.sleep_action()
-			#if users were followed
-			if len(self.followed) > 0:
-				for i in self.followed:
-					try:
-						self.tuser, _ = TwitterUser.objects.get_or_create(twitter_id=i)
-					except Exception, e:
-						self.process_e = self.process_exception(e)
-					self.tuser.save()
-					self.socialprofile.add_friend(self.tuser)
-			else:
-				self.socialprofile.job_status = "No_Users_To_Follow"
-				self.socialprofile.save()
-		#if there are no users to follow
+		
+		while self.num_followed < self.follow_limit:
+			for i in self.should_follow:
+				try:
+					self.api.create_friendship(i)
+				except Exception, e:
+					process_e = self.process_exception(e)
+				self.followed.append(i)
+				self.sleep_action()
+		#if users were followed
+		if len(self.followed) > 0:
+			for i in self.followed:
+				try:
+					self.tuser, _ = TwitterUser.objects.get_or_create(twitter_id=i)
+				except Exception, e:
+					self.process_e = self.process_exception(e)
+				self.tuser.save()
+				self.socialprofile.add_friend(self.tuser)
+		
+			self.socialprofile.job_status = 'Just_Followed'
+			self.socialprofile.friend_count = api.me().friends_count
+			self.socialprofile.follower_count = api.me().followers_count
+			self.socialprofile.save()
 		else:
 			self.socialprofile.job_status = "No_Users_To_Follow"
 			self.socialprofile.save()
-		self.socialprofile.job_status = 'Just_Followed'
-		self.socialprofile.friend_count = api.me().friends_count
-		self.socialprofile.follower_count = api.me().followers_count
-		self.socialprofile.save()
+		
+		
 
 
 
