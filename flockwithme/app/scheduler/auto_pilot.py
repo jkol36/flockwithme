@@ -239,8 +239,8 @@ class AutoPilot(Thread):
 		
 		elif self.action == 'Follow':
 			self.action = self.follow()
-			self.socialprofile.job_status = "Just_Followed"
-			self.socialprofile.save()
+			#self.socialprofile.job_status = "Just_Followed"
+			#self.socialprofile.save()
 		elif self.action == 'FAVORITE':
 			self.action = self.favorite()
 			self.socialprofile.job_status = "Just_Favorited"
