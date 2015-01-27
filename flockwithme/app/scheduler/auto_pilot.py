@@ -89,19 +89,18 @@ class AutoPilot(Thread):
 					self.api.create_friendship(i)
 				except Exception, e:
 					process_e = self.process_exception(e)
-				self.num_followed += 1
-				self.followed.append(i)
-				self.sleep_action()
-		#if users were followed
-		if len(self.followed) > 0:
-			for i in self.followed:
+			
 				try:
 					self.tuser, _ = TwitterUser.objects.get_or_create(twitter_id=i)
 				except Exception, e:
 					self.process_e = self.process_exception(e)
 				self.tuser.save()
 				self.socialprofile.add_friend(self.tuser)
-		
+				self.num_followed += 1
+				self.followed.append(i)
+				self.sleep_action()
+		#if users were followed
+		if len(self.followed) > 0:
 			self.socialprofile.job_status = 'Just_Followed'
 			self.socialprofile.friend_count = api.me().friends_count
 			self.socialprofile.follower_count = api.me().followers_count
