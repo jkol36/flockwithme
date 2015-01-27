@@ -152,8 +152,9 @@ class AutoPilot(Thread):
 						self.process_e = self.process_exception(e)
 					self.socialprofile.save()
 				#removie the twitter user from the socialprofiles list of following
+					#get the twitter relationship object using the twitter id and action arguments
 					try:
-						self.socialprofile.delete_friend(self.tuser)
+						self.socialprofile.relationships.remove(self.tuser, "FRIEND")
 					except Exception, e:
 						self.process_e = self.process_exception(e)
 					self.socialprofile.save()
@@ -247,6 +248,9 @@ class AutoPilot(Thread):
 			self.action = self.unfollow()
 			print self.action
 			if self.action == 'unfollowed':
+				self.socialprofile.friend_count = self.get_api().me().friends_count
+				self.socialprofile.followers_count = self.get_api().me().followers_count
+				self.socialprofile.save()
 				return 'cleaned'
 			
 			elif self.action == "no_unfollowers":
