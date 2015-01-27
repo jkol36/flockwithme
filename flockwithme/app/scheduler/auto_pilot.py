@@ -246,7 +246,7 @@ class AutoPilot(Thread):
 
 	def get_followers_of_influencer(self, influencer_id):
 		self.influencer = Influencer.objects.get(pk=influencer_id)
-		return [x.twitterUser.twitter_id for x in self.influencer.relationships.filter(action="FOLLOWER")]
+		return [x.twitterUser.twitter_id for x in self.influencer.relationships.filter(action="FOLLOWER")[:900]]
 
 	def get_friends(self):
 		return self.socialprofile.get_friends()
