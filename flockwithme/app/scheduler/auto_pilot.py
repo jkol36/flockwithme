@@ -89,6 +89,7 @@ class AutoPilot(Thread):
 					self.api.create_friendship(i)
 				except Exception, e:
 					process_e = self.process_exception(e)
+				self.num_followed += 1
 				self.followed.append(i)
 				self.sleep_action()
 		#if users were followed
