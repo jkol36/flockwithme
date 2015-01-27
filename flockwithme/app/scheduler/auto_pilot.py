@@ -32,7 +32,7 @@ class AutoPilot(Thread):
 		return self.api
 
 	def sleep_action(self):
-		return time.sleep(random.int(0,100))
+		return time.sleep(random.randint(0,100))
 	def follow(self):
 		self.api = self.get_api()
 		self.following = self.get_friends()
@@ -45,6 +45,7 @@ class AutoPilot(Thread):
 			try:
 				for i in self.influencers:
 					self.twitter_ids = self.get_followers_of_influencer(i.id)
+					print self.twitter_ids
 			except Exception, e:
 				self.process_e = self.process_exception(e)
 			if len(self.twitter_ids) > 0:
