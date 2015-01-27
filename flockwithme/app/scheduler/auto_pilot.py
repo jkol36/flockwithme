@@ -69,11 +69,12 @@ class AutoPilot(Thread):
 			print "no author_ids"
 
 		self.should_follow = [x for x in self.authors_and_followers if x not in self.following_ids]
+		print self.should_follow
 		#################NOW TIME FOR THE FOLLOWING BITCHES ##############
 		self.followers_count = api.me().followers_count
 		self.friends_count = api.me().friends_count
 		self.followed = []
-		self.follow_limit = int(self.followers_count) - int(self.friends_count)
+		self.follow_limit = len(self.followers_count) - len(self.friends_count))
 		if self.follow_limit >= 1000:
 			self.follow_limit = 800
 		print self.follow_limit
