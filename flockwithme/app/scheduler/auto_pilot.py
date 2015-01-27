@@ -34,6 +34,7 @@ class AutoPilot(Thread):
 	def sleep_action(self):
 		return time.sleep(random.randint(0,100))
 	def follow(self):
+		print "starting follow function"
 		self.api = self.get_api()
 		self.following = self.get_friends()
 		self.followers = self.get_followers()
