@@ -224,7 +224,7 @@ class AutoPilot(Thread):
 
 
 	def direct_message(self):
-		pass
+		print dir(self.socialprofile)
 
 	def get_tweets(self):
 		self.hashtags = self.profile.hashtags.all()

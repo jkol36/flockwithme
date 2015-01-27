@@ -22,11 +22,11 @@ def do_work():
 	for acct in SocialProfile.objects.filter(Q(job_status='Ratio_Good') | Q(job_status='Just_Cleaned')):
 		threads.append(AutoPilot(account=acct, action="Follow", queue=queue))
 
-	#for acct in SocialProfile.objects.filter(job_status="Just_Followed"):
-		#threads.append(AutoPilot(account=acct, action="FAVORITE", queue=queue))
+	for acct in SocialProfile.objects.filter(job_status="Just_Followed"):
+		threads.append(AutoPilot(account=acct, action="FAVORITE", queue=queue))
 
-	#for acct in SocialProfile.objects.filter(job_status="FAVORITES_FETCHED"):
-		#threads.append(AutoPilot(account=acct, action="FAVORITE", queue=queue))
+	for acct in SocialProfile.objects.filter(job_status="FAVORITES_FETCHED"):
+		threads.append(AutoPilot(account=acct, action="FAVORITE", queue=queue))
 
 	for acct in SocialProfile.objects.filter(job_status="Ratio_Bad"):
 		threads.append(AutoPilot(account=acct, action="clean_account", queue=queue))
@@ -134,4 +134,10 @@ def fetch_account_info():
 		else:
 			threads[:] = [t for t in threads if t.isAlive()]
 
+#@kronos.register('*/15 * * * *')
+#def auto_dm_followers():
+	#queue = queue()
+	#threads = []
+	#for acc in SocialProfile.objects.filter(has_dm_message=True):
+		#threads.append(AutoPilot())
 
