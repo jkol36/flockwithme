@@ -61,9 +61,11 @@ class SocialProfile(models.Model):
 	followers_count = models.IntegerField(default=None, null=True)
 	friend_count = models.IntegerField(default = None, null = True)
 	
-	def get_followers(self):
-		return self.relationships.filter(action="FOLLOWER", socialProfile=self).all()
+	def get_initial_followers(self):
+		return self.relationships.filter(action="FOLLOWER", is_initial=True, socialProfile=self).all()
 
+	def get_followers(self):
+		return self.relationships.filter(action="FOLLOWER", is_initial=False, socialProfile=self).all()
 	def get_friends(self):
 		return self.relationships.filter(action="FRIEND", socialProfile=self).all()
 
