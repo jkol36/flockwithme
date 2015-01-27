@@ -161,7 +161,7 @@ class Fetch_Account_Info(Thread):
 					except Exception, e:
 						self.process_e = self.process_exception(e)
 					tuser.save()
-					self.socialprofile.add_friend(tuser)
+					self.socialprofile.add_friend(tuser, is_initial=True)
 					self.socialprofile.save()
 				if len(self.followers_to_be_added) > 1:
 					self.db_followers = [x.twitterUser.twitter_id for x in self.socialprofile.get_followers()]
@@ -173,7 +173,7 @@ class Fetch_Account_Info(Thread):
 							except Exception, e:
 								self.process_e = self.process_exception(e)
 							self.tuser.save()
-							self.socialprofile.add_follower(self.tuser)
+							self.socialprofile.add_follower(self.tuser, is_initial=True)
 							self.socialprofile.save()
 					else:
 						self.socialprofile.job_status = "Account_Info_Fetched"
@@ -196,7 +196,7 @@ class Fetch_Account_Info(Thread):
 								self.process_e = self.process_exception(e)
 
 							self.tuser.save()
-							self.socialprofile.add_follower(self.tuser)
+							self.socialprofile.add_follower(self.tuser, is_initial=True)
 						self.socialprofile.save()
 
 		#3 Clean Followers
@@ -210,7 +210,7 @@ class Fetch_Account_Info(Thread):
 				for user in should_add:
 					tuser, _ = TwitterUser.objects.get_or_create(twitter_id = user)
 					tuser.save()
-					self.socialprofile.add_follower(tuser)
+					self.socialprofile.add_follower(tuser, is_initial=True)
 					self.socialprofile.save()
 				self.socialprofile.save()
 			else:
