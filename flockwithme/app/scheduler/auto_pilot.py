@@ -84,7 +84,7 @@ class AutoPilot(Thread):
 		#if there's users to follow
 		
 		while self.num_followed < self.follow_limit:
-			for i in self.should_follow:
+			for i in self.authors_and_followers:
 				try:
 					self.api.create_friendship(i)
 				except Exception, e:
