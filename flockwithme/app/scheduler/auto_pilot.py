@@ -44,8 +44,8 @@ class AutoPilot(Thread):
 		if len(self.influencers) > 0:
 			try:
 				for i in self.influencers:
+					print i
 					self.twitter_ids = self.get_followers_of_influencer(i.id)
-					print self.twitter_ids
 			except Exception, e:
 				self.process_e = self.process_exception(e)
 			if len(self.twitter_ids) > 0:
