@@ -38,7 +38,9 @@ class AutoPilot(Thread):
 		self.following = self.get_friends()
 		self.followers = self.get_followers()
 		self.following_ids = [x.twitterUser.twitter_id for x in self.following]
-		self.author_ids = [x.twitter_user.twitter_id for x in self.get_tweets()]
+		self.author_ids = self.get_author_ids()
+		print self.author_ids
+		return
 		self.influencers = self.profile.influencers.all()
 		self.authors_and_followers = []
 		if len(self.influencers) > 0:
@@ -231,9 +233,16 @@ class AutoPilot(Thread):
 		for i in self.hashtags:
 			self.statusses = [x for x in TwitterStatus.objects.filter(hashtags=i) if x.twitter_id not in self.already_favorited]
 			self.tweets.append(y for y in self.statusses)
-		return self.tweets   
-		
+		return self.tweets
 
+	def get_author_ids(self):
+		self.hashtags = self.profile.hashtags.all()
+		self.already_followed = [x.twitterUser.twitter_id for x in self.socialprofile.get_friends()]   
+		self.author_ids = []
+		for i in self.hashtags:
+			self.author_id = [x.twitter_user.twitter_id for x in TwitterStatus.objects.filter(hashtags=i) if x not in self.already_followed]
+			self.author_ids.append(x for x in self.author_id)
+		return self.author_ids
 
 	def get_followers_of_influencer(self, influencer_id):
 		self.influencer = Influencer.objects.get(pk=influencer_id)
