@@ -32,7 +32,7 @@ class AutoPilot(Thread):
 		return self.api
 
 	def sleep_action(self):
-		return time.sleep(random.randint(0,100))
+		return time.sleep(random.randint(0,10))
 	def follow(self):
 		print "starting follow function"
 		self.api = self.get_api()
@@ -231,7 +231,7 @@ class AutoPilot(Thread):
 		self.already_favorited = [x.twitter_status.twitter_id for x in self.socialprofile.get_favorites()]
 		self.tweets = []
 		for i in self.hashtags:
-			self.statusses = [x for x in TwitterStatus.objects.filter(hashtags=i) if x.twitter_id not in self.already_favorited]
+			self.statusses = [x for x in TwitterStatus.objects.filter(hashtags=i)[:1000] if x.twitter_id not in self.already_favorited]
 			self.tweets.append(y for y in self.statusses)
 		return self.tweets
 
