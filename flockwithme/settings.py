@@ -22,11 +22,11 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 SECRET_KEY = '6&nk*8d**vdfddn0q(d0pa3j@!t2tl^n+j@_f3q#j=*rqheu)k'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 TEMPLATE_DEBUG = DEBUG
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['www.flockwith.me']
 
 #timezone
 USE_TZ = True
