@@ -228,7 +228,7 @@ class AutoPilot(Thread):
 		self.hashtags = self.profile.hashtags.all()
 		self.already_favorited = [x.twitter_status.twitter_id for x in self.socialprofile.get_favorites()]
 		self.tweets = []
-		for i in hashtags:
+		for i in self.hashtags:
 			self.statusses = [x for x in TwitterStatus.objects.filter(hashtag=i) if x.twitter_id not in self.already_favorited]
 			self.tweets.append(y for y in self.statusses)
 		return self.tweets   
