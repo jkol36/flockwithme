@@ -74,7 +74,7 @@ class AutoPilot(Thread):
 		self.followers_count = api.me().followers_count
 		self.friends_count = api.me().friends_count
 		self.followed = []
-		self.follow_limit = len(self.followers_count) - len(self.friends_count))
+		self.follow_limit = len(self.followers_count) - len(self.friends_count)
 		if self.follow_limit >= 1000:
 			self.follow_limit = 800
 		print self.follow_limit
