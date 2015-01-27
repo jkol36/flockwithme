@@ -26,7 +26,7 @@ DEBUG = 'baseflock' not in socket.gethostname()
 
 TEMPLATE_DEBUG = DEBUG
 
-ALLOWED_HOSTS = ['www.flockwith.me']
+ALLOWED_HOSTS = ['www.flockwith.me', '107.170.164.66', '*']
 
 #timezone
 USE_TZ = True
