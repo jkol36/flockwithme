@@ -37,8 +37,8 @@ class AutoPilot(Thread):
 		self.api = self.get_api()
 		self.following = self.get_friends()
 		self.followers = self.get_followers()
-		print self.followers
-		#self.following_ids = set(x.twitterUser.twitter_id for x in self.following)
+		self.following_ids = [x.twitterUser.twitter_id for x in self.following]
+		print self.following_ids
 		#self.author_ids = [x.twitter_user.twitter_id for x in self.get_tweets()]
 		#self.influencers = self.profile.influencers.all()
 		#self.authors_and_followers = []
