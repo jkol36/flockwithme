@@ -239,7 +239,7 @@ class AutoPilot(Thread):
 		print self.hashtags
 		self.author_ids = []
 		for i in self.hashtags:
-			self.author_id = [x.twitter_user.twitter_id for x in TwitterStatus.objects.filter(hashtags=i)]
+			self.author_id = [x.twitter_user.twitter_id for x in TwitterStatus.objects.filter(hashtags=i)[:100]]
 			self.author_ids.append(self.author_id)
 		return self.author_ids
 
