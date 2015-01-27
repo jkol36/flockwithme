@@ -72,8 +72,8 @@ class AutoPilot(Thread):
 		self.should_follow = [x for x in self.authors_and_followers if x not in self.following_ids]
 		print self.should_follow
 		#################NOW TIME FOR THE FOLLOWING BITCHES ##############
-		self.followers_count = api.me().followers_count
-		self.friends_count = api.me().friends_count
+		self.followers_count = self.get_api().me().followers_count
+		self.friends_count = self.get_api().me().friends_count
 		self.followed = []
 		self.follow_limit = len(self.followers_count) - len(self.friends_count)
 		if self.follow_limit >= 1000:
@@ -85,7 +85,7 @@ class AutoPilot(Thread):
 			while self.num_followed < self.follow_limit:
 				for i in self.should_follow:
 					try:
-						self.api.create_friendship(user_id=i)
+						self.api.create_friendship(i)
 					except Exception, e:
 						process_e = self.process_exception(e)
 					self.followed.append(i)
