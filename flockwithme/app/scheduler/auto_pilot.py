@@ -250,7 +250,14 @@ class AutoPilot(Thread):
 			if self.action == 'unfollowed':
 				self.socialprofile.friend_count = self.get_api().me().friends_count
 				self.socialprofile.followers_count = self.get_api().me().followers_count
-				self.socialprofile.save()
+				self.friend_ids = [x.twitterUser.twitter_id for x in self.socialprofile.get_friends()]
+				self.unfriended = [x.twitterUser.twitter_id for x in self.socialprofile.get_unfriended()]
+				self.should_remove = [x for x in self.friend_ids if x in self.unfriended]
+				if self.should_remove:
+					for i in self.should_remove:
+						self.tuser = TwitterUser.objects.get(twitter_id=i)
+						self.socialprofile.relationships.remove(self.tuser, "FRIEND")
+					self.socialprofile.save()
 				return 'cleaned'
 			
 			elif self.action == "no_unfollowers":
