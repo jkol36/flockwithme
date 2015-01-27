@@ -236,6 +236,7 @@ class AutoPilot(Thread):
 
 	def get_author_ids(self):
 		self.hashtags = self.profile.hashtags.all()
+		print self.hashtags
 		self.author_ids = []
 		for i in self.hashtags:
 			self.author_id = [x.twitter_user.twitter_id for x in TwitterStatus.objects.filter(hashtags=i)]
