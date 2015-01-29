@@ -44,6 +44,8 @@ class OnNewRetweet(OnEvent):
 	def __init__(self, action=None, *args, **kwargs):
 		self.action = action
 
+
+
 class AutoPilot(Thread):
 	def __init__(self, lock=None, action=None, *args, **kwargs):
 		self.queue = kwargs.pop('queue')
@@ -96,7 +98,7 @@ class AutoPilot(Thread):
 		except Exception, e:
 			self.process_e = self.process_exception(e)
 		
-		if not len(self.author_ids) > 
+		#if not len(self.author_ids) > 
 		
 		if len(self.author_ids) > 0:
 			try:

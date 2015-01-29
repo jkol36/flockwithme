@@ -62,9 +62,18 @@ class SocialProfile(models.Model):
 	followers_count = models.IntegerField(default=None, null=True)
 	friend_count = models.IntegerField(default = None, null = True)
 	tweet_count = models.IntegerField(default=None, null=True)
+
 	def get_initial_followers(self):
 		return self.relationships.filter(action="FOLLOWER", is_initial=True, socialProfile=self).all()
 
+	def get_latest_tweets(self):
+		return self.relationships.filter(action="TWEET", is_initial=False, socialProfile=self).all()
+
+	def get_initial_tweets(self):
+		return self.relationships.filter(action="TWEET", is_initial=False, socialProfile=self).all()
+
+	def add_tweet(self):
+		self.add_relationship(twitterStatus, "TWEET", status=True)
 	def get_followers(self):
 		return self.relationships.filter(action="FOLLOWER", is_initial=False, socialProfile=self).all()
 	def get_friends(self):

@@ -107,6 +107,7 @@ class TwitterRelationship(models.Model):
 		('FAVORITE', 'Favorite'),
 		('DM', 'Direct Message'),
 		('SUBSCRIBE', 'Subscriber')
+		('TWEET', 'Tweet'),
 		)
 	action = models.CharField(choices=ACTION_CHOICES, max_length=20)
 	socialProfile = models.ForeignKey(SocialProfile, null=True, blank=True, related_name='relationships')

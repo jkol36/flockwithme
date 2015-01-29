@@ -3,7 +3,7 @@ from flockwithme.core.profiles.models import Profile, SocialProfile
 from flockwithme.app.scheduler.models import Influencer
 from .jobexecuter import JobExecuter
 from .accountfetch import AccountFetch
-from .Fetcher import Fetch_Account_Info, Fetch_Influencers_Followers
+from .Fetcher import  Fetch_Influencers_Followers, FetchInfluencerInfo, FetchSocialProfileInfo
 from Queue import Queue
 from threading import Lock
 from django.db.models import Q
@@ -79,10 +79,15 @@ def track_followers():
 		else:
 			threads[:] = [t for t in threads if t.isAlive()]
 
-
+@kronos.register('* * * * *')
 def track_social_profile():
-	pass
+	queue = Queue()
+	threads = []
+	for socialprofile in SocialProfile.objects.all():
+		threads.append(FetchSocialProfileInfo(socialprofile=socialprofile, action="Get_Tweets", queue=queue))
 
+	for thread in threads:
+		thread.start()
 @kronos.register('*/5 * * * *')
 def Fetch_Influencer_Followers():
 	queue = Queue()
