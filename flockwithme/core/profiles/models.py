@@ -20,6 +20,7 @@ class Profile(AbstractUser):
 	profile_status = models.CharField(max_length=250, default="pending", choices=PROFILE_STATUS)
 
 class SocialProfile(models.Model):
+
 	BACKEND_CHOICES = (
 		('twitter', 'Twitter'),
 		('instagram', 'Instagram'),
@@ -60,7 +61,7 @@ class SocialProfile(models.Model):
 	is_executing_jobs = models.BooleanField(default=False)
 	followers_count = models.IntegerField(default=None, null=True)
 	friend_count = models.IntegerField(default = None, null = True)
-	
+	tweet_count = models.IntegerField(default=None, null=True)
 	def get_initial_followers(self):
 		return self.relationships.filter(action="FOLLOWER", is_initial=True, socialProfile=self).all()
 
