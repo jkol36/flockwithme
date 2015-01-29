@@ -80,6 +80,8 @@ def track_followers():
 			threads[:] = [t for t in threads if t.isAlive()]
 
 
+def track_social_profile():
+	pass
 
 @kronos.register('*/5 * * * *')
 def Fetch_Influencer_Followers():
