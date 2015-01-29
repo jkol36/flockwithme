@@ -106,7 +106,7 @@ class TwitterRelationship(models.Model):
 		('UNFRIEND', 'Unfriended'),
 		('FAVORITE', 'Favorite'),
 		('DM', 'Direct Message'),
-		('SUBSCRIBE', 'Subscriber')
+		('SUBSCRIBE', 'Subscriber'),
 		('TWEET', 'Tweet'),
 		)
 	action = models.CharField(choices=ACTION_CHOICES, max_length=20)
