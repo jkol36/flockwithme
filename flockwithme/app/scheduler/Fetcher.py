@@ -108,12 +108,12 @@ class TwitterGetFunctions(object):
 	#followers, Friends, Tweets
 	def get_everything(self, screen_name=None, is_initial=False):
 		self.api = self.get_api()
-		self.db_followers = [x.twitterUser.twitter_id for x in self.socialprofile.get_followers()]	
-		self.db_friends = [x.twitterUser.twitter_id for x in self.socialprofile.get_friends()]
-		self.new_twitter_followers = []
-		self.new_twitter_friends = []
 		self.is_initial = is_initial
+		if not self.is_initial == True:
+			print "True"
 		print "is_initial = {}".format(self.is_initial)
+		#if is initial is false we can assume that the user does not have any database followers, or tweets, or friends.
+
 		#get_my_followers
 		####print "getting followers"
 		####try:
@@ -237,7 +237,7 @@ class FetchSocialProfileInfo(Thread, TwitterGetFunctions):
 
 	def run(self):
 		if self.action == "Get_Everything":
-			self.action = self.get_everything()
+			self.action = self.get_everything(is_initial=self.is_initial)
 		elif self.action == "Get_Tweets":
 			self.action = self.get_tweets(is_initial=self.is_initial)
 		elif self.action == "Get_Followers":
