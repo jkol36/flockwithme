@@ -120,6 +120,16 @@ def FetchSocialProfile():
 	for thread in threads:
 		thread.start()
 
+@kronos.register('* * * * *')
+####initial influencer query 
+def fetch_influencer_info():
+	queue = Queue()
+	threads = []
+	for influencer in Influencer.objects.filter(been_queried=False):
+		threads.append(FetchInfluencerInfo(influencer=influencer, queue=queue, screen_name=influencer.screen_name, action="Get_Everything"))
+
+	for thread in threads:
+		thread.start()
 @kronos.register('*/15 * * * *')
 def fetch_account_info():
 	queue = Queue()
