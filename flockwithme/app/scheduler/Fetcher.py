@@ -95,7 +95,12 @@ class TwitterGetFunctions(object):
 				self.socialprofile.save()
 			return "Done"
 		elif query_twitter == True:
-			print "query twitter is true"
+			if not self.screen_name:
+				try:
+					self.twitter_ids = tweepy.Cursor(self.api.followers_ids).items(5)
+				except TweepError, e:
+					self.process_exception(e)
+				return self.twitter_ids
 
 		elif not self.screen_name and is_initial == False and query_twitter==False:
 			print 'hello'
@@ -119,6 +124,7 @@ class TwitterGetFunctions(object):
 				self.db_initial_ids = [x.twitterUser.twitter_id for x in self.db_followers_initial]
 				self.all_db_followers = self.db_followers_ids + self.db_initial_ids
 				self.twitter_followers = self.get_followers(query_twitter=True)
+				print self.twitter_followers
 				return
 			else:
 				print "else jasd"
