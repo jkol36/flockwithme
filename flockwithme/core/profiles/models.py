@@ -58,6 +58,7 @@ class SocialProfile(models.Model):
 	twitter_id = models.IntegerField(default=None, null=True)
 	token = models.CharField(max_length=100, blank=True, null=True)
 	secret = models.CharField(max_length=100, blank=True, null=True)
+	is_initial = models.BooleanField(default=True)
 	is_executing_jobs = models.BooleanField(default=False)
 	followers_count = models.IntegerField(default=None, null=True)
 	friend_count = models.IntegerField(default = None, null = True)

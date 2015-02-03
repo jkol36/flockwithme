@@ -110,6 +110,10 @@ def Fetch_Influencer_Followers():
 		else:
 			threads[:] = [t for t in threads if t.isAlive()]
 
+
+def FetchSocialProfile():
+	queue = Queue()
+	threads = []
 @kronos.register('*/15 * * * *')
 def fetch_account_info():
 	queue = Queue()
