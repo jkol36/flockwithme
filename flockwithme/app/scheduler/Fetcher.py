@@ -115,7 +115,7 @@ class TwitterGetFunctions(object):
 				print self.twitter_followers
 			#if there's both initial database followers and non_initial followers
 			elif self.db_followers and self.db_followers_initial:
-				self.all_db_followers = self.db_followers + self.db_followers_initial
+				self.all_db_followers = set(self.db_followers, self.db_followers_initial)
 				self.db_followers_ids = [x.twitterUser.twitter_id for x in self.all_db_followers]
 				self.twitter_followers = self.get_followers(query_twitter=True)
 
