@@ -95,8 +95,9 @@ class TwitterGetFunctions(object):
 			return "Done"
 		
 		elif not self.screen_name and is_initial == False:
-			self.db_followers = Q(self.socialprofile.get_followers() | Q(self.socialprofile.get_initial_followers()))
-			self.db_followers_ids = [x.twitterUser.twitter_id for x in self.db_followers]
+			self.db_followers = self.socialprofile.get_followers())
+			self.db_followers_initial = self.socialprofile.get_initial_followers()
+			self.db_followers_ids = [x.twitterUser.twitter_id, n.twitterUser.twitter_id for x,n in self.db_followers, self.db_followers_initial]
 			print "followers ids"
 			print self.db_followers_ids
 		else:
