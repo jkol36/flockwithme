@@ -192,9 +192,9 @@ class FetchSocialProfileInfo(Thread, TwitterGetFunctions):
 		elif self.action == "Get_Followers":
 			self.action = self.get_followers(is_initial=self.is_initial)
 		elif self.action == "Get_Friends":
-			self.action = self.get_friends(is_initial=self.is_initial)
-		elif self.action = "Get_Favorites":
-			self.action = self.get_favorites(is_initial=self.is_initial)
+			self.action == self.get_friends(is_initial=self.is_initial)
+		elif self.action == "Get_Favorites":
+			self.action == self.get_favorites(is_initial=self.is_initial)
 
 class FetchInfluencerInfo(Thread, TwitterGetFunctions):
 	def __init__(self, is_initial=False, *args, **kwargs):
