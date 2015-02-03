@@ -97,7 +97,7 @@ class TwitterGetFunctions(object):
 		elif query_twitter == True:
 			print "query twitter is true"
 
-		elif not self.screen_name and is_initial == False and query_twitter=False:
+		elif not self.screen_name and is_initial == False and query_twitter==False:
 			print 'hello'
 			self.db_followers = self.socialprofile.get_followers(socialProfile=self.socialprofile)
 			self.db_followers_initial = self.socialprofile.get_initial_followers(socialProfile=self.socialprofile)
