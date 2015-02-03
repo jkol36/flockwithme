@@ -110,7 +110,21 @@ class TwitterGetFunctions(object):
 		self.api = self.get_api()
 		self.is_initial = is_initial
 		#if is_initial == True we'll query twitter for followers, friends, and tweets and add them to the database
-		
+		if self.is_initial == True:
+			try:
+				self.twitter_followers = tweepy.Cursor(api.followers_ids).items(1)
+			except TweepError as e:
+				self.process_exception(e)
+			for follower in self.twitter_followers:
+				self.tuser, _ = TwitterUser.objects.get_or_create(twitter_id=follower)
+				self.tuser.save()
+				x = self.socialprofile.add_follower(self.tuser, is_initial=True)
+				print x
+		else:
+			self.db_followers = [x.twitterUser.twitter_id for x in self.socialprofile.get_followers()]	
+			self.db_friends = [x.twitterUser.twitter_id for x in self.socialprofile.get_friends()]
+			self.new_twitter_followers = []
+			self.new_twitter_friends = []
 
 		print "is_initial = {}".format(self.is_initial)
 		#if is initial is false we can assume that the user does not have any database followers, or tweets, or friends.
