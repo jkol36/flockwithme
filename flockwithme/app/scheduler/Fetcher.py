@@ -119,7 +119,7 @@ class TwitterGetFunctions(object):
 				self.tuser, _ = TwitterUser.objects.get_or_create(twitter_id=follower)
 				self.tuser.save()
 				x = self.socialprofile.add_follower(self.tuser, is_initial=True)
-				print x.id
+				x.save()
 		else:
 			self.db_followers = [x.twitterUser.twitter_id for x in self.socialprofile.get_followers()]	
 			self.db_friends = [x.twitterUser.twitter_id for x in self.socialprofile.get_friends()]
