@@ -94,10 +94,11 @@ class TwitterGetFunctions(object):
 				self.socialprofile.add_follower(tuser, is_initial=self.is_initial)
 				self.socialprofile.save()
 			return "Done"
-		elif query_twitter== True:
+		elif query_twitter == True:
 			print "query twitter is true"
 
-		elif not self.screen_name and is_initial == False:
+		elif not self.screen_name and is_initial == False and query_twitter=False:
+			print 'hello'
 			self.db_followers = self.socialprofile.get_followers(socialProfile=self.socialprofile)
 			self.db_followers_initial = self.socialprofile.get_initial_followers(socialProfile=self.socialprofile)
 			if not self.db_followers and not self.db_followers_initial:
