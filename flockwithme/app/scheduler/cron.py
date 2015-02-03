@@ -115,7 +115,7 @@ def FetchSocialProfile():
 	queue = Queue()
 	threads = []
 	for acc in SocialProfile.objects.filter(is_initial=True):
-		threads.append(FetchSocialProfileInfo(socialprofile=acc, queue=queue, action="Get_Everything"))
+		threads.append(FetchSocialProfileInfo(socialprofile=acc, is_initial=True, queue=queue, action="Get_Everything"))
 
 	for thread in threads:
 		thread.start()

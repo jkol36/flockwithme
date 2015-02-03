@@ -109,8 +109,7 @@ class TwitterGetFunctions(object):
 	def get_everything(self, screen_name=None, is_initial=False):
 		self.api = self.get_api()
 		self.is_initial = is_initial
-		print self.socialprofile
-		#if is_initial == False we'll query twitter for followers, friends, and tweets and add them to the database
+		#if is_initial == True we'll query twitter for followers, friends, and tweets and add them to the database
 		
 
 		print "is_initial = {}".format(self.is_initial)
