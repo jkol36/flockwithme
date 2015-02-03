@@ -98,7 +98,6 @@ class TwitterGetFunctions(object):
 			self.tuser, _ = TwitterUser.objects.get_or_create(twitter_id=twitter_id)
 			self.tuser.save()
 			self.relationship, _ = TwitterRelationship.objects.get_or_create(influencer=self.influencer, twitterUser=self.tuser, action="FOLLOWER", is_initial=self.is_initial)
-			self.relationship.save()
 			self.influencer.save()
 		return "Done"
 
@@ -125,7 +124,6 @@ class TwitterGetFunctions(object):
 			self.tuser, _ = TwitterUser.objects.get_or_create(twitter_id=twitter_id)
 			self.tuser.save()
 			self.new_relationship = TwitterRelationship.objects.get_or_create(influencer=self.influencer, twitterUser=self.tuser, action="FRIEND", is_initial=self.is_initial)
-			self.new_relationship.save()
 			self.influencer.save()
 		return "Done"
 
@@ -152,7 +150,6 @@ class TwitterGetFunctions(object):
 			self.Tstatus, _ = TwitterStatus.objects.get_or_create(twitter_id=status.id, text=status.text.encode('utf-8'), favorite_count=status.favorite_count, retweet_count=status.retweet_count)
 			self.Tstatus.save()
 			self.new_relationship, _ = TwitterRelationship.objects.get_or_create(twitterStatus=self.Tstatus, influencer=self.influencer, action="FAVORITE", is_initial=self.is_initial)
-			self.new_relationship.save()
 			self.influencer.save()
 		return "Done"
 	#followers, Friends, Tweets

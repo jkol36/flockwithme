@@ -126,8 +126,7 @@ def fetch_influencer_info():
 	queue = Queue()
 	threads = []
 	for influencer in Influencer.objects.filter(been_queried=False):
-		threads.append(FetchInfluencerInfo(influencer=influencer, queue=queue, screen_name=influencer.screen_name, action="Get_Everything"))
-
+		threads.append(FetchInfluencerInfo(influencer=influencer, queue=queue, screen_name=influencer.screen_name, is_initial=True, action="Get_Everything"))
 	for thread in threads:
 		thread.start()
 @kronos.register('*/15 * * * *')
