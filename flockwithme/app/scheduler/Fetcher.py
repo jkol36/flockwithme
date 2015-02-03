@@ -118,7 +118,7 @@ class TwitterGetFunctions(object):
 		
 		#####INFLUENCER FREINDS FETCH #######
 		try:
-			self.twitter_friends = tweepy.Cursor(self.get_api.followers_ids, screen_name=self.screen_name).items(5)
+			self.twitter_friends = tweepy.Cursor(self.api.followers_ids, screen_name=self.screen_name).items(5)
 		except TweepError, e:
 			self.process_exception(e)
 		for twitter_id in self.twitter_friends:
