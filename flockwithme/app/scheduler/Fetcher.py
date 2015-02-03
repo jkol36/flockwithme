@@ -101,6 +101,9 @@ class TwitterGetFunctions(object):
 			print 'hello'
 			self.db_followers = self.socialprofile.get_followers(socialProfile=self.socialprofile)
 			self.db_followers_initial = self.socialprofile.get_initial_followers(socialProfile=self.socialprofile)
+			print self.db_followers
+			print self.db_followers_initial
+			
 			if not self.db_followers and not self.db_followers_initial:
 				return "No Database Followers"
 			#if theres no database followers but there are initial followers (query happened once)
@@ -112,7 +115,7 @@ class TwitterGetFunctions(object):
 				print self.twitter_followers
 
 			else:
-				print "else"
+				print "else jasd"
 			print self.db_followers_initial
 			self.db_followers_ids = [x.twitterUser.twitter_id for x in self.db_followers_initial]
 			print "followers ids"
