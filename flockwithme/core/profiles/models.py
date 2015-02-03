@@ -92,8 +92,8 @@ class SocialProfile(models.Model):
 	def add_dm(self, twitterUser, message):
 		self.add_relationship(twitterUser, "AUTO_DM", message=message)
 
-	def add_friend(self, twitterUser):
-		self.add_relationship(twitterUser, "FRIEND")
+	def add_friend(self, twitterUser, is_initial=False):
+		self.add_relationship(twitterUser, "FRIEND", is_initial=is_initial)
 
 	def add_follower(self, twitterUser, is_initial=False):
 		self.add_relationship(twitterUser, "FOLLOWER", is_initial=is_initial)
