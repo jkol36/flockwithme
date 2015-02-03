@@ -119,7 +119,7 @@ class TwitterGetFunctions(object):
 				self.db_initial_ids = [x.twitterUser.twitter_id for x in self.db_followers_initial]
 				self.all_db_followers = self.db_followers_ids + self.db_initial_ids
 				self.twitter_followers = self.get_followers(query_twitter=True)
-
+				break
 			else:
 				print "else jasd"
 			print self.db_followers_initial
