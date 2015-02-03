@@ -101,6 +101,12 @@ class TwitterGetFunctions(object):
 				except TweepError, e:
 					self.process_exception(e)
 				return self.twitter_ids
+			elif self.screen_name:
+				try:
+					self.twitter_ids = tweepy.Cursor(self.api.followers_ids, screen_name=self.screen_name).items(5)
+				except TweepError, e:
+					self.process_exception(e)
+				return self.twitter_ids
 
 		elif not self.screen_name and is_initial == False and query_twitter==False:
 			print 'hello'
@@ -117,7 +123,7 @@ class TwitterGetFunctions(object):
 				self.db_followers_ids = [x.twitterUser.twitter_id for x in self.db_followers_initial]
 				self.api = self.get_api()
 				self.twitter_followers = self.get_followers(query_twitter=True)
-				print self.twitter_followers
+				print([x for x in self.twitter_followers])
 			#if there's both initial database followers and non_initial followers
 			elif self.db_followers and self.db_followers_initial:
 				self.db_followers_ids = [x.twitterUser.twitter_id for x in self.db_followers]
