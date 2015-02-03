@@ -96,14 +96,14 @@ class TwitterGetFunctions(object):
 	def get_favorites(self, screen_name=None, is_initial=False):
 		self.api = self.get_api()
 		if not self.screen_name:
-			self.favorites = tweepy.Cursor(self.get_api.favorites).items(5)
+			self.favorites = tweepy.Cursor(self.api.favorites).items(5)
 			for status in self.favorites:
 				self.Tstatus, _ = TwitterStatus.objects.get_or_create(twitter_id=status.id, text=status.text.encode('utf-8'), favorite_count=status.favorites_count, retweet_count=status.retweet_count)
 				self.Tstatus.save()
 				self.socialprofile.add_favorite(self.Tstatus, is_initial=self.is_initial) 
 				self.socialprofile.save()
 			return "Done"
-		self.favorites = tweepy.Cursor(self.get_api().favorites, screen_name=self.screen_name)
+		self.favorites = tweepy.Cursor(self.api.favorites, screen_name=self.screen_name)
 		for status in self.favorites:
 			self.Tstatus, _ = TwitterStatus.objects.get_or_create(twitter_id=status.id, text=status.text.encode('utf-8'), favorite_count=status.favorites_count, retweet_count=status.retweet_count)
 			self.Tstatus.save()
