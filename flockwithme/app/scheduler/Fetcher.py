@@ -99,7 +99,7 @@ class TwitterGetFunctions(object):
 			print self.db_followers
 			self.db_followers_initial = self.socialprofile.get_initial_followers(socialProfile=self.socialprofile)
 			print self.db_followers_initial
-			self.db_followers_ids = [x.twitterUser.twitter_id for x in self.db_followers_initial)]
+			self.db_followers_ids = [x.twitterUser.twitter_id for x in self.db_followers_initial]
 			print "followers ids"
 			print self.db_followers_ids
 		else:
