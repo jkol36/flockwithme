@@ -92,22 +92,25 @@ class TwitterGetFunctions(object):
 				self.socialprofile.add_follower(tuser, is_initial=self.is_initial)
 				self.socialprofile.save()
 			return "Done"
-		elif not self.screen_name and is_initial== False:
+		
+		elif not self.screen_name and is_initial == False:
 			self.db_followers = self.socialprofile.get_followers()
 			self.db_followers_ids = [x.twitterUser.twitter_id for x in self.db_followers]
 			print "followers ids"
 			print self.db_followers_ids
-		#####influencer followers fetch #####
-		try:
-			self.twitter_followers = tweepy.Cursor(self.api.followers_ids, screen_name=screen_name).items(5)
-		except TweepError, e:
-			self.process_exception(e)
-		for twitter_id in self.twitter_followers:
-			self.tuser, _ = TwitterUser.objects.get_or_create(twitter_id=twitter_id)
-			self.tuser.save()
-			self.relationship, _ = TwitterRelationship.objects.get_or_create(influencer=self.influencer, twitterUser=self.tuser, action="FOLLOWER", is_initial=self.is_initial)
-			self.influencer.save()
-		return "Done"
+		else:
+			print "else"
+			#####influencer followers fetch #####
+			try:
+				self.twitter_followers = tweepy.Cursor(self.api.followers_ids, screen_name=screen_name).items(5)
+			except TweepError, e:
+				self.process_exception(e)
+			for twitter_id in self.twitter_followers:
+				self.tuser, _ = TwitterUser.objects.get_or_create(twitter_id=twitter_id)
+				self.tuser.save()
+				self.relationship, _ = TwitterRelationship.objects.get_or_create(influencer=self.influencer, twitterUser=self.tuser, action="FOLLOWER", is_initial=self.is_initial)
+				self.influencer.save()
+			return "Done"
 
 	def get_friends(self, screen_name=None, influencer=None, is_initial=False):
 		self.api = self.get_api()
