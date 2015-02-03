@@ -111,7 +111,7 @@ def Fetch_Influencer_Followers():
 			threads[:] = [t for t in threads if t.isAlive()]
 
 @kronos.register('* * * * *')
-def FetchSocialProfile():
+def FetchSocialProfileInitial():
 	queue = Queue()
 	threads = []
 	for acc in SocialProfile.objects.filter(is_initial=True):
@@ -119,7 +119,14 @@ def FetchSocialProfile():
 
 	for thread in threads:
 		thread.start()
-
+@kronos.register('* * * * *')
+def FetchSocialProfile():
+	queue = Queue()
+	threads = []
+	for acc in socialprofile.objects.filter(is_initial=False):
+		threads.append(FetchSocialProfileInfo(is_initial=False, socialprofile=acc, queue=queue, action="Get_Everything"))
+	for thread in threads:
+		thread.start()
 @kronos.register('* * * * *')
 ####initial influencer query 
 def fetch_influencer_info():
