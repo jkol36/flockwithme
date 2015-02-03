@@ -43,7 +43,7 @@ class TwitterGetFunctions(object):
 		return tweepy.Cursor(self.api.user_timeline, screen_name=self.screen_name).items()
 		
 	def process_status(self, status):
-		self.hashtags = [x for x in status.entities.hashtags]
+		self.hashtags = [x for x in status.entities['hashtags']]
 		self.tstatus, _ = TwitterStatus.objects.get_or_create(twitter_id = status.id, text=status.text.encode('utf-8'), favorite_count = status.favorite_count, retweet_count=status.retweet_count)
 		self.tstatus.save()
 		if not self.hashtags:

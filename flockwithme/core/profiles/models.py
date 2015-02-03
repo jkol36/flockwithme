@@ -112,7 +112,7 @@ class SocialProfile(models.Model):
 		if action == "AUTO_DM":
 			model.objects.get_or_create(socialProfile=self, twitterUser=receiver, action=action, message=message)	
 		elif status:
-			model.objects.get_or_create(socialProfile=self, twitterStatus=receiver, action=action)
+			model.objects.get_or_create(socialProfile=self, twitterStatus=receiver, action=action, is_initial=is_initial)
 		else:
 			model.objects.get_or_create(socialProfile=self, twitterUser=receiver, action=action, is_initial=is_initial)
 
