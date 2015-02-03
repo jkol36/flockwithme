@@ -38,6 +38,7 @@ class TwitterGetFunctions(object):
 				self.tstatus = self.process_status(status)
 				self.socialprofile.add_tweet(self.tstatus, is_initial=self.is_initial)
 			self.socialprofile.save()
+			return "Done"
 		
 		###INFLUENCER TWEET FETCH ####
 		try:
@@ -49,7 +50,7 @@ class TwitterGetFunctions(object):
 			self.new_relationship, _ = TwitterRelationship.objects.get_or_create(influencer=self.influencer, action="TWEET", twitterStatus=self.tstatus, is_initial=self.is_initial)
 			self.new_relationship.save()
 			self.influencer.save()
-		return tweepy.Cursor(self.api.user_timeline, screen_name=self.screen_name).items()
+		return "Done"
 		
 	def process_status(self, status):
 		self.hashtags = [x for x in status.entities['hashtags']]
@@ -152,12 +153,13 @@ class TwitterGetFunctions(object):
 			self.get_friends(is_initial=self.is_initial)
 			self.get_favorites(is_initial=self.is_initial)
 			self.get_tweets(is_initial=self.is_initial)
+			return "Done"
 		else:
 			self.get_followers(is_initial=self.is_initial, screen_name=self.screen_name)
 			self.get_friends(is_initial=self.is_initial, screen_name=self.screen_name)
 			self.get_favorites(is_initial=self.is_initial, screen_name=self.screen_name)
 			self.get_tweets(is_initial=self.is_initial, screen_name=self.screen_name)
-		
+			return "Done"
 
 		
 
@@ -213,6 +215,7 @@ class FetchInfluencerInfo(Thread, TwitterGetFunctions):
 	def run(self):
 		if self.action == "Get_Everything":
 			self.action = self.get_everything(influencer=self.influencer, is_initial=self.is_initial, screen_name=self.screen_name)
+			print "Action is {}".format(self.action)
 
 		elif self.action == "Get_Followers":
 			self.action = self.get_followers(influencer=self.influencer, is_initial=self.is_initial, screen_name=self.screen_name)
