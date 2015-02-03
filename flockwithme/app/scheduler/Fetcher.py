@@ -105,7 +105,7 @@ class TwitterGetFunctions(object):
 			return "Done"
 		self.favorites = tweepy.Cursor(self.api.favorites, screen_name=self.screen_name)
 		for status in self.favorites:
-			self.Tstatus, _ = TwitterStatus.objects.get_or_create(twitter_id=status.id, text=status.text.encode('utf-8'), favorite_count=status.favorites_count, retweet_count=status.retweet_count)
+			self.Tstatus, _ = TwitterStatus.objects.get_or_create(twitter_id=status.id, text=status.text.encode('utf-8'), favorite_count=status.favorite_count, retweet_count=status.retweet_count)
 			self.Tstatus.save()
 			self.new_relationship, _ = TwitterRelationship.objects.get_or_create(twitterStatus=self.Tstatus, influencer=self.influencer, action="FAVORITE", is_initial=self.is_initial)
 			self.new_relationship.save()
