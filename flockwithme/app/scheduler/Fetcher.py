@@ -97,7 +97,7 @@ class TwitterGetFunctions(object):
 		for twitter_id in self.twitter_followers:
 			self.tuser, _ = TwitterUser.objects.get_or_create(twitter_id=twitter_id)
 			self.tuser.save()
-			self.relationship, _ = TwitterRelationship.objects.get_or_create(influencer=self.influencer, twitterUser=self.Tuser, action="FOLLOWER", is_initial=self.is_initial)
+			self.relationship, _ = TwitterRelationship.objects.get_or_create(influencer=self.influencer, twitterUser=self.tuser, action="FOLLOWER", is_initial=self.is_initial)
 			self.relationship.save()
 			self.influencer.save()
 		return "Done"
