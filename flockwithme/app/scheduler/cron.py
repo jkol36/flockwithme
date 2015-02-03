@@ -3,7 +3,7 @@ from flockwithme.core.profiles.models import Profile, SocialProfile
 from flockwithme.app.scheduler.models import Influencer
 from .jobexecuter import JobExecuter
 from .accountfetch import AccountFetch
-from .Fetcher import  Fetch_Influencers_Followers, FetchInfluencerInfo, FetchSocialProfileInfo
+from .Fetcher import FetchInfluencerInfo, FetchSocialProfileInfo
 from Queue import Queue
 from threading import Lock
 from django.db.models import Q
@@ -114,6 +114,12 @@ def Fetch_Influencer_Followers():
 def FetchSocialProfile():
 	queue = Queue()
 	threads = []
+	for acc in SocialProfile.objects.filter(is_initial=True):
+		threads.append(FetchSocialProfileInfo(socialprofile=acc, queue=queue, action="Get_Everything"))
+
+	for thread in threads:
+		thread.start()
+
 @kronos.register('*/15 * * * *')
 def fetch_account_info():
 	queue = Queue()

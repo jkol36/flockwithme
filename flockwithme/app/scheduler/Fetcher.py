@@ -107,105 +107,108 @@ class TwitterGetFunctions(object):
 		return "Done"
 	#followers, Friends, Tweets
 	def get_everything(self, screen_name=None, is_initial=False):
-		api = self.get_api()
-		db_followers = [x.twitterUser.twitter_id for x in self.socialprofile.get_followers()]	
-		db_friends = [x.twitterUser.twitter_id for x in self.socialprofile.get_friends()]
-		new_twitter_followers = []
-		new_twitter_friends = []
+		self.api = self.get_api()
+		self.db_followers = [x.twitterUser.twitter_id for x in self.socialprofile.get_followers()]	
+		self.db_friends = [x.twitterUser.twitter_id for x in self.socialprofile.get_friends()]
+		self.new_twitter_followers = []
+		self.new_twitter_friends = []
+		self.is_initial = is_initial
+		print "is_initial = {}".format(self.is_initial)
 		#get_my_followers
-		try:
-			self.twitter_followers = tweepy.Cursor(api.followers_ids).items()
-		except TweepError, e:
-			process_e = self.process_exception(e)
+		####print "getting followers"
+		####try:
+		####	self.twitter_followers = tweepy.Cursor(api.followers_ids).items()
+		####except TweepError, e:
+		####	process_e = self.process_exception(e)
 		
-		try:
-			for follower in self.twitter_followers:
-				self.followers_to_be_added.append(follower)
-		except TweepError, e:
-			self.process_e = self.process_exception(e)
+		####try:
+			####for follower in self.twitter_followers:
+			####	self.followers_to_be_added.append(follower)
+		####except TweepError, e:
+			#self.process_e = self.process_exception(e)
 		
 
-		#get_my_following:
+		#####get_my_following:
+		####print "getting following"
+		####try:
+		####	self.following = tweepy.Cursor(api.friends_ids).items())
+		####except TweepError, e:
+		####	self.process_e = self.process_exception(e)
 		
-		try:
-			self.following = set(tweepy.Cursor(api.friends_ids).items())
-		except TweepError, e:
-			self.process_e = self.process_exception(e)
 		
-		
-		if not len(self.following) > 0:
-			print "No new friends"
+		####if not len(self.following) > 0:
+		####	print "No friends"
 
-		for friend in self.following:
-			try:
-				self.friends_to_be_added.append(friend)
-			except Exception, e:
-				process_e = self.process_exception(e)
-		
+		####for friend in self.following:
+		####	try:
+		####		self.friends_to_be_added.append(friend)
+		####	except Exception, e:
+		####		process_e = self.process_exception(e)
+		####
 
 		########CLEANING TIME ###########
 		#2. clean friends
-		if not len(self.friends_to_be_added) > 1:
-			return "No_New_Friends"
-		elif not len(self.followers_to_be_added) > 1:
-			return "No_New_Followers"
-		else:
+		###if not len(self.friends_to_be_added) > 1:
+		###	return "No_New_Friends"
+		###elif not len(self.followers_to_be_added) > 1:
+		###	return "No_New_Followers"
+		###else:
 			#compare the users friends on Twitter to his Friends in the database
 			#add the ones that are present in his list of following on Twitter but aren't present in his list of following in our flock db.
-			self.db_friends = [x.twitterUser.twitter_id for x in self.socialprofile.get_friends()]
-			self.friends_to_add = [x for x in self.friends_to_be_added if x not in self.db_friends]
-			self.followers_to_add = [x for x in self.followers_to_be_added if x not in self.db_followers]
+			##self.db_friends = [x.twitterUser.twitter_id for x in self.socialprofile.get_friends()]
+			##self.friends_to_add = [x for x in self.friends_to_be_added if x not in self.db_friends]
+			##self.followers_to_add = [x for x in self.followers_to_be_added if x not in self.db_followers]
 			#if there are no friends to add return no friends to write to db
-			if not len(self.friends_to_add) > 1:
-				return "No Friends to Write to DB"
+			##if not len(self.friends_to_add) > 1:
+				##return "No Friends to Write to DB"
 			#If there are no followers to write to the database
-			elif not len(self.followers_to_be_added) > 1:
-				return 'No followers to write to the database'
+			##elif not len(self.followers_to_be_added) > 1:
+				##return 'No followers to write to the database'
 
 			#otherwise, for id in friends.
-			for friend in self.friends_to_add:
-				try:
-					tuser, _ = TwitterUser.objects.get_or_create(twitter_id=friend) 
-				except Exception, e:
-					self.process_e = self.process_exception(e)
-				tuser.save()
-				self.socialprofile.add_friend(tuser, is_initial=True)
-				self.socialprofile.save()
-				if len(self.followers_to_be_added) > 1:
-					self.db_followers = [x.twitterUser.twitter_id for x in self.socialprofile.get_followers()]
-					self.should_add = [x for x in self.followers_to_be_added if x not in self.db_followers]
-					if len(self.should_add) > 1:
-						for user in self.should_add:
-							try:
-								self.tuser, _ = TwitterUser.objects.get_or_create(twitter_id=user)
-							except Exception, e:
-								self.process_e = self.process_exception(e)
-							self.tuser.save()
-							self.socialprofile.add_follower(self.tuser, is_initial=True)
-							self.socialprofile.save()
-					else:
-						self.socialprofile.job_status = "Account_Info_Fetched"
-						self.socialprofile.save()
-				else:
-					self.socialprofile.job_status = 'Account_Info_Fetched'
-					self.socialprofile.save()
+			##for friend in self.friends_to_add:
+				##try:
+					##tuser, _ = TwitterUser.objects.get_or_create(twitter_id=friend) 
+				##except Exception, e:
+					##self.process_e = self.process_exception(e)
+				#tuser.save()
+				#self.socialprofile.add_friend(tuser, is_initial=self.is_initial)
+				#self.socialprofile.save()
+				#if len(self.followers_to_be_added) > 1:
+					#self.db_followers = [x.twitterUser.twitter_id for x in self.socialprofile.get_followers()]
+					#self.should_add = [x for x in self.followers_to_be_added if x not in self.db_followers]
+					#if len(self.should_add) > 1:
+						#for user in self.should_add:
+							#try:
+								#self.tuser, _ = TwitterUser.objects.get_or_create(twitter_id=user)
+							#except Exception, e:
+							#	self.process_e = self.process_exception(e)
+							#self.tuser.save()
+							#self.socialprofile.add_follower(self.tuser, is_initial=True)
+							#self.socialprofile.save()
+					#else:
+						#self.socialprofile.job_status = "Account_Info_Fetched"
+						#self.socialprofile.save()
+				#else:
+					#self.socialprofile.job_status = 'Account_Info_Fetched'
+					#self.socialprofile.save()
 			
 
-			#otherwise do this
-			else:
-				if len(self.followers_to_be_added) > 1:
-					self.db_followers = [x.twitterUser.twitter_id for x in self.socialprofile.get_followers()]
-					self.should_add = [x for x in self.followers_to_be_added if x not in self.db_followers]
-					if self.should_add > 1:
-						for user in self.should_add:
-							try:
-								self.tuser, _ = TwitterUser.objects.get_or_create(twitter_id=user)
-							except Exception, e:
-								self.process_e = self.process_exception(e)
+			##otherwise do this
+			#else:
+				#if len(self.followers_to_be_added) > 1:
+					#self.db_followers = [x.twitterUser.twitter_id for x in self.socialprofile.get_followers()]
+					#self.should_add = [x for x in self.followers_to_be_added if x not in self.db_followers]
+					#if self.should_add > 1:
+						#for user in self.should_add:
+							#try:
+								#self.tuser, _ = TwitterUser.objects.get_or_create(twitter_id=user)
+							#except Exception, e:
+								#self.process_e = self.process_exception(e)
 
-							self.tuser.save()
-							self.socialprofile.add_follower(self.tuser, is_initial=True)
-						self.socialprofile.save()
+							#self.tuser.save()
+							#self.socialprofile.add_follower(self.tuser, is_initial=True)
+						#self.socialprofile.save()
 
 		
 
