@@ -104,8 +104,8 @@ class SocialProfile(models.Model):
 	def delete_friend(self, twitterUser):
 		self.relationships.remove(twitterUser, "FRIEND")
 
-	def add_favorite(self, twitterStatus):
-		self.add_relationship(twitterStatus, "FAVORITE", status=True)
+	def add_favorite(self, twitterStatus, is_initial=False):
+		self.add_relationship(twitterStatus, "FAVORITE", status=True, is_initial=is_initial)
 
 	def add_relationship(self, receiver, action, message=None, status=False, is_initial=False):
 		model = models.get_model('scheduler', 'TwitterRelationship')
