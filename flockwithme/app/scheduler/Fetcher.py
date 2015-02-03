@@ -80,9 +80,10 @@ class TwitterGetFunctions(object):
 		return self.tstatus
 
 
-	def get_followers(self, screen_name=None, influencer=None, fetch_followers=False, is_initial=False):
+	def get_followers(self, screen_name=None, influencer=None, query_twitter=False, is_initial=False):
 		self.api = self.get_api()
-		if not self.screen_name and is_initial==True:
+		if not self.screen_name and is_initial==True and query_twitter==True:
+			print "first if"
 			try:
 				self.twitter_followers = tweepy.Cursor(self.api.followers_ids).items(5)
 			except TweepError, e:
@@ -93,8 +94,10 @@ class TwitterGetFunctions(object):
 				self.socialprofile.add_follower(tuser, is_initial=self.is_initial)
 				self.socialprofile.save()
 			return "Done"
-		
-		elif not self.screen_name and is_initial == False:
+		elif query_twitter== True:
+			print "query twitter is true"
+
+		elif not self.screen_name and is_initial == False and fetch_followers==False:
 			self.db_followers = self.socialprofile.get_followers(socialProfile=self.socialprofile)
 			self.db_followers_initial = self.socialprofile.get_initial_followers(socialProfile=self.socialprofile)
 			if not self.db_followers and not self.db_followers_initial:
@@ -104,7 +107,7 @@ class TwitterGetFunctions(object):
 				print "only initial followers present"
 				self.db_followers_ids = [x.twitterUser.twitter_id for x in self.db_followers_initial]
 				self.api = self.get_api()
-				self.twitter_followers = self.get_followers(is_initial=True)
+				self.twitter_followers = self.get_followers(query_twitter=True)
 				print self.twitter_followers
 
 			else:
@@ -191,10 +194,10 @@ class TwitterGetFunctions(object):
 			self.influencer.save()
 		return "Done"
 	#followers, Friends, Tweets
-	def get_everything(self, screen_name=None, influencer=None, is_initial=False):
+	def get_everything(self, screen_name=None, influencer=None, query_twitter = False, is_initial=False):
 		self.screen_name = screen_name
 		if self.screen_name == None:
-			self.get_followers(is_initial=self.is_initial)
+			self.get_followers(is_initial=self.is_initial, query_twitter=self.query_twitter)
 			self.get_friends(is_initial=self.is_initial)
 			self.get_favorites(is_initial=self.is_initial)
 			self.get_tweets(is_initial=self.is_initial)
@@ -221,11 +224,12 @@ class TwitterGetFunctions(object):
 
 
 class FetchSocialProfileInfo(Thread, TwitterGetFunctions):
-	def __init__(self, is_initial=False, *args, **kwargs):
+	def __init__(self, is_initial=False, query_twitter=True, *args, **kwargs):
 		self.queue = kwargs.pop('queue')
 		self.socialprofile = kwargs.pop('socialprofile')
 		self.action = kwargs.pop('action')
 		self.is_initial = is_initial
+		self.query_twitter = query_twitter
 		print self.is_initial
 		self.queue.put(self)
 		TwitterGetFunctions.__init__(self, socialprofile=self.socialprofile,  *args, **kwargs)
@@ -233,7 +237,7 @@ class FetchSocialProfileInfo(Thread, TwitterGetFunctions):
 
 	def run(self):
 		if self.action == "Get_Everything":
-			self.action = self.get_everything(is_initial=self.is_initial)
+			self.action = self.get_everything(is_initial=self.is_initial, query_twitter=self.query_twitter)
 			if self.action == "Done":
 				self.socialprofile.is_initial = False
 				self.socialprofile.save()
