@@ -49,7 +49,7 @@ class TwitterGetFunctions(object):
 		if not self.hashtags:
 			return self.tstatus
 		for hashtag in self.hashtags:
-			self.h, _ = Hashtag.objects.get_or_create(name=hashtag, twitterStatus=self.tstatus) 
+			self.h, _ = Hashtag.objects.get_or_create(name=hashtag, statuses=self.tstatus) 
 			self.h.save()
 		return self.tstatus
 
