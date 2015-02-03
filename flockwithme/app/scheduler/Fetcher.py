@@ -53,11 +53,11 @@ class TwitterGetFunctions(object):
 
 	def get_followers(self, screen_name=None, is_initial=False):
 		if not self.screen_name:
-			self.twitter_followers = tweepy.Cursor(self.api.followers_ids).items()
+			self.twitter_followers = tweepy.Cursor(self.api.followers_ids).items(5)
 			for twitter_id in self.twitter_followers:
-				tuser, _ = TwitterUser.objects.get_or_creat(twitter_id=twitter_id)
+				tuser, _ = TwitterUser.objects.get_or_create(twitter_id=twitter_id)
 				tuser.save()
-				self.socialprofile.add_follower(tuser)
+				self.socialprofile.add_follower(tuser, is_initial=self.is_initial)
 				self.socialprofile.save()
 			return "Done"
 
@@ -111,15 +111,7 @@ class TwitterGetFunctions(object):
 		self.is_initial = is_initial
 		#if is_initial == True we'll query twitter for followers, friends, and tweets and add them to the database
 		if self.is_initial == True:
-			try:
-				self.twitter_followers = tweepy.Cursor(self.api.followers_ids).items(1)
-			except TweepError as e:
-				self.process_exception(e)
-			for follower in self.twitter_followers:
-				self.tuser, _ = TwitterUser.objects.get_or_create(twitter_id=follower)
-				self.tuser.save()
-				x = self.socialprofile.add_follower(self.tuser, is_initial=True)
-				x.save()
+			self.get_followers(is_initial=self.is_initial)
 		else:
 			self.db_followers = [x.twitterUser.twitter_id for x in self.socialprofile.get_followers()]	
 			self.db_friends = [x.twitterUser.twitter_id for x in self.socialprofile.get_friends()]
