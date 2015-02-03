@@ -98,7 +98,7 @@ class TwitterGetFunctions(object):
 		if not self.screen_name:
 			self.favorites = tweepy.Cursor(self.api.favorites).items(5)
 			for status in self.favorites:
-				self.Tstatus, _ = TwitterStatus.objects.get_or_create(twitter_id=status.id, text=status.text.encode('utf-8'), favorite_count=status.favorites_count, retweet_count=status.retweet_count)
+				self.Tstatus, _ = TwitterStatus.objects.get_or_create(twitter_id=status.id, text=status.text.encode('utf-8'), favorite_count=status.favorite_count, retweet_count=status.retweet_count)
 				self.Tstatus.save()
 				self.socialprofile.add_favorite(self.Tstatus, is_initial=self.is_initial) 
 				self.socialprofile.save()
