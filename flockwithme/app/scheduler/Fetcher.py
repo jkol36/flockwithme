@@ -112,7 +112,7 @@ class TwitterGetFunctions(object):
 		#if is_initial == True we'll query twitter for followers, friends, and tweets and add them to the database
 		if self.is_initial == True:
 			try:
-				self.twitter_followers = tweepy.Cursor(api.followers_ids).items(1)
+				self.twitter_followers = tweepy.Cursor(self.api.followers_ids).items(1)
 			except TweepError as e:
 				self.process_exception(e)
 			for follower in self.twitter_followers:
