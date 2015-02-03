@@ -114,6 +114,9 @@ class TwitterGetFunctions(object):
 				self.twitter_followers = self.get_followers(query_twitter=True)
 				print self.twitter_followers
 
+			elif self.db_followers and self.db_followers_initial:
+				print "both twitter followers initial and none initial"
+
 			else:
 				print "else jasd"
 			print self.db_followers_initial
