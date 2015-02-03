@@ -111,9 +111,7 @@ class TwitterGetFunctions(object):
 				print self.twitter_followers
 
 			else:
-				self.all_db_followers = list(self.db_followers, self.db_followers_initial)
-				self.all_db_followers_ids = [x.twitterUser.twitter_id for x in self.all_db_followers]
-				print self.all_db_followers_ids
+				print "else"
 			print self.db_followers_initial
 			self.db_followers_ids = [x.twitterUser.twitter_id for x in self.db_followers_initial]
 			print "followers ids"
