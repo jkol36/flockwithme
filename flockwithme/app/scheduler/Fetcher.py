@@ -77,7 +77,7 @@ class TwitterGetFunctions(object):
 	def get_friends(self, screen_name=None, is_initial=False):
 		self.api = self.get_api()
 		if not self.screen_name:
-			self.twitter_friends = tweepy.Cursor(self.get_api.followers_ids).items(5)
+			self.twitter_friends = tweepy.Cursor(self.api.followers_ids).items(5)
 			for twitter_id  in self.twitter_friends:
 				tuser, _ = TwitterUser.objects.get_or_create(twitter_id=twitter_id)
 				tuser.save()
