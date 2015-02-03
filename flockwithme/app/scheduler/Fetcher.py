@@ -36,7 +36,7 @@ class TwitterGetFunctions(object):
 				self.process_e = self.process_exception(e)
 			for status in tweets:
 				self.tstatus = self.process_status(status)
-				self.socialprofile.add_tweet(self.tstatus)
+				self.socialprofile.add_tweet(self.tstatus, is_initial=self.is_initial)
 			self.socialprofile.save()
 
 				
