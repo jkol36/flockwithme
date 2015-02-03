@@ -229,6 +229,7 @@ class FetchSocialProfileInfo(Thread, TwitterGetFunctions):
 		self.is_initial = is_initial
 		self.query_twitter = query_twitter
 		print self.is_initial
+		print "query twitter status {}".format(self.query_twitter)
 		self.queue.put(self)
 		TwitterGetFunctions.__init__(self, socialprofile=self.socialprofile,  *args, **kwargs)
 		super(FetchSocialProfileInfo, self).__init__(*args, **kwargs)
