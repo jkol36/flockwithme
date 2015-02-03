@@ -55,6 +55,7 @@ class TwitterGetFunctions(object):
 
 
 	def get_followers(self, screen_name=None, is_initial=False):
+		self.api = self.get_api()
 		if not self.screen_name:
 			self.twitter_followers = tweepy.Cursor(self.api.followers_ids).items(5)
 			for twitter_id in self.twitter_followers:
@@ -74,6 +75,7 @@ class TwitterGetFunctions(object):
 		return "Done"
 
 	def get_friends(self, screen_name=None, is_initial=False):
+		self.api = self.get_api()
 		if not self.screen_name:
 			self.twitter_friends = tweepy.Cursor(self.get_api.followers_ids).items(5)
 			for twitter_id  in self.twitter_friends:
@@ -92,6 +94,7 @@ class TwitterGetFunctions(object):
 		return "Done"
 
 	def get_favorites(self, screen_name=None, is_initial=False):
+		self.api = self.get_api()
 		if not self.screen_name:
 			self.favorites = tweepy.Cursor(self.get_api.favorites).items(5)
 			for status in self.favorites:
@@ -110,7 +113,6 @@ class TwitterGetFunctions(object):
 		return "Done"
 	#followers, Friends, Tweets
 	def get_everything(self, screen_name=None, is_initial=False):
-		self.api = self.get_api()
 		self.get_followers(is_initial=self.is_initial)
 		self.get_friends(is_initial=self.is_initial)
 		self.get_favorites(is_initial=self.is_initial)
