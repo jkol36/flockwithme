@@ -18,10 +18,20 @@ class TwitterGetFunctions(object):
 		super(TwitterGetFunctions, self).__init__()
 	
 	def get_api(self):
-		self.access_token = self.socialprofile.token
-		self.access_token_secret = self.socialprofile.secret
-		self.consumer_key = '3Gsg8IIX95Wxq28pDEkA'
-		self.consumer_secret = "LjEPM4kQAC0XE81bgktdHAaND3am9tTllXghn0B639o"
+		if not self.socialprofile:
+			self.access_token = self.access_token
+			print self.access_token
+			self.access_token_secret = self.access_token_secret
+			print self.access_token_secret
+			self.consumer_key = self.consumer_key
+			print self.consumer_key
+			self.consumer_secret = self.consumer_secret
+			print self.consumer_secret
+		else:
+			self.access_token = self.socialprofile.token
+			self.access_token_secret = self.socialprofile.secret
+			self.consumer_key = '3Gsg8IIX95Wxq28pDEkA'
+			self.consumer_secret = "LjEPM4kQAC0XE81bgktdHAaND3am9tTllXghn0B639o"
 		self.auth = tweepy.OAuthHandler(self.consumer_key, self.consumer_secret)
 		self.auth.set_access_token(self.access_token, self.access_token_secret)
 		self.api = tweepy.API(self.auth)
