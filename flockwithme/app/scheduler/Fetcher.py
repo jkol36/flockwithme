@@ -80,7 +80,7 @@ class TwitterGetFunctions(object):
 		return self.tstatus
 
 
-	def get_followers(self, screen_name=None, influencer=None, is_initial=False):
+	def get_followers(self, screen_name=None, influencer=None, fetch_followers=False, is_initial=False):
 		self.api = self.get_api()
 		if not self.screen_name and is_initial==True:
 			try:
@@ -99,11 +99,14 @@ class TwitterGetFunctions(object):
 			self.db_followers_initial = self.socialprofile.get_initial_followers(socialProfile=self.socialprofile)
 			if not self.db_followers and not self.db_followers_initial:
 				return "No Database Followers"
-			
+			#if theres no database followers but there are initial followers (query happened once)
 			elif not self.db_followers and self.db_followers_initial:
 				print "only initial followers present"
 				self.db_followers_ids = [x.twitterUser.twitter_id for x in self.db_followers_initial]
-				print self.db_followers_ids
+				self.api = self.get_api()
+				self.twitter_followers = self.get_followers(is_initial=True)
+				print self.twitter_followers
+
 			else:
 				self.all_db_followers = list(self.db_followers, self.db_followers_initial)
 				self.all_db_followers_ids = [x.twitterUser.twitter_id for x in self.all_db_followers]

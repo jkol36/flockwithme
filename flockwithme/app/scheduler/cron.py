@@ -119,8 +119,9 @@ def FetchSocialProfileInitial():
 
 	for thread in threads:
 		thread.start()
+#update favorites, followers, freinds, etc
 @kronos.register('* * * * *')
-def FetchSocialProfile():
+def TrackSocialProfile():
 	queue = Queue()
 	threads = []
 	for acc in SocialProfile.objects.filter(is_initial=False):
