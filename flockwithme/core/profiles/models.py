@@ -73,8 +73,8 @@ class SocialProfile(models.Model):
 	def get_initial_tweets(self):
 		return self.relationships.filter(action="TWEET", is_initial=False, socialProfile=self).all()
 
-	def add_tweet(self):
-		self.add_relationship(twitterStatus, "TWEET", status=True)
+	def add_tweet(self, twitterStatus, is_initial=False):
+		self.add_relationship(twitterStatus, "TWEET", status=True, is_initial=is_initial)
 	def get_followers(self):
 		return self.relationships.filter(action="FOLLOWER", is_initial=False, socialProfile=self).all()
 	def get_friends(self):
