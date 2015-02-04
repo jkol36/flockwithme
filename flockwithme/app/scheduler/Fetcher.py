@@ -394,6 +394,7 @@ class FetchSocialProfileInfo(Thread, TwitterGetFunctions):
 			self.db_tweet_count = self.socialprofile.tweet_count
 			print "Database Tweet count {}".format(self.db_tweet_count)
 			self.tweet_count = self.get_tweet_count()
+			self.is_ratelimited = self.socialprofile.follow_limit_reached
 			if self.tweet_count != self.db_tweet_count:
 				self.action = OnTweet(socialprofile=self.socialprofile)
 			else:
