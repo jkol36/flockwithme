@@ -42,6 +42,7 @@ class OnEvent(object):
 		while self.followed <= self.follow_limit:
 			for status in self.tweets:
 				try:
+					print status.twitter_user.twitter_id
 					self.api.create_friendship(user_id=status.twitter_user.twitter_id)
 					time.sleep(random.randint(0,20))
 				except TweepError, e:
