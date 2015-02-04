@@ -80,7 +80,8 @@ class OnEvent(object):
 
 		self.favorite_limit = 100
 		self.favorited = 0
-		
+		print self.tweets
+		"""
 		while self.favorited <= self.favorite_limit:
 			for status in self.tweets:
 				try:
@@ -93,7 +94,7 @@ class OnEvent(object):
 					self.new_favorite.save()
 				except Exception, e:
 					self.process_exception(e)
-	
+		"""
 	def Follow_Fav(self):
 		self.api = self.get_api()
 		self.hashtags = self.profile.hashtags.all()
