@@ -49,6 +49,8 @@ class OnEvent(object):
 					except TweepError, e:
 						self.process_exception(e)
 					self.followed +=1
+					self.socialprofile.add_friend(status.twitter_user)
+					self.socialprofile.save()
 			except TweepError, e:
 				self.process_exception(e)
 		#self.socialprofile.job_status = 
