@@ -29,7 +29,7 @@ class OnEvent(object):
 class OnTweet(OnEvent):
 	def __init__(self, socialprofile=None, action=None, *args, **kwargs):
 		self.socialprofile = socialprofile
-		self.profile = Profile.objects.get(socialprofile=self.socialprofile)
+		self.profile = Profile.objects.get(accounts=self.socialprofile)
 		self.action = self.Follow_Users()
 
 class OnNewFollower(OnEvent):
