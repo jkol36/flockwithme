@@ -183,7 +183,7 @@ class TwitterGetFunctions(object):
 		elif not self.screen_name and is_initial==False:
 			self.db_friends = self.socialprofile.get_friends()
 			self.db_friends_ids = [x.twitterUser.twitter_id for x in self.db_friends]
-			self.twitter_friends = self.get_friend(query_twitter=True)
+			self.twitter_friends = self.get_friends(query_twitter=True)
 			for twitter_id in self.twitter_friends:
 				if twitter_id not in self.db_friends_ids:
 					self.tuser, _ = TwitterUser.objects.get_or_create(twitter_id=twitter_id)
