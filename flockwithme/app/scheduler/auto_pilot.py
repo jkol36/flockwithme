@@ -20,8 +20,9 @@ class OnEvent(object):
 		for i in self.hashtags:
 			statuses = TwitterStatus.objects.filter(hashtags=i)[:30]
 			for status in statuses:
-				print status
-		#print self.tweets.count(self)
+				self.tweets.append(status)
+
+		print self.tweets.count()
 		print "following some users"
 
 	def Direct_Message_Users(self):
