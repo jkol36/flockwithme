@@ -18,7 +18,6 @@ class OnEvent(object):
 		self.hashtags = self.profile.hashtags.all()
 		self.tweets = []
 		for i in self.hashtags:
-			print i
 			self.tweets.append(x for x in TwitterStatus.objects.filter(hashtags=i))
 		print self.tweets.count(self)
 		print self.tweets
