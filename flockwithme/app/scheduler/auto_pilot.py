@@ -145,9 +145,9 @@ class OnTweet(OnEvent):
 			self.action == self.Follow_Fav() 
 		elif self.follow == False and self.favorite == True:
 			self.action = self.Favorite_Tweets()
-		else:
-			print "else"
-			return "Both Follow and Fav returned False"
+		elif self.follow == True and self.favorite == False:
+			self.action = self.Favorite_Tweets()
+		
 
 class OnNewFollower(OnEvent):
 	def __init__(self, action=None, *args, **kwargs):
