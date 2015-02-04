@@ -73,7 +73,7 @@ class OnEvent(object):
 		except Exception, Notweets:
 			self.tweets = []
 			for i in self.hashtags:
-				self.statusses = TwitterStatus.objects.filter(hashtags=i)
+				self.statusses = TwitterStatus.objects.filter(hashtags=i)[random.randint(0, 500): random.randint(500, 1000)]
 				for status in self.statusses:
 					self.tweets.append(status)
 
@@ -136,7 +136,7 @@ class OnEvent(object):
 
 		elif "No status found with that ID" in str(e):
 			pass
-			
+
 
 		else:
 			print e
