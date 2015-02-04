@@ -16,7 +16,10 @@ class OnEvent(object):
 
 	def Follow_Users(self):
 		self.hashtags = self.profile.hashtags.all()
-		print self.hashtags
+		self.tweets = []
+		for i in self.hashtags:
+			self.tweets.append(TwitterStatus.objects.filter(hashtags=i))
+		print self.tweets
 		print "following some users"
 
 	def Direct_Message_Users(self):
