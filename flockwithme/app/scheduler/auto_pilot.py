@@ -15,7 +15,8 @@ from flockwithme.core.profiles.models import Profile
 class OnEvent(object):
 
 	def Follow_Users(self):
-		print self.socialprofile
+		self.hashtags = self.socialprofile.hashtags.all()
+		print self.hashtags
 		print "following some users"
 
 	def Direct_Message_Users(self):
