@@ -51,7 +51,7 @@ class OnEvent(object):
 					self.followed +=1
 			except TweepError, e:
 				self.process_exception(e)
-		self.socialprofile.job_status = 
+		#self.socialprofile.job_status = 
 
 
 	def Direct_Message_Users(self):
