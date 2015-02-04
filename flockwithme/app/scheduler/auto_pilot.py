@@ -58,7 +58,6 @@ class OnEvent(object):
 
 	def Favorite_Tweets(self, status_id=None):
 		self.tweets = self.get_tweets()
-		"""
 		self.favorite_limit = 100
 		self.favorited = 0
 		while self.favorited <= self.favorite_limit:
@@ -73,7 +72,6 @@ class OnEvent(object):
 					self.socialprofile.save()
 				except Exception, e:
 					self.process_exception(e)
-		"""
 	def Follow_Fav(self):
 		self.api = self.get_api()
 		self.hashtags = self.profile.hashtags.all()
@@ -111,7 +109,6 @@ class OnEvent(object):
 			self.statusses = TwitterStatus.objects.filter(hashtags=i).exclude(favorited_by=self.socialprofile)[random.randint(0,100):random.randint(100,200)]
 			for status in self.statusses:
 				self.tweets.append(status)
-
 		print "length of statusses is {}".format(len(self.tweets))
 		return self.tweets
 
