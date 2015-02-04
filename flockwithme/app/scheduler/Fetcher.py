@@ -162,7 +162,7 @@ class TwitterGetFunctions(object):
 				self.influencer.save()
 			return "Done"
 
-	def get_friends(self, screen_name=None, influencer=None, is_initial=False):
+	def get_friends(self, screen_name=None, query_twitter=False, influencer=None, is_initial=False):
 		self.api = self.get_api()
 		if not self.screen_name and is_initial==True:
 			try:
@@ -175,11 +175,22 @@ class TwitterGetFunctions(object):
 				self.socialprofile.add_friend(tuser, is_initial=self.is_initial)
 				self.socialprofile.save()
 			return "Done"
+		elif query_twitter == True:
+			if not self.screen_name:
+				return tweepy.Cursor(self.api.friends_ids).items()
+			else:
+				return tweepy.Cursor(self.api.friends_ids, screen_name=self.screen_name).items()
 		elif not self.screen_name and is_initial==False:
-			print "running"
 			self.db_friends = self.socialprofile.get_friends()
 			self.db_friends_ids = [x.twitterUser.twitter_id for x in self.db_friends]
-			
+			self.twitter_friends = self.get_friend(query_twitter=True)
+			for twitter_id in self.twitter_friends:
+				if twitter_id not in self.db_friends_ids:
+					self.tuser, _ = TwitterUser.objects.get_or_create(twitter_id=twitter_id)
+					self.tuser.save()
+					self.socialprofile.add_friend(self.tuser, is_initial=False)
+					self.socialprofile.save()
+				return "Done"
 		
 		#####INFLUENCER FREINDS FETCH #######
 		try:
