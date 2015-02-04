@@ -110,8 +110,8 @@ class OnEvent(object):
 		self.tweets = []
 		for i in self.hashtags:
 			self.statusses = [x for x in TwitterStatus.objects.filter(hashtags=i).exclude(action="TWEET", socialProfile=self.socialprofile)[random.randint(0,100):random.randint(100,200)]
-			print "length of statusses is {}".format(len(self.statusses))
 			self.tweets.append(y for y in self.statusses)
+		print "length of statusses is {}".format(len(self.tweets))
 		return self.tweets
 
 	def process_exception(self, e):
