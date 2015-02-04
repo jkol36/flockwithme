@@ -128,7 +128,7 @@ class OnEvent(object):
 			self.socialprofile.follow_limit_reached = True
 			self.socialprofile.save()
 			raise StopIteration
-		
+
 		else:
 			print e
 
@@ -138,12 +138,15 @@ class OnTweet(OnEvent):
 		self.socialprofile = socialprofile
 		self.profile = Profile.objects.get(accounts=self.socialprofile)
 		self.follow = follow
+		print "follow {}".format(self.follow)
 		self.favorite = favorite
+		print "favorite {}".format(self.favorite)
 		if self.follow== True and self.favorite == True:
 			self.action == self.Follow_Fav() 
 		elif self.follow == False and self.favorite == True:
 			self.action = self.Favorite_Tweets()
 		else:
+			print "else"
 			return "Both Follow and Fav returned False"
 
 class OnNewFollower(OnEvent):
