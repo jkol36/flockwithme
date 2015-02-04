@@ -40,15 +40,17 @@ class OnEvent(object):
 				self.tweets.append(status)
 		self.followed = 0
 		while self.followed <= self.follow_limit:
-			for status in self.tweets:
-				try:
-					print status.twitter_user.twitter_id
-					self.api.create_friendship(user_id=status.twitter_user.twitter_id)
-					time.sleep(random.randint(0,20))
-				except TweepError, e:
-					self.process_exception(e)
-				self.followed +=1
-				return
+			try:
+				for status in self.tweets:
+					try:
+						print status.twitter_user.twitter_id
+						self.api.create_friendship(user_id=status.twitter_user.twitter_id)
+						time.sleep(random.randint(0,20))
+					except TweepError, e:
+						self.process_exception(e)
+					self.followed +=1
+			except TweepError, e:
+				self.process_exception(e)
 		
 
 
