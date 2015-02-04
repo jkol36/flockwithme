@@ -57,6 +57,7 @@ class OnEvent(object):
 		pass
 
 	def Favorite_Tweets(self, status_id=None):
+		self.api = self.get_api()
 		self.tweets = self.get_tweets()
 		self.favorite_limit = 100
 		self.favorited = 0
