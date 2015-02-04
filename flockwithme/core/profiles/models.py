@@ -46,6 +46,7 @@ class SocialProfile(models.Model):
 		('FAVORITES_FETCHED', 'ready to favorite tweets'),
 		#Send Direct Messages to followers
 		("Just_Favorited", 'We just favorited tweets. Next Step is to auto_dm your followers.'),
+		("Just_Followed", "We just followed people"),
 		#prompt the user for action
 		("Ratio_Dirty_No_Unfollowers", "Your ratio is dirty and you have no one who is not following you."),
 		#try favoriting tweets.
