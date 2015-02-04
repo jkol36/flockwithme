@@ -142,7 +142,7 @@ class OnTweet(OnEvent):
 		self.favorite = favorite
 		print "favorite {}".format(self.favorite)
 		if self.follow== True and self.favorite == True:
-			self.action == self.Follow_Fav() 
+			self.action = self.Follow_Fav() 
 		elif self.follow == False and self.favorite == True:
 			self.action = self.Favorite_Tweets()
 		elif self.follow == True and self.favorite == False:
