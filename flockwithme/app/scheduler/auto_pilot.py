@@ -134,6 +134,10 @@ class OnEvent(object):
 			self.socialprofile.save()
 			raise StopIteration
 
+		elif "No status found with that ID" in str(e):
+			pass
+			
+
 		else:
 			print e
 
