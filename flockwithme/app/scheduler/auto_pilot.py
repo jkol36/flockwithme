@@ -14,7 +14,8 @@ from flockwithme.core.profiles.models import Profile
 
 class OnEvent(object):
 
-	def Follow_User(self):
+	def Follow_Users(self):
+		print self.socialprofile
 		print "following some users"
 
 	def Direct_Message_Users(self):
@@ -25,8 +26,9 @@ class OnEvent(object):
 
 
 class OnTweet(OnEvent):
-	def __init__(self, action=None, *args, **kwargs):
-		self.action = self.Follow_User()
+	def __init__(self, socialprofile=None, action=None, *args, **kwargs):
+		self.socialprofile = socialprofile
+		self.action = self.Follow_Users()
 
 class OnNewFollower(OnEvent):
 	def __init__(self, action=None, *args, **kwargs):
