@@ -112,6 +112,17 @@ def FetchSocialProfileInitial():
 
 	for thread in threads:
 		thread.start()
+
+	while threads:
+		try:
+			executer = queue.get(timeout=1)
+		except:
+			executer = None
+		if executer != None:
+			print 'executer needs to bre removied'
+			threads.remove(executer)
+		else:
+			threads[:] = [t for t in threads if t.isAlive()]
 #update favorites, followers, freinds, etc
 #every 2 hours get everything
 @kronos.register('0 */2 * * *')
@@ -123,6 +134,17 @@ def TrackSocialProfile():
 	for thread in threads:
 		thread.start()
 
+	while threads:
+		try:
+			executer = queue.get(timeout=1)
+		except:
+			executer = None
+		if executer != None:
+			print 'executer needs to bre removied'
+			threads.remove(executer)
+		else:
+			threads[:] = [t for t in threads if t.isAlive()]
+
 #every 5 minutes check for new tweets
 @kronos.register('*/5 * * * *')
 def TrackSocialProfileTweets():
@@ -133,6 +155,17 @@ def TrackSocialProfileTweets():
 
 	for thread in threads:
 		thread.start()
+
+	while threads:
+		try:
+			executer = queue.get(timeout=1)
+		except:
+			executer = None
+		if executer != None:
+			print 'executer needs to bre removied'
+			threads.remove(executer)
+		else:
+			threads[:] = [t for t in threads if t.isAlive()]
 """
 @kronos.register('* * * * *')
 ####initial influencer query 
