@@ -48,9 +48,8 @@ class OnEvent(object):
 					self.process_exception(e)
 				self.followed +=1
 				return
-		for status in self.tweets:
+		
 
-		print "following some users"
 
 	def Direct_Message_Users(self):
 		pass
