@@ -13,18 +13,43 @@ from flockwithme.core.profiles.models import Profile
 
 
 class OnEvent(object):
+	def get_api(self):
+		self.access_token = self.socialprofile.token
+		self.access_token_secret = self.socialprofile.secret
+		self.consumer_key = '3Gsg8IIX95Wxq28pDEkA'
+		self.consumer_secret = 'LjEPM4kQAC0XE81bgktdHAaND3am9tTllXghn0B639o'
+		self.auth = tweepy.OAuthHandler(self.consumer_key, self.consumer_secret)
+		self.auth.set_access_token(self.access_token, self.access_token_secret)
+		self.api = tweepy.API(self.auth)
+		return self.api
 
 	def Follow_Users(self):
+		self.api = self.get_api()
 		self.hashtags = self.profile.hashtags.all()
 		self.tweets = []
+		self.follower_count = self.socialprofile.followers_count
+		self.friends_count = self.socialprofile.friend_count
+		self.follow_limit = self.follower_count - self.friends_count
+		if self.follow_limit >= 1000:
+			self.follow_limit = 800
+		else:
+			self.follow_limit = self.follow_limit
 		for i in self.hashtags:
 			statuses = TwitterStatus.objects.filter(hashtags=i)[:30]
 			for status in statuses:
 				self.tweets.append(status)
-
-		print len(self.tweets)
+		self.followed = 0
+		while self.followed <= self.follow_limit:
+			for status in self.tweets
+				try:
+					self.api.create_friendship(status.twitterUser.twitter_id)
+					time.sleep(random.randint(0,20))
+				except TweepError, e:
+					self.process_exception(e)
+				self.followed +=1
+				return
 		for status in self.tweets:
-			print status.text.encode('utf-8')
+
 		print "following some users"
 
 	def Direct_Message_Users(self):
@@ -33,6 +58,12 @@ class OnEvent(object):
 	def Favorite_Some_Tweets(self):
 		pass
 
+	def process_exception(self, e):
+		if "Rate limit exceeded" in str(e):
+			print "rate limited"
+			time.sleep(900)
+		else:
+			print e
 
 class OnTweet(OnEvent):
 	def __init__(self, socialprofile=None, action=None, *args, **kwargs):
