@@ -31,7 +31,7 @@ class OnEvent(object):
 		self.friends_count = self.socialprofile.friend_count
 		self.follow_limit = self.follower_count - self.friends_count
 		if self.follow_limit >= 1000:
-			self.follow_limit = 800
+			self.follow_limit = 100
 		else:
 			self.follow_limit = self.follow_limit
 		for i in self.hashtags:
