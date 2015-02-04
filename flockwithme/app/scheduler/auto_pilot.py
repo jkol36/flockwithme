@@ -35,7 +35,7 @@ class OnEvent(object):
 		else:
 			self.follow_limit = self.follow_limit
 		for i in self.hashtags:
-			statuses = TwitterStatus.objects.filter(hashtags=i)[:30]
+			statuses = TwitterStatus.objects.filter(hashtags=i)[random.randint(0,1000):random.randint(100,10000)]
 			for status in statuses:
 				self.tweets.append(status)
 		self.followed = 0
@@ -51,7 +51,7 @@ class OnEvent(object):
 					self.followed +=1
 			except TweepError, e:
 				self.process_exception(e)
-		
+		self.socialprofile.job_status = 
 
 
 	def Direct_Message_Users(self):
