@@ -126,6 +126,7 @@ def TrackSocialProfile():
 	threads = []
 	for acc in SocialProfile.objects.filter(is_initial=False):
 		threads.append(FetchSocialProfileInfo(is_initial=False, query_twitter=False, socialprofile=acc, queue=queue, action="Get_Everything"))
+		threads.append(FetchSocialProfileInfo(socialprofile=acc, action="get_followers_and_friends_count", queue=queue))
 	for thread in threads:
 		thread.start()
 @kronos.register('* * * * *')

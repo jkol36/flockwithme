@@ -38,6 +38,20 @@ class TwitterGetFunctions(object):
 		self.api = tweepy.API(self.auth)
 		return self.api
 	
+	def get_follower_count(self, screen_name=None, influencer=None):
+		self.api = self.get_api()
+		if not self.screen_name:
+			return self.api.me().followers_count
+		else:
+			return self.api.get_user(screen_name=self.screen_name).followers_count
+
+	def get_friends_count(self, screen_name=None, influencer=None):
+		self.api = self.get_api()
+		if not self.screen_name:
+			return self.api.me().friends_count
+		else:
+			return self.api.get_user(screen_name=self.screen_name).friends_count
+
 	def get_tweets(self, screen_name=None, influencer=None, is_initial=False):
 		self.api = self.get_api()
 		if not self.screen_name and is_initial == True:
@@ -294,6 +308,13 @@ class FetchSocialProfileInfo(Thread, TwitterGetFunctions):
 				self.socialprofile.save()
 			elif self.action == "Interrupted":
 				self.socialprofile.save()
+		elif self.action == "get_followers_and_friends_count":
+			self.follower_count = self.get_follower_count()
+			self.socialprofile.followers_count = self.follower_count
+			self.socialprofile.save()
+			self.friends_count = self.get_friends_count()
+			self.socialprofile.friend_count = self.friends_count
+			self.socialprofile.save()
 		elif self.action == "Get_Tweets":
 			self.action = self.get_tweets(is_initial=self.is_initial)
 		elif self.action == "Get_Followers":
