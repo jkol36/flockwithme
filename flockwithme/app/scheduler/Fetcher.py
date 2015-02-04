@@ -118,7 +118,11 @@ class TwitterGetFunctions(object):
 			elif not self.db_followers and self.db_followers_initial:
 				print "only initial followers present"
 				self.db_followers_ids = [x.twitterUser.twitter_id for x in self.db_followers_initial]
-				self.twitter_followers = self.get_followers(query_twitter=True)
+				try:
+					self.twitter_followers = self.get_followers(query_twitter=True)
+				except TweepError, e:
+					self.process_exception(e)
+				
 				for i in self.twitter_followers:
 					if i not in self.db_followers_ids:
 						self.tuser, _ = TwitterUser.objects.get_or_create(twitter_id=i)
@@ -183,14 +187,19 @@ class TwitterGetFunctions(object):
 		elif not self.screen_name and is_initial==False:
 			self.db_friends = self.socialprofile.get_friends()
 			self.db_friends_ids = [x.twitterUser.twitter_id for x in self.db_friends]
-			self.twitter_friends = self.get_friends(query_twitter=True)
+			try:
+				self.twitter_friends = self.get_friends(query_twitter=True)
+			except TweepError, e:
+				self.process_exception(e)
 			for twitter_id in self.twitter_friends:
 				if twitter_id not in self.db_friends_ids:
 					self.tuser, _ = TwitterUser.objects.get_or_create(twitter_id=twitter_id)
 					self.tuser.save()
 					self.socialprofile.add_friend(self.tuser, is_initial=False)
 					self.socialprofile.save()
-				return "Done"
+				else:
+					pass
+			return "Done"
 		
 		#####INFLUENCER FREINDS FETCH #######
 		try:
