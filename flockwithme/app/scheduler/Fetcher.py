@@ -396,6 +396,8 @@ class FetchSocialProfileInfo(Thread, TwitterGetFunctions):
 			self.tweet_count = self.get_tweet_count()
 			if self.tweet_count != self.db_tweet_count:
 				self.action = OnTweet()
+			else:
+				print "no new tweets"
 			self.socialprofile.tweet_count = self.tweet_count
 			self.socialprofile.save()
 		elif self.action == "Get_Tweets":
