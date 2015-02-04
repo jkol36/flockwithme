@@ -51,10 +51,10 @@ class SocialProfile(models.Model):
 		("Ratio_Dirty_No_Unfollowers", "Your ratio is dirty and you have no one who is not following you."),
 		#try favoriting tweets.
 		("No_Users_To_Follow", "That's weird. Following users failed because we couldn't find people to follow."),
-		)
 		('Follow_Limited_Favorite_Limited', 'You cannot currently follow more people or favorite any more tweets'),
 		('Favorite_Limited', "You cannot Favorite any more Tweets. This is temporary."),
 		("Followed_And_Favorited", "We successfully followed people and favorited tweets!"),
+		)
 	profile = models.ForeignKey(Profile, related_name="accounts")
 	job_status = models.CharField(max_length=150, choices=JOB_STATUS, default='Fetch_Account_Info')
 	provider = models.CharField(max_length=30, choices=BACKEND_CHOICES, blank=True, null=True)
