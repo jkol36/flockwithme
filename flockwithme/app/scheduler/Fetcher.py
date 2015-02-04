@@ -1,14 +1,18 @@
 import os
 import sys
-from optparse import OptionParser
-from django.conf import settings
 import time
+from optparse import OptionParser
+
+from django.conf import settings
 import tweepy
 from tweepy.error import TweepError
-from flockwithme.app.scheduler.models import OauthSet, Influencer, TwitterUser, TwitterRelationship, TwitterStatus, Hashtag
-from flockwithme.core.profiles.models import SocialProfile
 from threading import Thread
 from django.db.models import Q
+
+from flockwithme.app.scheduler.models import OauthSet, Influencer, TwitterUser, TwitterRelationship, TwitterStatus, Hashtag
+from flockwithme.core.profiles.models import SocialProfile
+from .auto_pilot import OnTweet
+
 
 #a class with all our Twitter Get Methods
 class TwitterGetFunctions(object):
@@ -390,6 +394,8 @@ class FetchSocialProfileInfo(Thread, TwitterGetFunctions):
 			self.db_tweet_count = self.socialprofile.tweet_count
 			print "Database Tweet count {}".format(self.db_tweet_count)
 			self.tweet_count = self.get_tweet_count()
+			if self.tweet_count != self.db_tweet_count:
+				self.action = OnTweet()
 			self.socialprofile.tweet_count = self.tweet_count
 			self.socialprofile.save()
 		elif self.action == "Get_Tweets":

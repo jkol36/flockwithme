@@ -12,10 +12,10 @@ from flockwithme.app.scheduler.models import TwitterStatus, TwitterUser, Influen
 from flockwithme.core.profiles.models import Profile
 
 
-class OnEvent():
+class OnEvent(object):
 
 	def Follow_User(self):
-		pass
+		print "following some users"
 
 	def Direct_Message_Users(self):
 		pass
@@ -26,7 +26,7 @@ class OnEvent():
 
 class OnTweet(OnEvent):
 	def __init__(self, action=None, *args, **kwargs):
-		self.action = action
+		self.action = self.Follow_User()
 
 class OnNewFollower(OnEvent):
 	def __init__(self, action=None, *args, **kwargs):
