@@ -136,6 +136,8 @@ class OnEvent(object):
 
 		elif "No status found with that ID" in str(e):
 			pass
+		elif "You have already favorited this status" in str(e):
+			pass
 
 
 		else:
