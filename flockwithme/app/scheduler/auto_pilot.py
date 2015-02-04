@@ -15,7 +15,7 @@ from flockwithme.core.profiles.models import Profile
 class OnEvent(object):
 
 	def Follow_Users(self):
-		self.hashtags = self.socialprofile.hashtags.all()
+		self.hashtags = self.profile.hashtags.all()
 		print self.hashtags
 		print "following some users"
 
@@ -29,6 +29,7 @@ class OnEvent(object):
 class OnTweet(OnEvent):
 	def __init__(self, socialprofile=None, action=None, *args, **kwargs):
 		self.socialprofile = socialprofile
+		self.profile = Profile.objects.get(socialprofile=self.socialprofile)
 		self.action = self.Follow_Users()
 
 class OnNewFollower(OnEvent):
