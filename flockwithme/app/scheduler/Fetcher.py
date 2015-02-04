@@ -385,6 +385,7 @@ class FetchSocialProfileInfo(Thread, TwitterGetFunctions):
 				self.socialprofile.save()
 		elif self.action == "Test":
 			print dir(self._Thread_delete)
+			print "testing"
 		elif self.action == "get_followers_and_friends_count":
 			self.follower_count = self.get_follower_count()
 			self.socialprofile.followers_count = self.follower_count
