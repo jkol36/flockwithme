@@ -145,6 +145,18 @@ def TrackSocialProfile():
 		else:
 			threads[:] = [t for t in threads if t.isAlive()]
 
+#test kronos
+@kronos.register('* * * * *')
+def testkronos():
+	queue = Queue()
+	threads = []
+	threads.append(FetchSocialProfileInfo(socialprofile=SocialProfile.objects.get(handle="Jkol36")))
+	for thread in threads:
+		thread.start()
+
+
+
+
 #every 5 minutes check for new tweets
 @kronos.register('*/5 * * * *')
 def TrackSocialProfileTweets():

@@ -383,6 +383,8 @@ class FetchSocialProfileInfo(Thread, TwitterGetFunctions):
 				self.socialprofile.save()
 			elif self.action == "Interrupted":
 				self.socialprofile.save()
+		elif self.action == "Test":
+			print dir(self)
 		elif self.action == "get_followers_and_friends_count":
 			self.follower_count = self.get_follower_count()
 			self.socialprofile.followers_count = self.follower_count
@@ -394,9 +396,13 @@ class FetchSocialProfileInfo(Thread, TwitterGetFunctions):
 			self.db_tweet_count = self.socialprofile.tweet_count
 			print "Database Tweet count {}".format(self.db_tweet_count)
 			self.tweet_count = self.get_tweet_count()
-			self.is_ratelimited = self.socialprofile.follow_limit_reached
-			if self.tweet_count != self.db_tweet_count:
-				self.action = OnTweet(socialprofile=self.socialprofile)
+			self.follow_limit_reached = self.socialprofile.follow_limit_reached
+			self.favorite_limit_reached=self.socialprofile.favorite_limit_reached
+			if self.tweet_count != self.db_tweet_count and self.follow_limit_reached == False and self.favorite_limit_reached == False:
+				self.action = OnTweet(socialprofile=self.socialprofile, follow=True, favorite=True)
+			elif self.tweet_count != self.db_tweet_count and self.follow_limit_reached == True and self.favorite_limit_reached == True:
+
+
 			else:
 				print "no new tweets"
 			self.socialprofile.tweet_count = self.tweet_count
