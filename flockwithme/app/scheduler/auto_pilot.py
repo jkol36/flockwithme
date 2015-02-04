@@ -109,7 +109,7 @@ class OnEvent(object):
 		self.already_favorited = [x.twitter_status.twitter_id for x in self.socialprofile.get_favorites()]
 		self.tweets = []
 		for i in self.hashtags:
-			self.statusses = [x for x in TwitterStatus.objects.filter(hashtags=i).exclude(action="TWEET", socialProfile=self.socialprofile)[random.randint(0,100:random.randint(100,200)] if x.twitter_id not in self.already_favorited]
+			self.statusses = [x for x in TwitterStatus.objects.filter(hashtags=i).exclude(action="TWEET", socialProfile=self.socialprofile)[random.randint(0,100:random.randint(100,200)]
 			print "length of statusses is {}".format(len(self.statusses))
 			self.tweets.append(y for y in self.statusses)
 		return self.tweets
