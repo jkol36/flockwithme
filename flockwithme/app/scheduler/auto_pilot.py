@@ -106,7 +106,7 @@ class OnEvent(object):
 
 	def get_tweets(self):
 		self.hashtags = self.profile.hashtags.all()
-		self.already_favorited = [x.twitter_status.twitter_id for x in self.socialprofile.get_favorites()]
+		self.already_favorited = [x.twitterStatus.twitter_id for x in self.socialprofile.get_favorites()]
 		self.tweets = []
 		for i in self.hashtags:
 			self.statusses = [x for x in TwitterStatus.objects.filter(hashtags=i).exclude(action="TWEET", socialProfile=self.socialprofile)]
