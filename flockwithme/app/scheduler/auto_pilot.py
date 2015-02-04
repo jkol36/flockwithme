@@ -22,7 +22,7 @@ class OnEvent(object):
 			for status in statuses:
 				self.tweets.append(status)
 
-		print self.tweets.count()
+		print self.tweets.count(self)
 		print "following some users"
 
 	def Direct_Message_Users(self):
