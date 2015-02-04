@@ -74,7 +74,7 @@ class OnEvent(object):
 					self.socialprofile.save()
 				except Exception, e:
 					self.process_exception(e)
-				self.time.sleep(random.randint(0,40))
+				time.sleep(random.randint(0,40))
 	def Follow_Fav(self):
 		self.api = self.get_api()
 		self.hashtags = self.profile.hashtags.all()
