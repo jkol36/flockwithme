@@ -240,7 +240,7 @@ class TwitterGetFunctions(object):
 				self.socialprofile.add_favorite(self.Tstatus, is_initial=self.is_initial) 
 				self.socialprofile.save()
 			return "Done"
-		elif query_twitter = True:
+		elif query_twitter == True:
 			if not self.screen_name:
 				try:
 					return tweepy.Cursor(self.api.favorites).items()
