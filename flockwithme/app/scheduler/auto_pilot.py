@@ -23,6 +23,8 @@ class OnEvent(object):
 				self.tweets.append(status)
 
 		print len(self.tweets)
+		for status in self.tweets:
+			print status.text.encode('utf-8')
 		print "following some users"
 
 	def Direct_Message_Users(self):
