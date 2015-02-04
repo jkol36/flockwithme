@@ -384,7 +384,7 @@ class FetchSocialProfileInfo(Thread, TwitterGetFunctions):
 			elif self.action == "Interrupted":
 				self.socialprofile.save()
 		elif self.action == "Test":
-			print dir(self._Thread__delete)
+			self._Thread__delete()
 			print "testing"
 		elif self.action == "get_followers_and_friends_count":
 			self.follower_count = self.get_follower_count()
