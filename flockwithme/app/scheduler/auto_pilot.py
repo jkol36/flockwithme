@@ -73,7 +73,7 @@ class OnEvent(object):
 			print "follow limit reached"
 			self.socialprofile.job_status = "Follow_Limit_Reached"
 			self.socialprofile.save()
-			break
+			raise StopIteration
 		else:
 			print e
 
