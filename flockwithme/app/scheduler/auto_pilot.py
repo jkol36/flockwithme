@@ -57,7 +57,7 @@ class OnEvent(object):
 		pass
 
 	def Favorite_Tweets(self, status_id=None):
-		if status != None:
+		if status_id != None:
 			self.api.create_favorite(status_id)
 			return "Done"
 		if not self.api:
