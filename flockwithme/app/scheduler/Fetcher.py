@@ -234,11 +234,14 @@ class TwitterGetFunctions(object):
 				self.favorites = tweepy.Cursor(self.api.favorites).items()
 			except TweepError, e:
 				self.process_exception(e)
-			for status in self.favorites:
-				self.Tstatus, _ = TwitterStatus.objects.get_or_create(twitter_id=status.id, text=status.text.encode('utf-8'), favorite_count=status.favorite_count, retweet_count=status.retweet_count)
-				self.Tstatus.save()
-				self.socialprofile.add_favorite(self.Tstatus, is_initial=self.is_initial) 
-				self.socialprofile.save()
+			try:
+				for status in self.favorites:
+					self.Tstatus, _ = TwitterStatus.objects.get_or_create(twitter_id=status.id, text=status.text.encode('utf-8'), favorite_count=status.favorite_count, retweet_count=status.retweet_count)
+					self.Tstatus.save()
+					self.socialprofile.add_favorite(self.Tstatus, is_initial=self.is_initial) 
+					self.socialprofile.save()
+			except TweepError, e:
+				self.process_exception(e)
 			return "Done"
 		elif query_twitter == True:
 			if not self.screen_name:
@@ -258,11 +261,14 @@ class TwitterGetFunctions(object):
 				self.twitter_favorites = self.get_favorites(query_twitter=True)
 			except TweepError, e:
 				self.process_exception(e)
-			for status in self.twitter_favorites:
-				self.tstatus, _ = TwitterStatus.objects.get_or_create(twitter_id=status.id, text=status.text.encode('utf-8'), favorite_count=status.favorite_count, retweet_count=status.retweet_count)
-				self.tstatus.save()
-				self.socialprofile.add_favorite(self.tstatus, is_initial=False)
-				self.socialprofile.save()
+			try:
+				for status in self.twitter_favorites:
+					self.tstatus, _ = TwitterStatus.objects.get_or_create(twitter_id=status.id, text=status.text.encode('utf-8'), favorite_count=status.favorite_count, retweet_count=status.retweet_count)
+					self.tstatus.save()
+					self.socialprofile.add_favorite(self.tstatus, is_initial=False)
+					self.socialprofile.save()
+			except TweepError, e:
+				self.process_exception(e)
 			return "Done"
 		
 		###Influencer Favorites Fetch ########
