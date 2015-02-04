@@ -40,7 +40,7 @@ class OnEvent(object):
 				self.tweets.append(status)
 		self.followed = 0
 		while self.followed <= self.follow_limit:
-			for status in self.tweets
+			for status in self.tweets:
 				try:
 					self.api.create_friendship(status.twitterUser.twitter_id)
 					time.sleep(random.randint(0,20))
