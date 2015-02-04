@@ -176,10 +176,10 @@ class TwitterGetFunctions(object):
 				self.socialprofile.save()
 			return "Done"
 		elif not self.screen_name and is_initial==False:
+			print "running"
 			self.db_friends = self.socialprofile.get_friends()
 			self.db_friends_ids = [x.twitterUser.twitter_id for x in self.db_friends]
-			print "friends ids"
-			print self.db_friends_ids
+			
 		
 		#####INFLUENCER FREINDS FETCH #######
 		try:
