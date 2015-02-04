@@ -69,7 +69,7 @@ class OnEvent(object):
 		except Exception, nohashtags:
 			self.hashtags = self.profile.hashtags.all()
 		try:
-			self.tweets = self.tweets:
+			self.tweets = self.tweets
 		except Exception, Notweets:
 			self.tweets = []
 			for i in self.hashtags:
