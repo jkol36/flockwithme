@@ -381,6 +381,7 @@ class FetchSocialProfileInfo(Thread, TwitterGetFunctions):
 			if self.action == "Done":
 				self.socialprofile.is_initial = False
 				self.socialprofile.save()
+				self._Thread__delete()
 			elif self.action == "Interrupted":
 				self.socialprofile.save()
 		elif self.action == "Test":
@@ -393,6 +394,7 @@ class FetchSocialProfileInfo(Thread, TwitterGetFunctions):
 			self.friends_count = self.get_friends_count()
 			self.socialprofile.friend_count = self.friends_count
 			self.socialprofile.save()
+			self._Thread__delete()
 		elif self.action =="Get_Tweet_Count":
 			self.db_tweet_count = self.socialprofile.tweet_count
 			print "Database Tweet count {}".format(self.db_tweet_count)
@@ -401,9 +403,30 @@ class FetchSocialProfileInfo(Thread, TwitterGetFunctions):
 			self.favorite_limit_reached=self.socialprofile.favorite_limit_reached
 			if self.tweet_count != self.db_tweet_count and self.follow_limit_reached == False and self.favorite_limit_reached == False:
 				self.action = OnTweet(socialprofile=self.socialprofile, follow=True, favorite=True)
+				if self.action == "Done":
+					self._Thread__delete()
+					self.socialprofile.job_status = "Followed_And_Favorited"
+					self.socialprofile.save()
+				else:
+					self._Thread__delete()
 			elif self.tweet_count != self.db_tweet_count and self.follow_limit_reached == True and self.favorite_limit_reached == True:
-				pass
+				self._Thread__delete()
+				self.socialprofile.job_status = "Follow_Limited_Favorite_Limited"
+				self.socialprofile.follow_limit_reached = True
+				self.socialprofile.favorite_limit_reached = True
+				self.socialprofile.save()
+			elif self.tweet_count != self.db_tweet_count and self.follow_limit_rached == True and self.favorite_limit_reached == False:
+				self.action = OnTweet(socialprofile=self.socialprofile, follow=False, favorite=True)
 
+			elif self.tweet_count != self.db_tweet_count and self.follow_limit_reached == False and self.favorite_limit_reached == True:
+				#if action completes it will return done. Otherwise it will return an error.
+				self.action = OnTweet(socialprofile=self.socialprofile, follow=True, favorite=False)
+				if self.action == "Done":
+					self._Thread__delete()
+					self.socialprofile.job_status = "Just_Followed"
+					self.socialprofile.save()
+				else:
+					self._Thread__delete()
 
 			else:
 				print "no new tweets"
