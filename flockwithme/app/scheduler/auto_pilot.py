@@ -134,9 +134,12 @@ class OnEvent(object):
 			raise StopIteration
 
 		elif "No status found with that ID" in str(e):
+			print e
 			pass
 		elif "You have already favorited this status" in str(e):
+			print e
 			pass
+			
 
 
 		else:
