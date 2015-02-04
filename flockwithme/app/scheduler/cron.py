@@ -120,13 +120,24 @@ def FetchSocialProfileInitial():
 	for thread in threads:
 		thread.start()
 #update favorites, followers, freinds, etc
+#every 2 hours get everything
 @kronos.register('* * * * *')
 def TrackSocialProfile():
 	queue = Queue()
 	threads = []
 	for acc in SocialProfile.objects.filter(is_initial=False):
 		threads.append(FetchSocialProfileInfo(is_initial=False, query_twitter=False, socialprofile=acc, queue=queue, action="Get_Everything"))
-		threads.append(FetchSocialProfileInfo(socialprofile=acc, action="get_followers_and_friends_count", queue=queue))
+	for thread in threads:
+		thread.start()
+
+#every 5 minutes check for new tweets
+@kronos.register('* * * * *')
+def TrackSocialProfileTweets():
+	queue = Queue()
+	threads = []
+	for acc in SocialProfile.objects.filter(is_initial=False):
+		threads.append(FetchSocialProfileInfo(is_initial=False, queue=queue, query_twitter=False, socialprofile=acc, action="Get_Tweet_Count"))
+
 	for thread in threads:
 		thread.start()
 @kronos.register('* * * * *')

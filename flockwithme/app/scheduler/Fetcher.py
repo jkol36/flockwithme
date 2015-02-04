@@ -52,32 +52,45 @@ class TwitterGetFunctions(object):
 		else:
 			return self.api.get_user(screen_name=self.screen_name).friends_count
 
+	def get_tweet_count(self, screen_name=None, influencer=None):
+		self.api = self.get_api()
+		if not self.screen_name:
+			return self.api.me().statuses_count
+		else:
+			return self.api.get_user(screen_name=self.screen_name).statuses_count
+
 	def get_tweets(self, screen_name=None, influencer=None, is_initial=False):
 		self.api = self.get_api()
 		if not self.screen_name and is_initial == True:
 			try:
-				tweets = tweepy.Cursor(self.api.user_timeline).items(5)
+				tweets = tweepy.Cursor(self.api.user_timeline).items()
 			except TweepError as e:
 				self.process_e = self.process_exception(e)
-			for status in tweets:
-				self.tstatus = self.process_status(status)
-				self.socialprofile.add_tweet(self.tstatus, is_initial=self.is_initial)
+			try:
+				for status in tweets:
+					self.tstatus = self.process_status(status)
+					self.socialprofile.add_tweet(self.tstatus, is_initial=self.is_initial)
+			except TweepError, e:
+				self.process_exception(e)
 			self.socialprofile.save()
 			return "Done"
 		elif not self.screen_name and is_initial == False:
-			self.db_tweets = [x.twitterStatus.twitter_id for x in TwitterRelationship.objects.filter(action="TWEET", socialprofile=self.socialprofile)]
+			self.db_tweets = [x.twitterStatus.twitter_id for x in TwitterRelationship.objects.filter(action="TWEET", socialProfile=self.socialprofile)]
 			print "db tweet ids"
 			print self.db_tweets
 		###INFLUENCER TWEET FETCH ####
 		try:
-			tweets = tweepy.Cursor(self.api.user_timeline, screen_name=self.screen_name).items(5)
+			tweets = tweepy.Cursor(self.api.user_timeline, screen_name=self.screen_name).items()
 		except TweepError, e:
 			self.process_exception(e)
-		for tweet in tweets:
-			self.tstatus = self.process_status(tweet)
-			self.new_relationship, _ = TwitterRelationship.objects.get_or_create(influencer=self.influencer, action="TWEET", twitterStatus=self.tstatus, is_initial=self.is_initial)
-			self.new_relationship.save()
-			self.influencer.save()
+		try:
+			for tweet in tweets:
+				self.tstatus = self.process_status(tweet)
+				self.new_relationship, _ = TwitterRelationship.objects.get_or_create(influencer=self.influencer, action="TWEET", twitterStatus=self.tstatus, is_initial=self.is_initial)
+				self.new_relationship.save()
+				self.influencer.save()
+		except TweepError, e:
+			self.process_exception(e)
 		return "Done"
 		
 	def process_status(self, status):
@@ -102,11 +115,14 @@ class TwitterGetFunctions(object):
 				self.twitter_followers = tweepy.Cursor(self.api.followers_ids).items()
 			except TweepError, e:
 				self.process_exception(e)
-			for twitter_id in self.twitter_followers:
-				tuser, _ = TwitterUser.objects.get_or_create(twitter_id=twitter_id)
-				tuser.save()
-				self.socialprofile.add_follower(tuser, is_initial=self.is_initial)
-				self.socialprofile.save()
+			try:
+				for twitter_id in self.twitter_followers:
+					tuser, _ = TwitterUser.objects.get_or_create(twitter_id=twitter_id)
+					tuser.save()
+					self.socialprofile.add_follower(tuser, is_initial=self.is_initial)
+					self.socialprofile.save()
+			except TweepError, e:
+				self.process_exception(e)
 			return "Done"
 		elif query_twitter == True:
 			if not self.screen_name:
@@ -136,15 +152,18 @@ class TwitterGetFunctions(object):
 					self.twitter_followers = self.get_followers(query_twitter=True)
 				except TweepError, e:
 					self.process_exception(e)
-				
-				for i in self.twitter_followers:
-					if i not in self.db_followers_ids:
-						self.tuser, _ = TwitterUser.objects.get_or_create(twitter_id=i)
-						self.tuser.save()
-						self.socialprofile.add_follower(self.tuser, is_initial=False)
-						self.socialprofile.save()
-					else:
-						pass
+				try:
+					for i in self.twitter_followers:
+						if i not in self.db_followers_ids:
+							self.tuser, _ = TwitterUser.objects.get_or_create(twitter_id=i)
+							self.tuser.save()
+							self.socialprofile.add_follower(self.tuser, is_initial=False)
+							self.socialprofile.save()
+						else:
+							pass
+				except TweepError, e:
+					self.process_exception(e)
+
 				return "Done"
 				print([x for x in self.twitter_followers])
 			#if there's both initial database followers and non_initial followers
@@ -152,15 +171,21 @@ class TwitterGetFunctions(object):
 				self.db_followers_ids = [x.twitterUser.twitter_id for x in self.db_followers]
 				self.db_initial_ids = [x.twitterUser.twitter_id for x in self.db_followers_initial]
 				self.all_db_followers = self.db_followers_ids + self.db_initial_ids
-				self.twitter_followers = self.get_followers(query_twitter=True)
-				for i in self.twitter_followers:
-					if i not in self.all_db_followers:
-						self.tuser, _ = TwitterUser.objects.get_or_create(twitter_id=i)
-						self.tuser.save()
-						self.socialprofile.add_follower(self.tuser, is_initial=False)
-						self.socialprofile.save()
-					else:
-						pass
+				try:
+					self.twitter_followers = self.get_followers(query_twitter=True)
+				except TweepError, e:
+					self.process_exception(e)
+				try:
+					for i in self.twitter_followers:
+						if i not in self.all_db_followers:
+							self.tuser, _ = TwitterUser.objects.get_or_create(twitter_id=i)
+							self.tuser.save()
+							self.socialprofile.add_follower(self.tuser, is_initial=False)
+							self.socialprofile.save()
+						else:
+							pass
+				except TweepError, e:
+					self.process_exception(e)
 				return "Done"
 			else:
 				print "else jasd"
@@ -173,11 +198,14 @@ class TwitterGetFunctions(object):
 				self.twitter_followers = tweepy.Cursor(self.api.followers_ids, screen_name=screen_name).items(5)
 			except TweepError, e:
 				self.process_exception(e)
-			for twitter_id in self.twitter_followers:
-				self.tuser, _ = TwitterUser.objects.get_or_create(twitter_id=twitter_id)
-				self.tuser.save()
-				self.relationship, _ = TwitterRelationship.objects.get_or_create(influencer=self.influencer, twitterUser=self.tuser, action="FOLLOWER", is_initial=self.is_initial)
-				self.influencer.save()
+			try:
+				for twitter_id in self.twitter_followers:
+					self.tuser, _ = TwitterUser.objects.get_or_create(twitter_id=twitter_id)
+					self.tuser.save()
+					self.relationship, _ = TwitterRelationship.objects.get_or_create(influencer=self.influencer, twitterUser=self.tuser, action="FOLLOWER", is_initial=self.is_initial)
+					self.influencer.save()
+			except TweepError, e:
+				self.process_exception(e)
 			return "Done"
 
 	def get_friends(self, screen_name=None, query_twitter=False, influencer=None, is_initial=False):
@@ -187,11 +215,14 @@ class TwitterGetFunctions(object):
 				self.twitter_friends = tweepy.Cursor(self.api.followers_ids).items(5)
 			except TweepError, e:
 				self.process_exception(e)
-			for twitter_id  in self.twitter_friends:
-				tuser, _ = TwitterUser.objects.get_or_create(twitter_id=twitter_id)
-				tuser.save()
-				self.socialprofile.add_friend(tuser, is_initial=self.is_initial)
-				self.socialprofile.save()
+			try:
+				for twitter_id  in self.twitter_friends:
+					tuser, _ = TwitterUser.objects.get_or_create(twitter_id=twitter_id)
+					tuser.save()
+					self.socialprofile.add_friend(tuser, is_initial=self.is_initial)
+					self.socialprofile.save()
+			except TweepError, e:
+				self.process_exception(e)
 			return "Done"
 		elif query_twitter == True:
 			if not self.screen_name:
@@ -205,14 +236,17 @@ class TwitterGetFunctions(object):
 				self.twitter_friends = self.get_friends(query_twitter=True)
 			except TweepError, e:
 				self.process_exception(e)
-			for twitter_id in self.twitter_friends:
-				if twitter_id not in self.db_friends_ids:
-					self.tuser, _ = TwitterUser.objects.get_or_create(twitter_id=twitter_id)
-					self.tuser.save()
-					self.socialprofile.add_friend(self.tuser, is_initial=False)
-					self.socialprofile.save()
-				else:
-					pass
+			try:
+				for twitter_id in self.twitter_friends:
+					if twitter_id not in self.db_friends_ids:
+						self.tuser, _ = TwitterUser.objects.get_or_create(twitter_id=twitter_id)
+						self.tuser.save()
+						self.socialprofile.add_friend(self.tuser, is_initial=False)
+						self.socialprofile.save()
+					else:
+						pass
+			except TweepyError, e:
+				self.process_exception(e)
 			return "Done"
 		
 		#####INFLUENCER FREINDS FETCH #######
@@ -220,11 +254,14 @@ class TwitterGetFunctions(object):
 			self.twitter_friends = tweepy.Cursor(self.api.followers_ids, screen_name=self.screen_name).items(5)
 		except TweepError, e:
 			self.process_exception(e)
-		for twitter_id in self.twitter_friends:
-			self.tuser, _ = TwitterUser.objects.get_or_create(twitter_id=twitter_id)
-			self.tuser.save()
-			self.new_relationship = TwitterRelationship.objects.get_or_create(influencer=self.influencer, twitterUser=self.tuser, action="FRIEND", is_initial=self.is_initial)
-			self.influencer.save()
+		try:
+			for twitter_id in self.twitter_friends:
+				self.tuser, _ = TwitterUser.objects.get_or_create(twitter_id=twitter_id)
+				self.tuser.save()
+				self.new_relationship = TwitterRelationship.objects.get_or_create(influencer=self.influencer, twitterUser=self.tuser, action="FRIEND", is_initial=self.is_initial)
+				self.influencer.save()
+		except TweepError, e:
+			self.process_exception(e)
 		return "Done"
 
 	def get_favorites(self, screen_name=None, query_twitter=False, influencer=None, is_initial=False):
@@ -276,11 +313,14 @@ class TwitterGetFunctions(object):
 			self.favorites = tweepy.Cursor(self.api.favorites, screen_name=self.screen_name).items()
 		except TweepError, e:
 			self.process_exception(e)
-		for status in self.favorites:
-			self.Tstatus, _ = TwitterStatus.objects.get_or_create(twitter_id=status.id, text=status.text.encode('utf-8'), favorite_count=status.favorite_count, retweet_count=status.retweet_count)
-			self.Tstatus.save()
-			self.new_relationship, _ = TwitterRelationship.objects.get_or_create(twitterStatus=self.Tstatus, influencer=self.influencer, action="FAVORITE", is_initial=self.is_initial)
-			self.influencer.save()
+		try:
+			for status in self.favorites:
+				self.Tstatus, _ = TwitterStatus.objects.get_or_create(twitter_id=status.id, text=status.text.encode('utf-8'), favorite_count=status.favorite_count, retweet_count=status.retweet_count)
+				self.Tstatus.save()
+				self.new_relationship, _ = TwitterRelationship.objects.get_or_create(twitterStatus=self.Tstatus, influencer=self.influencer, action="FAVORITE", is_initial=self.is_initial)
+				self.influencer.save()
+		except TweepError, e:
+			self.process_exception(e)
 		return "Done"
 	#followers, Friends, Tweets
 	def get_everything(self, screen_name=None, influencer=None, query_twitter = False, is_initial=False):
@@ -290,6 +330,12 @@ class TwitterGetFunctions(object):
 			self.get_friends(is_initial=self.is_initial)
 			self.get_favorites(is_initial=self.is_initial)
 			self.get_tweets(is_initial=self.is_initial)
+			self.get_tweet_count()
+			self.follower_count = self.get_follower_count()
+			self.friend_count = self.get_friends_count()
+			self.socialprofile.followers_count=self.follower_count
+			self.socialprofile.friend_count = self.friend_count
+			self.socialprofile.save()
 			return "Done"
 		else:
 			self.get_followers(is_initial=self.is_initial, screen_name=self.screen_name)
@@ -339,6 +385,12 @@ class FetchSocialProfileInfo(Thread, TwitterGetFunctions):
 			self.socialprofile.save()
 			self.friends_count = self.get_friends_count()
 			self.socialprofile.friend_count = self.friends_count
+			self.socialprofile.save()
+		elif self.action =="Get_Tweet_Count":
+			self.db_tweet_count = self.socialprofile.tweet_count
+			print "Database Tweet count {}".format(self.db_tweet_count)
+			self.tweet_count = self.get_tweet_count()
+			self.socialprofile.tweet_count = self.tweet_count
 			self.socialprofile.save()
 		elif self.action == "Get_Tweets":
 			self.action = self.get_tweets(is_initial=self.is_initial)
