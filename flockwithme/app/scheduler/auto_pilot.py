@@ -89,7 +89,7 @@ class OnEvent(object):
 					self.process_exception(e)
 				self.favorited += 1
 				try:
-					self.new_favorite, _ = TwitterRelationship.objects.get_or_create(twitterStatus=status, action="FAVORITE", socialProfile=self.socialprofile, is_initial=False) 
+					self.new_favorite, _ = self.socialprofile.add_favorite(status)
 					self.new_favorite.save()
 				except Exception, e:
 					self.process_exception(e)
