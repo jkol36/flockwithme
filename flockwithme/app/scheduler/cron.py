@@ -11,7 +11,7 @@ from .auto_pilot import AutoPilot
 
 
 
-@kronos.register('0 10 * * *')
+"""@kronos.register('0 10 * * *')
 def do_work():
 	queue = Queue()
 	threads = []
@@ -50,7 +50,8 @@ def do_work():
 		else:
 			threads[:] = [t for t in threads if t.isAlive()]
 
-
+"""
+"""
 @kronos.register('*/15 * * * *')
 def track_followers():
 	lock = Lock()
@@ -78,16 +79,8 @@ def track_followers():
 			executer.account.save()
 		else:
 			threads[:] = [t for t in threads if t.isAlive()]
-
-@kronos.register('* * * * *')
-def track_social_profile():
-	queue = Queue()
-	threads = []
-	for socialprofile in SocialProfile.objects.all():
-		threads.append(FetchSocialProfileInfo(socialprofile=socialprofile, action="Get_Tweets", queue=queue))
-
-	for thread in threads:
-		thread.start()
+"""
+"""
 @kronos.register('*/5 * * * *')
 def Fetch_Influencer_Followers():
 	queue = Queue()
@@ -109,8 +102,8 @@ def Fetch_Influencer_Followers():
 			threads.remove(executer)
 		else:
 			threads[:] = [t for t in threads if t.isAlive()]
-
-@kronos.register('* * * * *')
+"""
+@kronos.register('*/15 * * * *')
 def FetchSocialProfileInitial():
 	queue = Queue()
 	threads = []
@@ -121,7 +114,7 @@ def FetchSocialProfileInitial():
 		thread.start()
 #update favorites, followers, freinds, etc
 #every 2 hours get everything
-@kronos.register('* * * * *')
+@kronos.register('0 */2 * * *')
 def TrackSocialProfile():
 	queue = Queue()
 	threads = []
@@ -131,7 +124,7 @@ def TrackSocialProfile():
 		thread.start()
 
 #every 5 minutes check for new tweets
-@kronos.register('* * * * *')
+@kronos.register('*/5 * * * *')
 def TrackSocialProfileTweets():
 	queue = Queue()
 	threads = []
@@ -140,6 +133,7 @@ def TrackSocialProfileTweets():
 
 	for thread in threads:
 		thread.start()
+"""
 @kronos.register('* * * * *')
 ####initial influencer query 
 def fetch_influencer_info():
@@ -186,4 +180,4 @@ def fetch_account_info():
 	#threads = []
 	#for acc in SocialProfile.objects.filter(has_dm_message=True):
 		#threads.append(AutoPilot())
-
+"""

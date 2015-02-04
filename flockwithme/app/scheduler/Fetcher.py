@@ -398,8 +398,8 @@ class FetchSocialProfileInfo(Thread, TwitterGetFunctions):
 				self.action = OnTweet(socialprofile=self.socialprofile)
 			else:
 				print "no new tweets"
-			#self.socialprofile.tweet_count = self.tweet_count
-			#self.socialprofile.save()
+			self.socialprofile.tweet_count = self.tweet_count
+			self.socialprofile.save()
 		elif self.action == "Get_Tweets":
 			self.action = self.get_tweets(is_initial=self.is_initial)
 		elif self.action == "Get_Followers":
