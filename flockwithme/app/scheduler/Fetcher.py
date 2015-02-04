@@ -227,11 +227,11 @@ class TwitterGetFunctions(object):
 			self.influencer.save()
 		return "Done"
 
-	def get_favorites(self, screen_name=None, influencer=None, is_initial=False):
+	def get_favorites(self, screen_name=None, query_twitter=False, influencer=None, is_initial=False):
 		self.api = self.get_api()
 		if not self.screen_name and is_initial == True:
 			try:
-				self.favorites = tweepy.Cursor(self.api.favorites).items(5)
+				self.favorites = tweepy.Cursor(self.api.favorites).items()
 			except TweepError, e:
 				self.process_exception(e)
 			for status in self.favorites:
@@ -240,17 +240,36 @@ class TwitterGetFunctions(object):
 				self.socialprofile.add_favorite(self.Tstatus, is_initial=self.is_initial) 
 				self.socialprofile.save()
 			return "Done"
+		elif query_twitter = True:
+			if not self.screen_name:
+				try:
+					return tweepy.Cursor(self.api.favorites).items()
+				except TweepError, e:
+					self.process_exception(e)
+			else:
+				try:
+					return tweepy.Cursor(self.api.favorites, screen_name=self.screen_name).items()
+				except TweepError, e:
+					self.process_exception(e)
 		elif not self.screen_name and is_initial == False:
 			self.db_favorites = self.socialprofile.get_favorites()
 			self.db_favorites_ids = [x.twitterStatus.twitter_id for x in self.db_favorites]
-			print "database favorites"
-			print self.db_favorites_ids
+			try:
+				self.twitter_favorites = self.get_favorites(query_twitter=True)
+			except TweepError, e:
+				self.process_exception(e)
+			for status in self.twitter_favorites:
+				self.tstatus, _ = TwitterStatus.objects.get_or_create(twitter_id=status.id, text=status.text.encode('utf-8'), favorite_count=status.favorite_count, retweet_count=status.retweet_count)
+				self.tstatus.save()
+				self.socialprofile.add_favorite(self.tstatus, is_initial=False)
+				self.socialprofile.save()
+			return "Done"
+		
 		###Influencer Favorites Fetch ########
 		try:
-			self.favorites = tweepy.Cursor(self.api.favorites, screen_name=self.screen_name).items(5)
+			self.favorites = tweepy.Cursor(self.api.favorites, screen_name=self.screen_name).items()
 		except TweepError, e:
 			self.process_exception(e)
-
 		for status in self.favorites:
 			self.Tstatus, _ = TwitterStatus.objects.get_or_create(twitter_id=status.id, text=status.text.encode('utf-8'), favorite_count=status.favorite_count, retweet_count=status.retweet_count)
 			self.Tstatus.save()
