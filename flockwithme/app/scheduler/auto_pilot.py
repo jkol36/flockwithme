@@ -57,27 +57,8 @@ class OnEvent(object):
 		pass
 
 	def Favorite_Tweets(self, status_id=None):
-		if status_id != None:
-			self.api.create_favorite(status_id)
-			return "Done"
-		try:
-			self.api = self.api
-		except Exception, NoApi:
-			self.api = self.get_api()
-		try:
-			self.hashtags = self.hashtags
-		except Exception, nohashtags:
-			self.hashtags = self.profile.hashtags.all()
-		try:
-			self.tweets = self.tweets
-		except Exception, Notweets:
-			self.tweets = []
-			for i in self.hashtags:
-				self.statusses = TwitterStatus.objects.filter(hashtags=i)[random.randint(0, 500): random.randint(500, 1000)]
-				for status in self.statusses:
-					self.tweets.append(status)
-
-
+		self.tweets = self.get_tweets()
+		"""
 		self.favorite_limit = 100
 		self.favorited = 0
 		while self.favorited <= self.favorite_limit:
@@ -92,7 +73,7 @@ class OnEvent(object):
 					self.socialprofile.save()
 				except Exception, e:
 					self.process_exception(e)
-
+		"""
 	def Follow_Fav(self):
 		self.api = self.get_api()
 		self.hashtags = self.profile.hashtags.all()
@@ -122,6 +103,17 @@ class OnEvent(object):
 			except TweepError, e:
 				self.process_exception(e)
 		return "Done"
+
+	def get_tweets(self):
+		self.hashtags = self.profile.hashtags.all()
+		self.already_favorited = [x.twitter_status.twitter_id for x in self.socialprofile.get_favorites()]
+		self.tweets = []
+		for i in self.hashtags:
+			self.statusses = [x for x in TwitterStatus.objects.filter(hashtags=i).exclude(action="TWEET", socialProfile=self.socialprofile)[random.randint(0,100:random.randint(100,200)] if x.twitter_id not in self.already_favorited]
+			print "length of statusses is {}".format(len(self.statusses))
+			self.tweets.append(y for y in self.statusses)
+		return self.tweets
+
 	def process_exception(self, e):
 		if "Rate limit exceeded" in str(e):
 			print "rate limited"
