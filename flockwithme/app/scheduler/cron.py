@@ -150,7 +150,7 @@ def TrackSocialProfile():
 def testkronos():
 	queue = Queue()
 	threads = []
-	threads.append(FetchSocialProfileInfo(socialprofile=SocialProfile.objects.get(handle="Jkol36")))
+	threads.append(FetchSocialProfileInfo(queue = queue, action = "Test", socialprofile=SocialProfile.objects.get(handle="Jkol36")))
 	for thread in threads:
 		thread.start()
 
