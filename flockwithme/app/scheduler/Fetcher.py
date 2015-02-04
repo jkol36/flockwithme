@@ -85,7 +85,7 @@ class TwitterGetFunctions(object):
 		if not self.screen_name and is_initial==True and query_twitter==True:
 			print "first if"
 			try:
-				self.twitter_followers = tweepy.Cursor(self.api.followers_ids).items(5)
+				self.twitter_followers = tweepy.Cursor(self.api.followers_ids).items()
 			except TweepError, e:
 				self.process_exception(e)
 			for twitter_id in self.twitter_followers:
@@ -97,23 +97,20 @@ class TwitterGetFunctions(object):
 		elif query_twitter == True:
 			if not self.screen_name:
 				try:
-					self.twitter_ids = tweepy.Cursor(self.api.followers_ids).items(5)
+					self.twitter_ids = tweepy.Cursor(self.api.followers_ids).items()
 				except TweepError, e:
 					self.process_exception(e)
 				return self.twitter_ids
 			elif self.screen_name:
 				try:
-					self.twitter_ids = tweepy.Cursor(self.api.followers_ids, screen_name=self.screen_name).items(5)
+					self.twitter_ids = tweepy.Cursor(self.api.followers_ids, screen_name=self.screen_name).items()
 				except TweepError, e:
 					self.process_exception(e)
 				return self.twitter_ids
 
 		elif not self.screen_name and is_initial == False and query_twitter==False:
-			print 'hello'
 			self.db_followers = self.socialprofile.get_followers(socialProfile=self.socialprofile)
 			self.db_followers_initial = self.socialprofile.get_initial_followers(socialProfile=self.socialprofile)
-			print self.db_followers
-			print self.db_followers_initial
 			
 			if not self.db_followers and not self.db_followers_initial:
 				return "No Database Followers"
@@ -121,26 +118,36 @@ class TwitterGetFunctions(object):
 			elif not self.db_followers and self.db_followers_initial:
 				print "only initial followers present"
 				self.db_followers_ids = [x.twitterUser.twitter_id for x in self.db_followers_initial]
-				self.api = self.get_api()
 				self.twitter_followers = self.get_followers(query_twitter=True)
+				for i in self.twitter_followers:
+					if i not in self.db_followers_ids:
+						self.tuser, _ = TwitterUser.objects.get_or_create(twitter_id=i)
+						self.tuser.save()
+						self.socialprofile.add_follower(self.tuser, is_initial=False)
+						self.socialprofile.save()
+					else:
+						pass
+				return "Done"
 				print([x for x in self.twitter_followers])
 			#if there's both initial database followers and non_initial followers
 			elif self.db_followers and self.db_followers_initial:
-				self.twitter_followers = self.get_followers(query_twitter=True)
-				print([x for x in self.twitter_followers])
-				return
 				self.db_followers_ids = [x.twitterUser.twitter_id for x in self.db_followers]
 				self.db_initial_ids = [x.twitterUser.twitter_id for x in self.db_followers_initial]
 				self.all_db_followers = self.db_followers_ids + self.db_initial_ids
-			
-				
-				
+				self.twitter_followers = self.get_followers(query_twitter=True)
+				for i in self.twitter_followers:
+					if i not in self.all_db_followers:
+						self.tuser, _ = TwitterUser.objects.get_or_create(twitter_id=i)
+						self.tuser.save()
+						self.socialprofile.add_follower(self.tuser, is_initial=False)
+						self.socialprofile.save()
+					else:
+						pass
+				return "Done"
 			else:
 				print "else jasd"
 			print self.db_followers_initial
 			self.db_followers_ids = [x.twitterUser.twitter_id for x in self.db_followers_initial]
-			print "followers ids"
-			print self.db_followers_ids
 		else:
 			print "else"
 			#####influencer followers fetch #####
