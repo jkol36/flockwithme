@@ -160,7 +160,7 @@ def testkronos():
 @kronos.register('* 6 * * * ')
 def SetLimitsFalse():
 	queue = Queue()
-	for acc in SocialProfile.objects.filter(Q(follow_limit_reached==True) | Q(favorite_limit_reached==True)):
+	for acc in SocialProfile.objects.filter(Q(follow_limit_reached=True) | Q(favorite_limit_reached=True)):
 		acc.follow_limit_reached = False
 		acc.favorite_limit_reached = False
 		acc.save()
