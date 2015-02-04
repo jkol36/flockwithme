@@ -357,7 +357,7 @@ class TwitterGetFunctions(object):
 			print 'rate limited, sleeping'
 			time.sleep(900)
 		else:
-			print 'error'
+			print "error {}".format(e)
 		
 	
 
