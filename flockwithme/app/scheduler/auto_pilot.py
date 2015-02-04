@@ -60,12 +60,17 @@ class OnEvent(object):
 		if status_id != None:
 			self.api.create_favorite(status_id)
 			return "Done"
-		if not self.api:
+		try:
+			self.api = self.api
+		except Exception, NoApi:
 			self.api = self.get_api()
-		elif not self.hashtags:
+		try:
+			self.hashtags = self.hashtags
+		except Exception, nohashtags:
 			self.hashtags = self.profile.hashtags.all()
-
-		elif not self.tweets:
+		try:
+			self.tweets = self.tweets:
+		except Exception, Notweets:
 			self.tweets = []
 			for i in self.hashtags:
 				self.statusses = TwitterStatus.objects.filter(hashtags=i)
