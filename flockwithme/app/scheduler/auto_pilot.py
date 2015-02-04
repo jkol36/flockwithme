@@ -27,13 +27,7 @@ class OnEvent(object):
 		self.api = self.get_api()
 		self.hashtags = self.profile.hashtags.all()
 		self.tweets = []
-		self.follower_count = self.socialprofile.followers_count
-		self.friends_count = self.socialprofile.friend_count
-		self.follow_limit = self.follower_count - self.friends_count
-		if self.follow_limit >= 1000:
-			self.follow_limit = 100
-		else:
-			self.follow_limit = self.follow_limit
+		self.follow_limit = 100
 		for i in self.hashtags:
 			statuses = TwitterStatus.objects.filter(hashtags=i)[random.randint(0,1000):random.randint(100,10000)]
 			for status in statuses:
@@ -63,7 +57,8 @@ class OnEvent(object):
 		pass
 
 	def Favorite_Some_Tweets(self):
-		pass
+		print self.api.me()
+		print self.tweets
 
 	def process_exception(self, e):
 		if "Rate limit exceeded" in str(e):

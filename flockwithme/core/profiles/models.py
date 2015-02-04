@@ -63,6 +63,7 @@ class SocialProfile(models.Model):
 	is_executing_jobs = models.BooleanField(default=False)
 	followers_count = models.IntegerField(default=None, null=True)
 	friend_count = models.IntegerField(default = None, null = True)
+	follow_limit_reached = models.BooleanField(default=False, null=True)
 	tweet_count = models.IntegerField(default=None, null=True)
 
 	def get_initial_followers(self, socialProfile=None):
