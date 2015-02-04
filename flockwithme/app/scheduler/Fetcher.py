@@ -334,7 +334,6 @@ class TwitterGetFunctions(object):
 			self.get_friends(is_initial=self.is_initial)
 			self.get_favorites(is_initial=self.is_initial)
 			self.get_tweets(is_initial=self.is_initial)
-			self.get_tweet_count()
 			self.follower_count = self.get_follower_count()
 			self.friend_count = self.get_friends_count()
 			self.socialprofile.followers_count=self.follower_count

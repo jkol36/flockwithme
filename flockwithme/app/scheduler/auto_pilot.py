@@ -53,6 +53,9 @@ class OnEvent(object):
 					self.socialprofile.save()
 			except TweepError, e:
 				self.process_exception(e)
+			self.followed +=1
+			print self.followed
+		return "Done"
 		#self.socialprofile.job_status = 
 
 
