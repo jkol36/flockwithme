@@ -69,6 +69,11 @@ class OnEvent(object):
 		if "Rate limit exceeded" in str(e):
 			print "rate limited"
 			time.sleep(900)
+		elif "You are unable to follow more people at this time" in str(e):
+			print "follow limit reached"
+			self.socialprofile.job_status = "Follow_Limit_Reached"
+			self.socialprofile.save()
+			return
 		else:
 			print e
 
