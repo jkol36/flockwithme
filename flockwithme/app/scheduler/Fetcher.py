@@ -34,6 +34,7 @@ class TwitterGetFunctions(object):
 			print self.consumer_secret
 		else:
 			self.access_token = self.socialprofile.token
+			print self.access_token
 			self.access_token_secret = self.socialprofile.secret
 			self.consumer_key = '3Gsg8IIX95Wxq28pDEkA'
 			self.consumer_secret = "LjEPM4kQAC0XE81bgktdHAaND3am9tTllXghn0B639o"
@@ -113,7 +114,7 @@ class TwitterGetFunctions(object):
 
 	def get_followers(self, screen_name=None, influencer=None, query_twitter=False, is_initial=False):
 		self.api = self.get_api()
-		if not self.screen_name and is_initial==True and query_twitter==True:
+		if not self.screen_name and self.is_initial==True and self.query_twitter==True:
 			print "first if"
 			try:
 				self.twitter_followers = tweepy.Cursor(self.api.followers_ids).items()
@@ -399,6 +400,7 @@ class FetchSocialProfileInfo(Thread, TwitterGetFunctions):
 				print "no new tweets"
 			self.socialprofile.tweet_count = self.tweet_count
 			self.socialprofile.save()
+
 		elif self.action == "Get_Tweets":
 			self.action = self.get_tweets(is_initial=self.is_initial)
 		elif self.action == "Get_Followers":
