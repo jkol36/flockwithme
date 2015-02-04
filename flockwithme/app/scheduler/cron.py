@@ -155,7 +155,15 @@ def testkronos():
 		thread.start()
 
 
+#Once every 24 hours change social profiles from rate limited to not rate limited
 
+@kronos.register('* 6 * * * ')
+def SetLimitsFalse():
+	queue = Queue()
+	for acc in SocialProfile.objects.filter(Q(follow_limit_reached==True) | Q(favorite_limit_reached==True)):
+		acc.follow_limit_reached = False
+		acc.favorite_limit_reached = False
+		acc.save()
 
 #every 5 minutes check for new tweets
 @kronos.register('*/5 * * * *')

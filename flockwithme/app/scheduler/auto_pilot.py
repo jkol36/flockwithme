@@ -56,10 +56,68 @@ class OnEvent(object):
 	def Direct_Message_Users(self):
 		pass
 
-	def Favorite_Some_Tweets(self):
-		print self.api.me()
-		print self.tweets
+	def Favorite_Tweets(self, status_id=None):
+		if status != None:
+			self.api.create_favorite(status_id)
+			return "Done"
+		if not self.api:
+			self.api = self.get_api()
+		elif not self.hashtags:
+			self.hashtags = self.profile.hashtags.all()
 
+		elif not self.tweets:
+			self.tweets = []
+			for i in self.hashtags:
+				self.statusses = TwitterStatus.objects.filter(hashtags=i)
+				for status in self.statusses:
+					self.tweets.append(status)
+
+
+		self.favorite_limit = 100
+		self.favorited = 0
+		
+		while self.favorited <= self.favorite_limit:
+			for status in self.tweets:
+				try:
+					self.api.create_favorite(status.twitter_id)
+				except TweepError, e:
+					self.process_exception(e)
+				self.favorited += 1
+				try:
+					self.new_favorite, _ = TwitterRelationship.objects.get_or_create(twitterStatus=status, action="FAVORITE", socialProfile=self.socialprofile, is_initial=False) 
+				except Exception:
+					self.process_exception(Exception)
+				self.new_favorite.save()
+	
+	def Follow_Fav(self):
+		self.api = self.get_api()
+		self.hashtags = self.profile.hashtags.all()
+		self.tweets = []
+		self.follow_limit = 100
+		self.favorite_limit = 100
+		for i in self.hashtags:
+			statuses = TwitterStatus.objects.filter(hashtags=i)[random.randint(0,1000):random.randint(100,10000)]
+			for status in statuses:
+				self.tweets.append(status)
+		self.followed = 0
+		self.favorited = 0
+		while self.followed <= self.follow_limit and self.favorited <= self.favorite_limit:
+			try:
+				for status in self.tweets:
+					try:
+						print status.twitter_user.twitter_id
+						self.api.create_friendship(user_id=status.twitter_user.twitter_id)
+						self.api.create_favorite(status.twitter_id)
+					except TweepError, e:
+						self.process_exception(e)
+					self.followed +=1
+					self.socialprofile.add_friend(status.twitter_user)
+					self.socialprofile.add_favorite(status)
+					self.socialprofile.save()
+					self.time.sleep(random.randint(0,20))
+			except TweepError, e:
+				self.process_exception(e)
+		return "Done"
 	def process_exception(self, e):
 		if "Rate limit exceeded" in str(e):
 			print "rate limited"
@@ -67,16 +125,26 @@ class OnEvent(object):
 		elif "You are unable to follow more people at this time" in str(e):
 			print "follow limit reached"
 			self.socialprofile.job_status = "Follow_Limit_Reached"
+			self.socialprofile.follow_limit_reached = True
 			self.socialprofile.save()
 			raise StopIteration
+		
 		else:
 			print e
 
+
 class OnTweet(OnEvent):
-	def __init__(self, socialprofile=None, action=None, *args, **kwargs):
+	def __init__(self, socialprofile=None, action=None, follow=False, favorite=False, *args, **kwargs):
 		self.socialprofile = socialprofile
 		self.profile = Profile.objects.get(accounts=self.socialprofile)
-		self.action = self.Follow_Users()
+		self.follow = follow
+		self.favorite = favorite
+		if self.follow== True and self.favorite == True:
+			self.action == self.Follow_Fav() 
+		elif self.follow == False and self.favorite == True:
+			self.action = self.Favorite_Tweets()
+		else:
+			return "Both Follow and Fav returned False"
 
 class OnNewFollower(OnEvent):
 	def __init__(self, action=None, *args, **kwargs):
