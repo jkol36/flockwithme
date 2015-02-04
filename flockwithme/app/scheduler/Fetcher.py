@@ -415,7 +415,7 @@ class FetchSocialProfileInfo(Thread, TwitterGetFunctions):
 				self.socialprofile.follow_limit_reached = True
 				self.socialprofile.favorite_limit_reached = True
 				self.socialprofile.save()
-			elif self.tweet_count != self.db_tweet_count and self.follow_limit_rached == True and self.favorite_limit_reached == False:
+			elif self.tweet_count != self.db_tweet_count and self.follow_limit_reached == True and self.favorite_limit_reached == False:
 				self.action = OnTweet(socialprofile=self.socialprofile, follow=False, favorite=True)
 
 			elif self.tweet_count != self.db_tweet_count and self.follow_limit_reached == False and self.favorite_limit_reached == True:
