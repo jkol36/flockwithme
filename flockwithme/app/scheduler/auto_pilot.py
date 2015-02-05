@@ -66,13 +66,14 @@ class OnEvent(object):
 				try:
 					self.api.create_favorite(status.twitter_id)
 					self.favorited += 1
+					self.socialprofile.add_favorite(status)
+					self.socialprofile.save()
 				except TweepError, e:
 					self.process_exception(e)
 				print self.favorited
 
 				try:
-					self.socialprofile.add_favorite(status)
-					self.socialprofile.save()
+					
 				except Exception, e:
 					self.process_exception(e)
 				time.sleep(random.randint(0,40))
