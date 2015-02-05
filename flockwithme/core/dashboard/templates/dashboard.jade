@@ -118,9 +118,11 @@ extends base
 						tr
 							th Twitter User
 							th Tweet
+						{% for i in favorites %}
 						tr
-							td test
-							td test
+							td {{i.twitter_user.screen_name}}
+							td {{i.text}}
+						{%endfor%}
 
 
 

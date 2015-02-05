@@ -11,10 +11,12 @@ def index(request):
 		potential_customers += (acc.get_friends().count() + acc.get_favorites().count())
 		days += ( now - acc.profile.date_joined).days
 	money_saved = 100 * days
+	favorites = request.user.get_favorites()
 	return render(request, 'dashboard.jade', {
 		'new_followers': new_followers, 
 		'potential_customers': potential_customers,
-		'money_saved': money_saved
+		'money_saved': money_saved,
+		'favorites':favorites,
 		})
 @login_required
 
