@@ -6,18 +6,20 @@ from django.utils import timezone
 def index(request):
 	new_followers, days, potential_customers = 0, 0, 0
 	now = timezone.now()
-	favorites = []
+	favorited_tweets = []
 	for acc in request.user.accounts.all():
 		new_followers += acc.get_followers(socialProfile=acc).count()
 		potential_customers += (acc.get_friends().count() + acc.get_favorites().count())
 		days += ( now - acc.profile.date_joined).days
-		favorites.append(acc.get_favorites())
+		favorites = acc.get_favorites()
+		for i in favorites:
+			favorited_tweets.append(i)
 	money_saved = 100 * days
 	return render(request, 'dashboard.jade', {
 		'new_followers': new_followers, 
 		'potential_customers': potential_customers,
 		'money_saved': money_saved,
-		'favorites':favorites,
+		'favorites':favorited_tweets,
 		})
 @login_required
 
