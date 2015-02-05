@@ -38,7 +38,12 @@ def handle_form(request):
 		messages.error(request, "Something went wrong...")
 		print form.errors
 
-
+@login_required
+def add_job(request):
+	if not request.POST:
+		return render(request, 'add_job.jade')
+	handle_form(request)
+	return render(request, 'add_job.jade')
 @login_required
 def auto_favorite(request):
 	if request.POST:
