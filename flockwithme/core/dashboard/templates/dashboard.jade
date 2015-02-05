@@ -134,7 +134,8 @@ extends base
 								th Text
 							{% for i in favorites %}
 							tr(style="word-break:break-word")
-								td(style="padding:0 0 0 0;") {{i}}
+								td(style="padding:0 0 0 0;") {{i.created_at}}
+								td(style="padding:0 0 0 0;"){{i.twitterStatus.text}}
 							{%endfor%}
 		.col-md-6
 			.panel.panel-default.content
@@ -145,8 +146,7 @@ extends base
 						table.table(data-toggle="table")
 							{% for i in friends %}
 							tr
-								td {{i.created_at}}
-								td {{i.twitterStatus.text}}
+								td {{i}}
 							{%endfor%}
 
 
