@@ -109,6 +109,17 @@ extends base
 								| {{user.influencers.all.count}}
 							.details(style="font-size:1.2em; color:white;")
 								| Influencers
+		.col-md-4
+			.well(style="background-color:#44b6ae;")
+				.row
+					.col-md-5
+						.visual
+							i.fa.fa-heart(style="font-size:8em; opacity: 0.3; color:white;")
+					.col-md-7.text-right
+						.number(style="font-size:3.4em; color:white; font-weight:300;")
+							| {{tweets_favorited}}
+						.details
+							| Tweets Favorited
 	.row
 		.col-md-6
 			.panel.panel-default.content

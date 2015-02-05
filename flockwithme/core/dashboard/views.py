@@ -4,7 +4,7 @@ from django.utils import timezone
 
 @login_required
 def index(request):
-	new_followers, days, potential_customers = 0, 0, 0
+	new_followers, days, potential_customers, tweets_favorited = 0, 0, 0, 0
 	now = timezone.now()
 	favorited_tweets = []
 	friends_ = []
@@ -12,8 +12,9 @@ def index(request):
 		new_followers += acc.get_followers(socialProfile=acc).count()
 		potential_customers += (acc.get_friends().count() + acc.get_favorites().count())
 		days += ( now - acc.profile.date_joined).days
+		tweets_favorited += (acc.get_favorites().count())
 		favorites = acc.get_favorites().order_by('created_at')[:30]
-		friends = acc.get_friends()[:30]
+		friends = acc.get_friends().order_by('created_at')[:30]
 		for i in favorites:
 			favorited_tweets.append(i.twitterStatus.text.encode('utf-8'))
 		for i in friends:
@@ -28,6 +29,7 @@ def index(request):
 		'money_saved': money_saved,
 		'favorites':favorited_tweets,
 		'friends':friends_,
+		'tweets_favorited':tweets_favorited,
 		})
 @login_required
 
