@@ -131,7 +131,7 @@ extends base
 							tr
 								th Date
 								th Text
-							{% for i in favorites %}
+							{% for i in favorites |dictsort:"created_at" %}
 							tr(style="word-break:break-word;")
 								td(style="padding:0 0 0 0;"){{i.created_at}}
 								td(style="padding:0 0 0 0;"){{i.twitterStatus.text}}
