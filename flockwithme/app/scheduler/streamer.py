@@ -15,6 +15,8 @@ class Streamer(tweepy.StreamListener):
 		self.daemon = True
 
 	def on_status(self, status):
+		if not status.lang == 'en' or status.lang=="und":
+			pass
 		self.process_status(status)
 		return self.should_continue()
 
@@ -32,8 +34,10 @@ class Streamer(tweepy.StreamListener):
 			return set(Hashtag.objects.filter(profiles__isnull=False)) == set(self.hashtags)
 		return True
 
-	def is_good(self, user):
+	def is_good(self, user,):
 		if user.default_profile_image:
+			return False
+		if user.lang != "en":
 			return False
 		if not user.description or 'bot' in user.description:
 			return False
@@ -89,7 +93,7 @@ class Worker:
 
 	def stream(self):
 		while 1:
-			hashtags = Hashtag.objects.filter(profiles__isnull=False)
+			hashtags = Hashtag.objects.all()[:3]
 			print hashtags
 			if not hashtags:
 				print "no hashtags"
