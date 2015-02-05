@@ -13,7 +13,7 @@ def index(request):
 		days += ( now - acc.profile.date_joined).days
 		favorites = acc.get_favorites()
 		for i in favorites:
-			favorited_tweets.append(i)
+			favorited_tweets.append(i.twitterStatus.text.encode('utf-8'))
 	money_saved = 100 * days
 	return render(request, 'dashboard.jade', {
 		'new_followers': new_followers, 
