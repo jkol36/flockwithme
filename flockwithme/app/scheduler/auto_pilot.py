@@ -71,11 +71,6 @@ class OnEvent(object):
 				except TweepError, e:
 					self.process_exception(e)
 				print self.favorited
-
-				try:
-					
-				except Exception, e:
-					self.process_exception(e)
 				time.sleep(random.randint(0,40))
 	def Follow_Fav(self):
 		self.api = self.get_api()
