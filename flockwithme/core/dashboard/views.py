@@ -17,8 +17,10 @@ def index(request):
 		for i in favorites:
 			favorited_tweets.append(i.twitterStatus.text.encode('utf-8'))
 		for i in friends:
-			friends_.append(i.twitterUser.screen_name)
-
+			if i.twitterUser.screen_name != None:
+				friends_.append(i.twitterUser.screen_name)
+			else:
+				pass
 	money_saved = 100 * days
 	return render(request, 'dashboard.jade', {
 		'new_followers': new_followers, 
