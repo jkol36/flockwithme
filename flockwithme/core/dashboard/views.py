@@ -11,7 +11,7 @@ def index(request):
 		new_followers += acc.get_followers(socialProfile=acc).count()
 		potential_customers += (acc.get_friends().count() + acc.get_favorites().count())
 		days += ( now - acc.profile.date_joined).days
-		favorites = acc.get_favorites()[:-30]
+		favorites = acc.get_favorites()[-30:]
 		for i in favorites:
 			favorited_tweets.append(i.twitterStatus.text.encode('utf-8'))
 	money_saved = 100 * days
