@@ -129,8 +129,9 @@ extends base
 					.table-responsive
 						table.table(data-toggle="table")
 							{% for i in favorites %}
-							tr
-								td(style="width:65%; font-size:0.8em; padding:0 0 0 0;") {{i}}
+							.col-md-6
+								tr
+									td(style="width:65%; font-size:0.8em; padding:0 0 0 0;") {{i}}
 							{%endfor%}
 		.col-md-6
 			.panel.panel-default.content
