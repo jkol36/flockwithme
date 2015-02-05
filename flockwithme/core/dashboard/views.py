@@ -13,7 +13,7 @@ def index(request):
 		potential_customers += (acc.get_friends().count() + acc.get_favorites().count())
 		days += ( now - acc.profile.date_joined).days
 		tweets_favorited += (acc.get_favorites().count())
-		favorites = acc.get_favorites().latest('created_at')
+		favorites = acc.get_favorites().filter('created_at').latest()[:30]
 		friends = acc.get_friends().order_by('created_at')[:30]
 		for i in favorites:
 			favorited_tweets.append(i)
