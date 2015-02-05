@@ -16,7 +16,7 @@ def index(request):
 		favorites = acc.get_favorites().order_by('created_at')[:30]
 		friends = acc.get_friends().order_by('created_at')[:30]
 		for i in favorites:
-			favorited_tweets.append(i.twitterStatus.text.encode('utf-8'))
+			favorited_tweets.append(i)
 		for i in friends:
 			if i.twitterUser.screen_name != None:
 				friends_.append(i.twitterUser.screen_name)
