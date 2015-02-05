@@ -135,6 +135,7 @@ extends base
 							{% for i in favorites %}
 							tr(style="word-break:break-word;")
 								td(style="padding:0 0 0 0;"){{i.created_at}}
+								td(style="padding:0 0 0 0;"){{i.twitterStatus.text}}
 							{%endfor%}
 		.col-md-6
 			.panel.panel-default.content
