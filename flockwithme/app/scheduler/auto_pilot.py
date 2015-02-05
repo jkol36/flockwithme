@@ -136,7 +136,8 @@ class OnEvent(object):
 			pass
 			
 
-
+		elif "Twitter error response: status code = 429" in str(e):
+			print "application rate limited."
 		else:
 			print e
 
