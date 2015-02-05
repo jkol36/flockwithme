@@ -127,12 +127,12 @@ extends base
 					p.lead.content-header Latest Favorites
 					p.text-muted Tweets Flock has Favorited Recently.
 					.table-responsive
-						.col-md-6
-							table.table(data-toggle="table")
-								{% for i in favorites %}
-								tr
-									td(style="word-wrap:break-word; padding:0 0 0 0;") {{i}}
-								{%endfor%}
+						
+						table.table(data-toggle="table")
+							{% for i in favorites %}
+							tr(style="word-break:break-word")
+								td(style="padding:0 0 0 0;") {{i}}
+							{%endfor%}
 		.col-md-6
 			.panel.panel-default.content
 				.panel-body
