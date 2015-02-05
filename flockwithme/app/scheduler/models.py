@@ -173,6 +173,7 @@ class TwitterListOwner(models.Model):
 class Job(models.Model):
 	ACTION_CHOICES = (
 		("FOLLOW", 'Follow'),
+		('FOLLOW_FAV', "Follow users and favorite tweets"),
 		("FAVORITE", "Favorite tweets"),
 		("UNFOLLOW", "Unfollow all the users that haven't followed you back"),
 		("AUTO_DM", "Send direct messages to your followers"),

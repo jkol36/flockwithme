@@ -9,7 +9,7 @@ from tweepy.error import TweepError
 from threading import Thread
 from django.db.models import Q
 
-from flockwithme.app.scheduler.models import OauthSet, Influencer, TwitterUser, TwitterRelationship, TwitterStatus, Hashtag
+from flockwithme.app.scheduler.models import OauthSet, Influencer, TwitterUser, TwitterRelationship, TwitterStatus, Hashtag, Job
 from flockwithme.core.profiles.models import SocialProfile
 from .auto_pilot import OnTweet
 
@@ -401,28 +401,54 @@ class FetchSocialProfileInfo(Thread, TwitterGetFunctions):
 			self.tweet_count = self.get_tweet_count()
 			self.follow_limit_reached = self.socialprofile.follow_limit_reached
 			self.favorite_limit_reached=self.socialprofile.favorite_limit_reached
+			#Can Follow and Favorite
 			if self.tweet_count != self.db_tweet_count and self.follow_limit_reached == False and self.favorite_limit_reached == False:
-				self.action = OnTweet(socialprofile=self.socialprofile, follow=True, favorite=True)
+				self.job, _ = Job.objects.get_or_create(socialprofile=self.socialprofile, action="FOLLOW_FAV", status="started")
+				self.job.save()
+				self.action = OnTweet(socialprofile=self.socialprofile, job=self.job, follow=True, favorite=True)
 				if self.action == "Done":
+					self.job.is_complete = True
+					self.job.save()
 					self._Thread__delete()
 					self.socialprofile.job_status = "Followed_And_Favorited"
 					self.socialprofile.save()
 				else:
 					self._Thread__delete()
+			#Cannot follow or favorite
 			elif self.tweet_count != self.db_tweet_count and self.follow_limit_reached == True and self.favorite_limit_reached == True:
 				self._Thread__delete()
 				self.socialprofile.job_status = "Follow_Limited_Favorite_Limited"
 				self.socialprofile.follow_limit_reached = True
 				self.socialprofile.favorite_limit_reached = True
 				self.socialprofile.save()
-			elif self.tweet_count != self.db_tweet_count and self.follow_limit_reached == True and self.favorite_limit_reached == False:
-				self.action = OnTweet(socialprofile=self.socialprofile, follow=False, favorite=True)
+				#doesn't have job completion
 
-			elif self.tweet_count != self.db_tweet_count and self.follow_limit_reached == False and self.favorite_limit_reached == True:
-				#if action completes it will return done. Otherwise it will return an error.
-				self.action = OnTweet(socialprofile=self.socialprofile, follow=True, favorite=False)
+			#Can Favorite but not follow
+			elif self.tweet_count != self.db_tweet_count and self.follow_limit_reached == True and self.favorite_limit_reached == False:
+				self.job, _ = Job.objects.get_or_create(action="FAVORITE", socialprofile=self.socialprofile, status="started")
+				self.job.save()
+				self.action = OnTweet(socialprofile=self.socialprofile, job=self.job, follow=False, favorite=True)
+				#on job completion
 				if self.action == "Done":
 					self._Thread__delete()
+					self.job.is_complete = True
+					self.job.status = "complete"
+					self.job.save()
+					self.socialprofile.job_status = "Just_Favorited"
+					self.socialprofile.save()
+				else:
+					self._Thread__delete()
+			#Can follow but not favorite
+			elif self.tweet_count != self.db_tweet_count and self.follow_limit_reached == False and self.favorite_limit_reached == True:
+				#if action completes it will return done. Otherwise it will return an error.
+				self.job, _ = Job.objects.get_or_create(socialprofile=self.socialprofile, action="FOLLOW", status="started")
+				self.job.save()
+				self.action = OnTweet(socialprofile=self.socialprofile, job=self.job, follow=True, favorite=False)
+				if self.action == "Done":
+					self._Thread__delete()
+					self.job.is_complete = True
+					self.job.status = "complete"
+					self.job.save()
 					self.socialprofile.job_status = "Just_Followed"
 					self.socialprofile.save()
 				else:
