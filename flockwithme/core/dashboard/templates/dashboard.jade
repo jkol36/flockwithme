@@ -114,6 +114,7 @@ extends base
 			.panel.panel-default.content
 				.panel-body
 					p.lead.content-header Latest Favorites
+					p.text-muted Tweets Flock has Favorited Recently.
 					.table-responsive
 						table.table(data-toggle="table")
 							{% for i in favorites %}
@@ -124,6 +125,7 @@ extends base
 			.panel.panel-default.content
 				.panel-body
 					p.lead.content-header Latest Friends
+					p.text-muted People flock has followed recently.
 					.table-responsive
 						table.table(data-toggle="table")
 							{% for i in friends %}
