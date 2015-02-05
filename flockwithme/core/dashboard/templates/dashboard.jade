@@ -110,15 +110,16 @@ extends base
 							.details(style="font-size:1.2em; color:white;")
 								| Influencers
 	.row
-		.panel.panel-default.content
-			.panel-body
-				p.lead.content-header Latest Favorites
-				.table-responsive
-					table.table(data-toggle="table")
-						{% for i in favorites %}
-						tr
-							td {{i}}
-						{%endfor%}
+		.col-md-6
+			.panel.panel-default.content
+				.panel-body
+					p.lead.content-header Latest Favorites
+					.table-responsive
+						table.table(data-toggle="table")
+							{% for i in favorites %}
+							tr
+								td {{i}}
+							{%endfor%}
 
 
 
