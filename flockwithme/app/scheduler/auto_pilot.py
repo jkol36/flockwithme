@@ -68,6 +68,7 @@ class OnEvent(object):
 				except TweepError, e:
 					self.process_exception(e)
 				self.favorited += 1
+				print self.favorited
 
 				try:
 					self.socialprofile.add_favorite(status)
@@ -142,6 +143,7 @@ class OnEvent(object):
 class OnTweet(OnEvent):
 	def __init__(self, socialprofile=None, action=None, follow=False, favorite=False, *args, **kwargs):
 		self.socialprofile = socialprofile
+		self.job = kwargs.pop('job')
 		self.profile = Profile.objects.get(accounts=self.socialprofile)
 		self.follow = follow
 		print "follow {}".format(self.follow)
