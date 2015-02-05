@@ -65,9 +65,9 @@ class OnEvent(object):
 			for status in self.tweets:
 				try:
 					self.api.create_favorite(status.twitter_id)
+					self.favorited += 1
 				except TweepError, e:
 					self.process_exception(e)
-				self.favorited += 1
 				print self.favorited
 
 				try:
