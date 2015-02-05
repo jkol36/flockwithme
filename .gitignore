@@ -6,3 +6,4 @@ db.sqlite3
 scheduler.log
 .Python
 .pyc
+src/
