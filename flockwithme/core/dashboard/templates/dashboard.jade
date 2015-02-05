@@ -133,8 +133,9 @@ extends base
 								th Date
 								th Text
 							{% for i in favorites %}
+							{{i}}
 							tr(style="word-break:break-word;")
-								td(style="padding:0 0 0 0;"){{i.twitterStatus}}
+								td(style="padding:0 0 0 0;"){{i}}
 							{%endfor%}
 		.col-md-6
 			.panel.panel-default.content
