@@ -185,13 +185,20 @@ class Job(models.Model):
 		('paused', 'paused'),
 		('started', 'started'),
 		)
-	
+	EVENT_CHOICES = (
+		('TWEET', 'tweet'),
+		('NEW_FOLLOWER', 'New Follower'),
+		('FAVORITE', 'New Favorite'),
+		('MENTION', 'Mention'),
+		('RETWEER', 'Retweet'),
+		)
 
 	socialprofile = models.ForeignKey(SocialProfile, related_name='jobs')
 	action = models.CharField(max_length=20, choices=ACTION_CHOICES, blank=True, null=True)
 	status = models.CharField(max_length=20, choices=STATUS_TYPES, blank=True, null=True)
 	message = models.CharField(max_length=160, blank=True, null=True)
 	hashtag = models.ForeignKey(Hashtag, related_name='hashtags', blank=True, null=True)
+	event = models.CharField(max_length=250, choices=EVENT_CHOICES, blank=True, null=True)
 	location = models.ForeignKey(Location, related_name='locations', blank=True, null=True)
 	radius = models.PositiveIntegerField(blank=True, null=True)
 	number = models.PositiveIntegerField(blank=True, null=True)
