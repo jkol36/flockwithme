@@ -20,6 +20,13 @@ class TwitterStatus(models.Model):
 	def __unicode__(self):
 		return unicode(self.twitter_id)
 
+class ApiStatus(models.Model):
+	STATUS_TYPES = (
+		('Active', "active"),
+		('Rate_Limited', 'rate_limited'),
+		)
+	status = models.CharField(max_length=20, choices=STATUS_TYPES)
+
 class OauthSet(models.Model):
 	name = models.CharField(max_length=250, default="TokenSet%d")
 	c_key = models.CharField(max_length=250, default=False)
