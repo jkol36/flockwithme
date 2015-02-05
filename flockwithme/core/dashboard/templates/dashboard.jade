@@ -129,6 +129,8 @@ extends base
 					.table-responsive
 						
 						table.table(data-toggle="table")
+							tr
+								th Date
 							{% for i in favorites %}
 							tr(style="word-break:break-word")
 								td(style="padding:0 0 0 0;") {{i}}
