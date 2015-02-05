@@ -120,7 +120,16 @@ extends base
 							tr
 								td(style="width:75%;") {{i}}
 							{%endfor%}
-
+		.col-md-6
+			.panel.panel-default.content
+				.panel-body
+					p.lead.content-header Latest Friends
+					.table-responsive
+						table.table(data-toggle="table")
+							{% for i in friends %}
+							tr
+								td {{i}}
+							{%endfor%}
 
 
 
