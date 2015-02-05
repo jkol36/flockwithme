@@ -146,7 +146,7 @@ extends base
 							{% for i in friends %}
 							tr
 								td {{i.created_at}}
-								td {{i.twitterStatus.text.encode(utf-8)}}
+								td {{i.twitterStatus.text}}
 							{%endfor%}
 
 
