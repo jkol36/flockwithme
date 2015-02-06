@@ -48,7 +48,7 @@ def add_job(request):
 @login_required
 def api_status(request):
 	apistatus = ApiStatus.status
-	return render(request, 'api_status.jade', 'APISTATUS':apistatus)
+	return render(request, 'api_status.jade', {'APISTATUS':apistatus})
 
 @login_required
 def auto_favorite(request):
