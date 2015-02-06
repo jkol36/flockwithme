@@ -148,8 +148,8 @@ extends base
 								th Handle
 							{% for i in friends %}
 							tr
-								td {{i.created_at}}
-								td {{i.twitterUser.screen_name}}
+								td(style="padding: 0 0 0 0;") {{i.created_at}}
+								td(style="padding: 0 0 0 0;") {{i.twitterUser.screen_name}}
 							{%endfor%}
 
 
