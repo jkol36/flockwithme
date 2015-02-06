@@ -23,6 +23,6 @@ class TestApi:
 		
 
 	def favorite_tweets(self):
-		self.tweets = [x.twitterStatus.twitter_id for x in TwitterStatus.objects.filter()]
+		self.tweets = [x.twitterStatus.twitter_id for x in TwitterStatus.objects.filter()[:30]]
 		return self.tweets
 
