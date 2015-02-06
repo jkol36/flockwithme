@@ -11,6 +11,6 @@ class TestApi:
 		self.auth = tweepy.OAuthHandler(a, b)
 		self.auth.set_access_token(c, d)
 		self.api = tweepy.API(auth)
-		return super(TestApi, self).__init__(*args, **kwargs)
-	print dir(self.api)
+		#return super(TestApi, self).__init__(*args, **kwargs)
+		print dir(self.api)
 
