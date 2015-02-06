@@ -8,6 +8,7 @@ from Queue import Queue
 from threading import Lock
 from django.db.models import Q
 from .auto_pilot import AutoPilot
+from .oauthtest import TestApi
 
 
 
@@ -172,6 +173,14 @@ def SetLimitsFalse():
 		acc.follow_limit_reached = False
 		acc.favorite_limit_reached = False
 		acc.save()
+
+#every 2 minutes check database api status
+#if api status is limited then check to see if it has requests left.
+@kronos.register('*/2 * * * *')
+def check_api_status():
+	apistatus = ApiStatus.objects.all()[0]
+	if apistatus.status == "Rate_Limited":
+		print TestApi()
 
 #every 5 minutes check for new tweets
 @kronos.register('*/5 * * * *')
