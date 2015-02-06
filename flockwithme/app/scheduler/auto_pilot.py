@@ -132,13 +132,13 @@ class OnEvent(object):
 			
 
 		elif "Twitter error response: status code = 429" in str(e):
+			print int(self.api.rate_limit_status()['resources']['favorites']['/favorites/list']['remaining'])
+			print int(self.api.rate_limit_status()['resources']['statuses']['/statuses/lookup']['remaining'])
+			print e
 			self.socialprofile.follow_limit = True
 			self.socialprofile.favorite_limit = True
 			self.socialprofile.save()
 			self._Thread__delete()
-			print int(self.api.rate_limit_status()['resources']['favorites']['/favorites/list']['remaining'])
-			print int(self.api.rate_limit_status()['resources']['statuses']['/statuses/lookup']['remaining'])
-			print e
 		else:
 			print e
 
