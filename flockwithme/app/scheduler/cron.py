@@ -178,7 +178,7 @@ def SetLimitsFalse():
 #if api status is limited then check to see if it has requests left.
 @kronos.register('*/2 * * * *')
 def check_api_status():
-	apistatus = ApiStatus.objects.filter(status="Rate_Limited")
+	apistatus = ApiStatus.objects.filter(status="Rate_Limited")[0]
 	if apistatus:
 		requests_left = TestApi().get_remaining_follow_requests()
 		if requests_left == 15:
