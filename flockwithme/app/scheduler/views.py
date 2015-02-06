@@ -47,7 +47,7 @@ def add_job(request):
 	return render(request, 'add_job.jade')
 @login_required
 def api_status(request):
-	apistatus = ApiStatus.objects.all().status
+	apistatus = ApiStatus.objects.all()[0].status
 	return render(request, 'api_status.jade', {'APISTATUS':apistatus})
 
 @login_required
