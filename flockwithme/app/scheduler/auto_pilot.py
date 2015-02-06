@@ -135,7 +135,7 @@ class OnEvent(object):
 			#self.apistatus.status = "Rate_Limited"
 			#self.apistatus.save()
 			#time.sleep(900)
-			print int(self.api.rate_limit_status()['resources']['favorites']['/favorites/lists']['remaining'])
+			print int(self.api.rate_limit_status()['resources']['favorites']['/favorites/list']['remaining'])
 			print e
 		else:
 			print e

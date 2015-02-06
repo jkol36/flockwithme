@@ -17,6 +17,6 @@ class TestApi:
 		return int(self.api.rate_limit_status()['resources']['followers']['/followers/ids']['remaining'])
 
 	def get_remaining_favorite_request(self):
-		return int(self.api.rate_limit_status()['resources']['favorites']['/favorites/lists']['remaining'])
+		return int(self.api.rate_limit_status()['resources']['favorites']['/favorites/list']['remaining'])
 		
 
