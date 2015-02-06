@@ -23,6 +23,7 @@ class TestApi:
 		
 
 	def favorite_tweets(self):
+		print self.api.me()
 		self.tweets = [x.twitter_id for x in TwitterStatus.objects.filter()[:30]]
 		for tweet in self.tweets:
 			self.api.create_favorite(tweet)
