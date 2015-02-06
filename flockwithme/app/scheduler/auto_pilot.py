@@ -132,9 +132,10 @@ class OnEvent(object):
 			
 
 		elif "Twitter error response: status code = 429" in str(e):
-			self.apistatus.status = "Rate_Limited"
-			self.apistatus.save()
-			time.sleep(900)
+			#self.apistatus.status = "Rate_Limited"
+			#self.apistatus.save()
+			#time.sleep(900)
+			print e
 		else:
 			print e
 
