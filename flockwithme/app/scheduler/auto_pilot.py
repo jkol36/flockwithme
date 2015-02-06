@@ -8,7 +8,7 @@ import tweepy
 from tweepy.error import TweepError
 from threading import Thread
 
-from flockwithme.app.scheduler.models import TwitterStatus, TwitterUser, Influencer
+from flockwithme.app.scheduler.models import TwitterStatus, TwitterUser, Influencer, ApiStatus
 from flockwithme.core.profiles.models import Profile
 
 
@@ -132,7 +132,9 @@ class OnEvent(object):
 			
 
 		elif "Twitter error response: status code = 429" in str(e):
-			print "application rate limited."
+			self.apistatus.status = "Rate_Limited"
+			self.apistatus.save()
+			time.sleep(900)
 		else:
 			print e
 
@@ -141,6 +143,7 @@ class OnTweet(OnEvent):
 	def __init__(self, socialprofile=None, action=None, follow=False, favorite=False, *args, **kwargs):
 		self.socialprofile = socialprofile
 		self.job = kwargs.pop('job')
+		self.apistatus = ApiStatus.objects.all()[0]
 		self.profile = Profile.objects.get(accounts=self.socialprofile)
 		self.follow = follow
 		print "follow {}".format(self.follow)
