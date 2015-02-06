@@ -108,7 +108,7 @@ def FetchSocialProfileInitial():
 	queue = Queue()
 	threads = []
 	apistatus = ApiStatus.objects.all()[0].status
-	if apistatus == "Rate Limited":
+	if apistatus == "Rate_Limited":
 		print "api status is rate limited."
 	else:
 		for acc in SocialProfile.objects.filter(is_initial=True):
@@ -134,7 +134,7 @@ def TrackSocialProfile():
 	queue = Queue()
 	threads = []
 	apistatus = ApiStatus.objects.all()[0].status
-	if apistatus == "Rate Limited":
+	if apistatus == "Rate_Limited":
 		print "api status is rate limited."
 	else:
 		for acc in SocialProfile.objects.filter(is_initial=False):
@@ -179,7 +179,7 @@ def TrackSocialProfileTweets():
 	queue = Queue()
 	threads = []
 	apistatus = ApiStatus.objects.all()[0].status
-	if apistatus == "Rate Limited":
+	if apistatus == "Rate_Limited":
 		print "api status is rate limited."
 	else:
 		for acc in SocialProfile.objects.filter(is_initial=False):
