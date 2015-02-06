@@ -1,6 +1,6 @@
 import kronos
 from flockwithme.core.profiles.models import Profile, SocialProfile
-from flockwithme.app.scheduler.models import Influencer, ApiStatus
+from flockwithme.app.scheduler.models import Influencer, ApiStatus, Job
 from .jobexecuter import JobExecuter
 from .accountfetch import AccountFetch
 from .Fetcher import FetchInfluencerInfo, FetchSocialProfileInfo
@@ -213,7 +213,7 @@ def finish_jobs():
 				threads.remove(executer)
 			else:
 				threads[:] = [t for t in threads if t.isAlive()]
-	
+
 
 #every 5 minutes check for new tweets
 @kronos.register('*/5 * * * *')
