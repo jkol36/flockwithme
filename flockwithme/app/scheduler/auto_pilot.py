@@ -140,12 +140,13 @@ class OnEvent(object):
 
 
 class OnTweet(OnEvent):
-	def __init__(self, socialprofile=None, action=None, follow=False, favorite=False, *args, **kwargs):
+	def __init__(self, socialprofile=None, queue=None, action=None, follow=False, favorite=False, *args, **kwargs):
 		self.socialprofile = socialprofile
+		self.queue = queue
 		self.job = kwargs.pop('job')
 		self.apistatus = ApiStatus.objects.all()[0]
 		self.profile = Profile.objects.get(accounts=self.socialprofile)
-		self.follow = follow
+		self.follow = follow 
 		print "follow {}".format(self.follow)
 		self.favorite = favorite
 		print "favorite {}".format(self.favorite)
@@ -155,6 +156,8 @@ class OnTweet(OnEvent):
 			self.action = self.Favorite_Tweets()
 		elif self.follow == True and self.favorite == False:
 			self.action = self.Favorite_Tweets()
+		if self.queue not None:
+			self.queue.put(self)
 		
 
 class OnNewFollower(OnEvent):

@@ -7,7 +7,7 @@ from .Fetcher import FetchInfluencerInfo, FetchSocialProfileInfo
 from Queue import Queue
 from threading import Lock
 from django.db.models import Q
-from .auto_pilot import AutoPilot
+from .auto_pilot import AutoPilot, OnTweet
 from .oauthtest import TestApi
 
 
@@ -185,7 +185,18 @@ def check_api_status():
 			apistatus.status = "Active"
 			apistatus.save()
 
-
+#Finish Jobs that have started but not finished.
+@kronos.register('*/25 * * * *')
+def finish_jobs():
+	queue = Queue()
+	threads = []
+	apistatus = ApiStatus.objects.all()[0].status
+	if apistatus != "Rate_Limited":
+		for job in Job.objects.filter(status="started"):
+			if job.action == "FAVORITE":
+				threads.append(OnTweet(socialprofile=job.socialprofile, queue=queue, job=job, follow=False, favorite=True))
+	for thread in threads:
+		thread.start()
 #every 5 minutes check for new tweets
 @kronos.register('*/5 * * * *')
 def TrackSocialProfileTweets():
