@@ -25,7 +25,7 @@ class ApiStatus(models.Model):
 		('Active', "active"),
 		('Rate_Limited', 'rate_limited'),
 		)
-	status = models.CharField(max_length=20, choices=STATUS_TYPES)
+	status = models.CharField(max_length=20, choices=STATUS_TYPES, default="Active")
 
 class OauthSet(models.Model):
 	name = models.CharField(max_length=250, default="TokenSet%d")

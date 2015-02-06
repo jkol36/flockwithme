@@ -1,0 +1,26 @@
+extends base
+
+- load staticfiles
+- block title
+| Analytics
+- endblock
+
+- block include
+script(type="text/javascript", src="{% static 'js/raphael.2.1.0.min.js' %}")
+link(rel='stylesheet', href='http://cdn.oesmith.co.uk/morris-0.4.3.min.css')
+script(type="text/javascript", src='http://cdn.oesmith.co.uk/morris-0.4.3.min.js')
+
+- endblock
+
+- block content
+.container-fluid
+	.row
+		.col-md-12
+			.panel.panel-default.content
+				.panel-body
+					p.lead.content-header
+						i.fa.fa-user.fa-fw
+						| API STATUS
+
+					{{APISTATUS}}
+					

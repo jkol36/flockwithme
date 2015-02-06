@@ -9,6 +9,7 @@ viewpatterns = patterns('flockwithme.app.scheduler.views',
 	url(r'^delete_job/(?P<pk>\d+)/$', 'delete_job', name='delete_job'),
 	url(r'^analytics/$', 'analytics_view', name='analytics'),
 	url(r'^add_job/$', 'add_job', name='add_job'),
+	url(r'api_status/$', 'api_status', name="api_status"),
 )
 
 urlpatterns = viewpatterns
