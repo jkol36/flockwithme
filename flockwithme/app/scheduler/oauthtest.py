@@ -12,5 +12,5 @@ class TestApi:
 		self.auth.set_access_token(c, d)
 		self.api = tweepy.API(self.auth)
 		#return super(TestApi, self).__init__(*args, **kwargs)
-		print dir(self.api.auth)
+		print self.api.rate_limit_status()
 
