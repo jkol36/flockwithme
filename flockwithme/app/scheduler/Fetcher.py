@@ -405,7 +405,7 @@ class FetchSocialProfileInfo(Thread, TwitterGetFunctions):
 			if self.tweet_count != self.db_tweet_count and self.follow_limit_reached == False and self.favorite_limit_reached == False:
 				self.job, _ = Job.objects.get_or_create(socialprofile=self.socialprofile, action="FOLLOW_FAV", status="started")
 				self.job.save()
-				self.action = OnTweet(socialprofile=self.socialprofile, job=self.job, follow=True, favorite=True)
+				self.action = OnTweet(socialprofile=self.socialprofile, job=self.job, queue=self.queue, follow=True, favorite=True)
 				if self.action == "Done":
 					self.job.is_complete = True
 					self.job.save()
@@ -427,7 +427,7 @@ class FetchSocialProfileInfo(Thread, TwitterGetFunctions):
 			elif self.tweet_count != self.db_tweet_count and self.follow_limit_reached == True and self.favorite_limit_reached == False:
 				self.job, _ = Job.objects.get_or_create(action="FAVORITE", socialprofile=self.socialprofile, status="started")
 				self.job.save()
-				self.action = OnTweet(socialprofile=self.socialprofile, job=self.job, follow=False, favorite=True)
+				self.action = OnTweet(socialprofile=self.socialprofile, queue=self.queue, job=self.job, follow=False, favorite=True)
 				#on job completion
 				if self.action == "Done":
 					self._Thread__delete()
@@ -443,7 +443,7 @@ class FetchSocialProfileInfo(Thread, TwitterGetFunctions):
 				#if action completes it will return done. Otherwise it will return an error.
 				self.job, _ = Job.objects.get_or_create(socialprofile=self.socialprofile, action="FOLLOW", status="started")
 				self.job.save()
-				self.action = OnTweet(socialprofile=self.socialprofile, job=self.job, follow=True, favorite=False)
+				self.action = OnTweet(socialprofile=self.socialprofile, job=self.job, queue=self.queue, follow=True, favorite=False)
 				if self.action == "Done":
 					self._Thread__delete()
 					self.job.is_complete = True
