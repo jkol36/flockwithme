@@ -140,6 +140,7 @@ class OnEvent(object):
 			self.socialprofile.favorite_limit_reached = True
 			self.socialprofile.save()
 			self._Thread__delete()
+			return
 		else:
 			print e
 
