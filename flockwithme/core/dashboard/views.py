@@ -19,7 +19,7 @@ def index(request):
 			favorited_tweets.append(i)
 		for i in friends:
 			if i.twitterUser.screen_name != None:
-				friends_.append(i.twitterUser.screen_name)
+				friends_.append(i)
 			else:
 				pass
 	money_saved = 100 * days

@@ -142,10 +142,14 @@ extends base
 					p.lead.content-header Latest Friends
 					p.text-muted People flock has followed recently.
 					.table-responsive
-						table.table(data-toggle="table")
+						table.table-bordered(data-toggle="table")
+							tr
+								th Date
+								th Handle
 							{% for i in friends %}
 							tr
-								td {{i}}
+								td {{i.created_at}}
+								td {{i.twitterUser.screen_name}}
 							{%endfor%}
 
 
