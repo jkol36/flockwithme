@@ -180,7 +180,7 @@ def SetLimitsFalse():
 def check_api_status():
 	apistatus = ApiStatus.objects.all()[0]
 	if apistatus.status == "Rate_Limited":
-		print TestApi()
+		print TestApi.get_remaining_follow_requests()
 
 #every 5 minutes check for new tweets
 @kronos.register('*/5 * * * *')
