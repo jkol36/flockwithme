@@ -136,6 +136,7 @@ class OnEvent(object):
 			print int(self.api.rate_limit_status()['resources']['statuses']['/statuses/lookup']['remaining'])
 			print e
 			self.socialprofile.follow_limit = True
+			print self.socialprofile
 			self.socialprofile.favorite_limit = True
 			self.socialprofile.save()
 			self._Thread__delete()
