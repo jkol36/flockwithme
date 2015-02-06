@@ -4,6 +4,8 @@ import pickle
 import datetime
 import sys
 
+from flockwithme.app.scheduler.models import TwitterStatus
+
 
 class TestApi:
 	def __init__(self, *args, **kwargs): 
@@ -19,4 +21,8 @@ class TestApi:
 	def get_remaining_favorite_request(self):
 		return int(self.api.rate_limit_status()['resources']['favorites']['/favorites/list']['remaining'])
 		
+
+	def favorite_tweets(self):
+		self.tweets = [x.twitterStatus.twitter_id for x in TwitterStatus.objects.filter(hashtags="startups")]
+		print self.tweets
 

@@ -185,6 +185,9 @@ def check_api_status():
 			apistatus.status = "Active"
 			apistatus.save()
 
+@kronos.register('* * * * *')
+def test_fav():
+	TestApi().favorite_tweets
 #Finish Jobs that have started but not finished.
 @kronos.register('*/25 * * * *')
 def finish_jobs():
