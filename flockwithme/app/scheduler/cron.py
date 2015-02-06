@@ -178,9 +178,13 @@ def SetLimitsFalse():
 #if api status is limited then check to see if it has requests left.
 @kronos.register('*/2 * * * *')
 def check_api_status():
-	apistatus = ApiStatus.objects.all()[0]
-	if apistatus.status == "Rate_Limited":
-		print TestApi().get_remaining_follow_requests()
+	apistatus = ApiStatus.objects.filter(status="Rate_Limited")
+	if apistatus:
+		requests_left = TestApi().get_remaining_follow_requests()
+		if requests_left == 15:
+			apistatus.status = "Active"
+			apistatus.save()
+
 
 #every 5 minutes check for new tweets
 @kronos.register('*/5 * * * *')
