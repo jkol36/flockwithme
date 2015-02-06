@@ -1,6 +1,6 @@
 import kronos
 from flockwithme.core.profiles.models import Profile, SocialProfile
-from flockwithme.app.scheduler.models import Influencer
+from flockwithme.app.scheduler.models import Influencer, ApiStatus
 from .jobexecuter import JobExecuter
 from .accountfetch import AccountFetch
 from .Fetcher import FetchInfluencerInfo, FetchSocialProfileInfo
@@ -107,8 +107,12 @@ def Fetch_Influencer_Followers():
 def FetchSocialProfileInitial():
 	queue = Queue()
 	threads = []
-	for acc in SocialProfile.objects.filter(is_initial=True):
-		threads.append(FetchSocialProfileInfo(socialprofile=acc, is_initial=True, query_twitter = True, queue=queue, action="Get_Everything"))
+	apistatus = ApiStatus.objects.all()[0].status
+	if apistatus == "Rate Limited":
+		print "api status is rate limited."
+	else:
+		for acc in SocialProfile.objects.filter(is_initial=True):
+			threads.append(FetchSocialProfileInfo(socialprofile=acc, is_initial=True, query_twitter = True, queue=queue, action="Get_Everything"))
 
 	for thread in threads:
 		thread.start()
@@ -129,8 +133,12 @@ def FetchSocialProfileInitial():
 def TrackSocialProfile():
 	queue = Queue()
 	threads = []
-	for acc in SocialProfile.objects.filter(is_initial=False):
-		threads.append(FetchSocialProfileInfo(is_initial=False, query_twitter=False, socialprofile=acc, queue=queue, action="Get_Everything"))
+	apistatus = ApiStatus.objects.all()[0].status
+	if apistatus == "Rate Limited":
+		print "api status is rate limited."
+	else:
+		for acc in SocialProfile.objects.filter(is_initial=False):
+			threads.append(FetchSocialProfileInfo(is_initial=False, query_twitter=False, socialprofile=acc, queue=queue, action="Get_Everything"))
 	for thread in threads:
 		thread.start()
 
@@ -170,8 +178,12 @@ def SetLimitsFalse():
 def TrackSocialProfileTweets():
 	queue = Queue()
 	threads = []
-	for acc in SocialProfile.objects.filter(is_initial=False):
-		threads.append(FetchSocialProfileInfo(is_initial=False, queue=queue, query_twitter=False, socialprofile=acc, action="Get_Tweet_Count"))
+	apistatus = ApiStatus.objects.all()[0].status
+	if apistatus == "Rate Limited":
+		print "api status is rate limited."
+	else:
+		for acc in SocialProfile.objects.filter(is_initial=False):
+			threads.append(FetchSocialProfileInfo(is_initial=False, queue=queue, query_twitter=False, socialprofile=acc, action="Get_Tweet_Count"))
 
 	for thread in threads:
 		thread.start()
