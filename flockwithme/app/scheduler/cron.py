@@ -181,7 +181,7 @@ def check_api_status():
 	apistatus = ApiStatus.objects.filter(status="Rate_Limited")[0]
 	if apistatus:
 		requests_left = TestApi().get_remaining_follow_requests()
-		if requests_left == 15:
+		if requests_left > 1:
 			apistatus.status = "Active"
 			apistatus.save()
 
