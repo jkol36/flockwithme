@@ -61,8 +61,8 @@ class OnEvent(object):
 		self.tweets = self.get_tweets()
 		self.favorite_limit = 100
 		self.favorited = 0
-		while self.favorited <= self.favorite_limit:
-			for status in self.tweets:
+		for status in self.tweets:
+			if self.favorited < self.favorite_limit:
 				try:
 					self.api.create_favorite(status.twitter_id)
 					self.favorited += 1
