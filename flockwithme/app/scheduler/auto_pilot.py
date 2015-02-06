@@ -143,15 +143,14 @@ class OnEvent(object):
 
 
 class OnTweet(Thread, OnEvent):
-	def __init__(self, socialprofile=None, queue=None, action=None, follow=False, favorite=False, *args, **kwargs):
+	def __init__(self, socialprofile=None, action=None, follow=False, favorite=False, *args, **kwargs):
 		self.socialprofile = socialprofile
-		self.queue = queue
-		if self.queue != None:
-			self.queue.put(self)
+		self.queue = kwargs.pop('queue')
 		self.job = kwargs.pop('job')
 		self.apistatus = ApiStatus.objects.all()[0]
 		self.profile = Profile.objects.get(accounts=self.socialprofile)
 		self.follow = follow 
+		self.queue.put(self)
 		print "follow {}".format(self.follow)
 		self.favorite = favorite
 		print "favorite {}".format(self.favorite)
@@ -161,6 +160,8 @@ class OnTweet(Thread, OnEvent):
 			self.action = self.Favorite_Tweets()
 		elif self.follow == True and self.favorite == False:
 			self.action = self.Favorite_Tweets()
+		super(OnTweet, self).__init__(*args, **kwargs)
+
 
 		
 
