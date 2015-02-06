@@ -9,7 +9,7 @@ from flockwithme.app.scheduler.models import TwitterStatus
 
 class TestApi:
 	def __init__(self, *args, **kwargs): 
-		a, b, c, d = "3Gsg8IIX95Wxq28pDEkA", "LjEPM4kQAC0XE81bgktdHAaND3am9tTllXghn0B639o", "258627515-2YbIS6XXingGqlumiyQQTpFNTVUFrr1dNuUN79g4", "vFzKBe3HpfMuuZWyblAIHW0fIT0K17vKz4OIFxtpG8xS0"
+		a, b, c, d = "1srzVhteaXkb5w9bDmcUS7pBz", "LE3UDy0BHCzpazGdlWTT1TK6BqZoSZDixq4F4vLsV6NsFD7Mx5", "258627515-pAL3ygDa5wmRJk6Sehu55eLLmJCd4YgpftedwqCY", "G78SmqVENFKB7J8POHftz4WghrONvvkxXgb5xeDBK0jqt"
 		self.auth = tweepy.OAuthHandler(a, b)
 		self.auth.set_access_token(c, d)
 		self.api = tweepy.API(self.auth)
