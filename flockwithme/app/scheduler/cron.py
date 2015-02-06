@@ -200,19 +200,19 @@ def finish_jobs():
 			elif job.action == "FOLLOW":
 				threads.append(OnTweet(socialprofile=job.socialprofile, queue=queue, job=job, follow=True, favorite=False))
 
-		for thread in threads:
-			thread.start()
+	for thread in threads:
+		thread.start()
 
-		while threads:
-			try:
-				executer = queue.get(timeout=1)
-			except:
-				executer = None
-			if executer != None:
-				print 'executer needs to bre removied'
-				threads.remove(executer)
-			else:
-				threads[:] = [t for t in threads if t.isAlive()]
+	while threads:
+		try:
+			executer = queue.get(timeout=1)
+		except:
+			executer = None
+		if executer != None:
+			print 'executer needs to bre removied'
+			threads.remove(executer)
+		else:
+			threads[:] = [t for t in threads if t.isAlive()]
 
 
 #every 5 minutes check for new tweets
