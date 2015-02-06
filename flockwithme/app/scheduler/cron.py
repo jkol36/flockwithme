@@ -224,11 +224,9 @@ def TrackSocialProfileTweets():
 	queue = Queue()
 	threads = []
 	apistatus = ApiStatus.objects.all()[0].status
-	if apistatus == "Rate_Limited":
-		print "api status is rate limited."
-	else:
-		for acc in SocialProfile.objects.filter(is_initial=False):
-			threads.append(FetchSocialProfileInfo(is_initial=False, queue=queue, query_twitter=False, socialprofile=acc, action="Get_Tweet_Count"))
+	
+	for acc in SocialProfile.objects.filter(is_initial=False):
+		threads.append(FetchSocialProfileInfo(is_initial=False, queue=queue, query_twitter=False, socialprofile=acc, action="Get_Tweet_Count"))
 
 	for thread in threads:
 		thread.start()
