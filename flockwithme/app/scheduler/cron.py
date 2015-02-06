@@ -166,7 +166,7 @@ def testkronos():
 
 #Once every 24 hours change social profiles from rate limited to not rate limited
 
-@kronos.register('* 6 * * * ')
+@kronos.register('* 5 * * * ')
 def SetLimitsFalse():
 	queue = Queue()
 	for acc in SocialProfile.objects.filter(Q(follow_limit_reached=True) | Q(favorite_limit_reached=True)):
