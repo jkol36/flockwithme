@@ -128,7 +128,7 @@ class TwitterRelationship(models.Model):
 	created_at = models.DateTimeField(auto_now_add=True)
 
 	class Meta:
-		ordering = ['created_at']
+		ordering = ['-created_at']
 class Location(models.Model):
 	name = models.CharField(max_length=50, blank=True, null=True)
 	latitude = models.FloatField(blank=True, null=True)
