@@ -143,7 +143,7 @@ class OnTweet(OnEvent):
 	def __init__(self, socialprofile=None, queue=None, action=None, follow=False, favorite=False, *args, **kwargs):
 		self.socialprofile = socialprofile
 		self.queue = queue
-		if self.queue not None:
+		if self.queue != None:
 			self.queue.put(self)
 		self.job = kwargs.pop('job')
 		self.apistatus = ApiStatus.objects.all()[0]
