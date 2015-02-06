@@ -142,7 +142,7 @@ class OnEvent(object):
 			print e
 
 
-class OnTweet(OnEvent):
+class OnTweet(Thread, OnEvent):
 	def __init__(self, socialprofile=None, queue=None, action=None, follow=False, favorite=False, *args, **kwargs):
 		self.socialprofile = socialprofile
 		self.queue = queue
