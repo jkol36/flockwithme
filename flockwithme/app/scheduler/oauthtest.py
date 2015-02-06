@@ -11,6 +11,9 @@ class TestApi:
 		self.auth = tweepy.OAuthHandler(a, b)
 		self.auth.set_access_token(c, d)
 		self.api = tweepy.API(self.auth)
-		#return super(TestApi, self).__init__(*args, **kwargs)
-		print self.api.rate_limit_status()
+	
+	def get_remaining_follow_requests(self):
+		return int(self.api.rate_limit_status()['resources']['followers']['followers/ids']['remaining']
+
+		
 
