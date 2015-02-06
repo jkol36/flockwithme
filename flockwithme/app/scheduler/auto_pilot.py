@@ -137,7 +137,7 @@ class OnEvent(object):
 			print e
 			self.socialprofile.follow_limit = True
 			print self.socialprofile
-			self.socialprofile.favorite_limit = True
+			self.socialprofile.favorite_limit_reached = True
 			self.socialprofile.save()
 			self._Thread__delete()
 		else:
