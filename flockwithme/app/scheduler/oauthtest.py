@@ -14,7 +14,7 @@ class TestApi:
 		
 	
 	def get_remaining_follow_requests(self):
-		return int(self.api.rate_limit_status()['resources']['followers']['followers/ids']['remaining'])
+		return int(self.api.rate_limit_status()['resources']['followers']['/followers/ids']['remaining'])
 
 		
 
