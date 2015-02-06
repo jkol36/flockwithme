@@ -97,7 +97,7 @@ class OnEvent(object):
 					self.socialprofile.add_friend(status.twitter_user)
 					self.socialprofile.add_favorite(status)
 					self.socialprofile.save()
-					self.time.sleep(random.randint(0,20))
+					time.sleep(random.randint(0,20))
 			except TweepError, e:
 				self.process_exception(e)
 		return "Done"
