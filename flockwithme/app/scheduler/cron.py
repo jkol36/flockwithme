@@ -190,11 +190,14 @@ def test_fav():
 	print TestApi().favorite_tweets()
 #fetch twitter follower count, friend count and twitter_id for new profiles
 @kronos.register('0/25 * * *')
+#NEW ACCOUNT
+#RUN EVERY 25 MINUTES
+#FETCH TWITTER ID, FOLLOWER_COUNT, FRIEND_COUNT, TWEET_COUNT
 def New_Account():
 	queue =Queue()
 	threads = []
 	for acc in SocialProfile.objects.filter(new_account=True):
-		threads.append(FetchSocialProfileInfo(action="get_followers_and_friends_count", queue=queue, socialprofile=acc))
+		threads.append(FetchSocialProfileInfo(action="NEW_ACCOUNT", queue=queue, socialprofile=acc))
 
 	for thread in threads:
 		thread.start()
@@ -239,7 +242,7 @@ def finish_jobs():
 
 
 #every 5 minutes check for new tweets
-@kronos.register('*/5 * * * *')
+@kronos.register('*/10 * * * *')
 def TrackSocialProfileTweets():
 	queue = Queue()
 	threads = []

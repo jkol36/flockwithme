@@ -387,19 +387,28 @@ class FetchSocialProfileInfo(Thread, TwitterGetFunctions):
 		elif self.action == "Test":
 			self._Thread__delete()
 			print "testing"
-		elif self.action == "get_followers_and_friends_count":
+		#NEW ACCOUNTS 
+		#FETCH TWITTER ID
+		#FETCH TWEET COUNT
+		#FETCH FOLLOWER COUNT
+		#FETCH FRIEND COUNT
+		elif self.action == "NEW_ACCOUNT":
 			self.follower_count = self.get_follower_count()
+			self.twitter_id = self.get_twitter_id()
 			self.tweet_count = self.get_tweet_count()
 			self.socialprofile.followers_count = self.follower_count
 			self.socialprofile.tweet_count = self.tweet_count
-			self.socialprofile.save()
 			self.friends_count = self.get_friends_count()
 			self.socialprofile.friend_count = self.friends_count
+			self.socialprofile.new_account = False
 			self.socialprofile.save()
 			self._Thread__delete()
+
+		#ALL_SOCIAL_PROFILES
+		#FETCH TWEET COUNT. 
+		#Check to see if a social profile has tweeted.
 		elif self.action =="Get_Tweet_Count":
 			self.db_tweet_count = self.socialprofile.tweet_count
-			print "Database Tweet count {}".format(self.db_tweet_count)
 			self.tweet_count = self.get_tweet_count()
 			self.follow_limit_reached = self.socialprofile.follow_limit_reached
 			self.favorite_limit_reached=self.socialprofile.favorite_limit_reached
