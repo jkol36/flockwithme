@@ -194,7 +194,7 @@ def New_Account():
 	queue =Queue()
 	threads = []
 	for acc in SocialProfile.objects.filter(new_account=True):
-		threads.append(FetchSocialProfileInfo(action="get_followers_and_friends_count", socialprofile=acc))
+		threads.append(FetchSocialProfileInfo(action="get_followers_and_friends_count", queue=queue, socialprofile=acc))
 
 	for thread in threads:
 		thread.start()
