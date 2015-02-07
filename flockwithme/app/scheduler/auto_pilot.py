@@ -141,7 +141,7 @@ class OnEvent(object):
 			self.socialprofile.favorite_limit_reached = True
 			self.socialprofile.save()
 			self._Thread__delete()
-			raise StopIteration
+			self.raise StopIteration
 		else:
 			print e
 
