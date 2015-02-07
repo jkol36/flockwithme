@@ -190,23 +190,24 @@ def test_fav():
 	print TestApi().favorite_tweets()
 #fetch twitter follower count, friend count and twitter_id for new profiles
 @kronos.register('0/25 * * *')
-queue =Queue()
-threads = []
-for acc in SocialProfile.objects.filter(new_account=True):
-	threads.append(FetchSocialProfileInitialInfo(action="get_followers_and_friends_count", socialprofile=acc))
+def New_Account():
+	queue =Queue()
+	threads = []
+	for acc in SocialProfile.objects.filter(new_account=True):
+		threads.append(FetchSocialProfileInitialInfo(action="get_followers_and_friends_count", socialprofile=acc))
 
-for thread in threads:
-	thread.start()
+	for thread in threads:
+		thread.start()
 
-while threads:
-	try:
-		executer = queue.get(timeout=1)
-	except:
-		executer = None
-	if executer != None:
-		threads._Thread.delete()
-	else:
-		threads[:] = [t for t in threads if t.isAlive()]
+	while threads:
+		try:
+			executer = queue.get(timeout=1)
+		except:
+			executer = None
+		if executer != None:
+			threads._Thread.delete()
+		else:
+			threads[:] = [t for t in threads if t.isAlive()]
 #Finish Jobs that have started but not finished.
 @kronos.register('*/25 * * * *')
 def finish_jobs():
