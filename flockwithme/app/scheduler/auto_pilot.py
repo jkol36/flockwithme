@@ -29,7 +29,7 @@ class OnEvent(object):
 		self.tweets = []
 		self.follow_limit = 100
 		for i in self.hashtags:
-			statuses = TwitterStatus.objects.filter(hashtags=i)
+			statuses = TwitterStatus.objects.filter(hashtags=i).order_by
 			for status in statuses:
 				self.tweets.append(status)
 		self.followed = 0
