@@ -16,7 +16,8 @@ class TwitterStatus(models.Model):
 	relationships = models.ManyToManyField(SocialProfile, through='TwitterRelationship')
 	favorited_by= models.ForeignKey(SocialProfile, related_name='Favorite_Statuses', blank=True, null=True)
 
-
+	class Meta:
+		ordering = ['-created_at']
 	def __unicode__(self):
 		return unicode(self.twitter_id)
 

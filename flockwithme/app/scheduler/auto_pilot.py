@@ -29,7 +29,7 @@ class OnEvent(object):
 		self.tweets = []
 		self.follow_limit = 100
 		for i in self.hashtags:
-			statuses = TwitterStatus.objects.filter(hashtags=i)[random.randint(0,1000):random.randint(100,10000)]
+			statuses = TwitterStatus.objects.filter(hashtags=i)
 			for status in statuses:
 				self.tweets.append(status)
 		self.followed = 0
@@ -162,7 +162,7 @@ class OnTweet(Thread, OnEvent):
 		elif self.follow == False and self.favorite == True:
 			self.action = self.Favorite_Tweets()
 		elif self.follow == True and self.favorite == False:
-			self.action = self.Favorite_Tweets()
+			self.action = self.Follow_Users()
 		super(OnTweet, self).__init__(*args, **kwargs)
 
 
