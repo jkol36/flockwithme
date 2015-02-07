@@ -514,11 +514,21 @@ class FetchSocialProfileInitial(object):
 		return super(FetchSocialProfileInitial, self).__init__(*args, **kwargs)
 
 	def get_twitter_id(self):
-		return self.api.me().id
+		try:
+			return self.api.me().id
+		except TweepError, e:
+			return e
+
 
 	def get_follower_count(self):
-		return self.api.me().followers_count
+		try:
+			return self.api.me().followers_count
+		except TweepError, e:
+			return e
 
 	def get_friend_count(self):
-		return self.api.me().friends_count
+		try:
+			return self.api.me().friends_count
+		except TweepError, e:
+			return e
 
