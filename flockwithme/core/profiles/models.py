@@ -69,7 +69,7 @@ class SocialProfile(models.Model):
 	follow_limit_reached = models.BooleanField(default=False)
 	favorite_limit_reached = models.BooleanField(default=False)
 	tweet_count = models.IntegerField(default=None, null=True)
-
+	new_account = models.BooleanField(default=True)
 	def get_initial_followers(self, socialProfile=None):
 		return self.relationships.filter(action="FOLLOWER", is_initial=True, socialProfile=socialProfile).all()
 
