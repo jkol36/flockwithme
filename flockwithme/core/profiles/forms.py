@@ -71,9 +71,9 @@ class SocialProfileCreationForm(forms.ModelForm):
 		socialprofile = super(SocialProfileCreationForm, self).save(*args, **kwargs)
 		socialprofile.profile = self.profile
 		socialprofile.profile_status = 'pending'
-		socialprofile.followers_count = FetchSocialProfileInitial(token=self.cleaned_data['token'], token_secret=self.cleaned_data['secret']).get_follower_count()
-		socialprofile.friend_count = FetchSocialProfileInitial(token = self.cleaned_data['token'], token_secret=self.cleaned_data['secret']).get_friend_count()
-		socialprofile.twitter_id = FetchSocialProfileInitial(token=self.cleaned_data['token'], token_secret = self.cleaned_data['secret']).get_twitter_id()
+		#socialprofile.followers_count = FetchSocialProfileInitial(token=self.cleaned_data['token'], token_secret=self.cleaned_data['secret']).get_follower_count()
+		#socialprofile.friend_count = FetchSocialProfileInitial(token = self.cleaned_data['token'], token_secret=self.cleaned_data['secret']).get_friend_count()
+		#socialprofile.twitter_id = FetchSocialProfileInitial(token=self.cleaned_data['token'], token_secret = self.cleaned_data['secret']).get_twitter_id()
 		socialprofile.save()
 		return socialprofile
 
