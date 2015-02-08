@@ -80,7 +80,7 @@ class OnEvent(object):
 		self.follow_limit = 100
 		self.favorite_limit = 100
 		for i in self.hashtags:
-			statuses = TwitterStatus.objects.filter(hashtags=i).exclude(favorited_by=self.socialprofile)[random.randint(0,100):random.randint(100, 200)]
+			statuses = TwitterStatus.objects.filter(hashtags=i).exclude(favorited_by=self.socialprofile)[:300]
 			for status in statuses:
 				self.tweets.append(status)
 		self.followed = 0
@@ -107,7 +107,7 @@ class OnEvent(object):
 		self.hashtags = self.profile.hashtags.all()
 		self.tweets = []
 		for i in self.hashtags:
-			self.statusses = TwitterStatus.objects.filter(hashtags=i).exclude(favorited_by=self.socialprofile)[random.randint(0,100):random.randint(100,200)]
+			self.statusses = TwitterStatus.objects.filter(hashtags=i).exclude(favorited_by=self.socialprofile)[:300]
 			for status in self.statusses:
 				self.tweets.append(status)
 		print "length of statusses is {}".format(len(self.tweets))
@@ -122,7 +122,7 @@ class OnEvent(object):
 			self.socialprofile.job_status = "Follow_Limit_Reached"
 			self.socialprofile.follow_limit_reached = True
 			self.socialprofile.save()
-			raise StopIteration
+			break
 
 		elif "No status found with that ID" in str(e):
 			print e
@@ -140,8 +140,7 @@ class OnEvent(object):
 			print self.socialprofile
 			self.socialprofile.favorite_limit_reached = True
 			self.socialprofile.save()
-			self._Thread__delete()
-			raise StopIteration
+			break
 		else:
 			print e
 
