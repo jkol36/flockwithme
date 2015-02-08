@@ -100,7 +100,7 @@ class OnEvent(object):
 						self.api.create_favorite(status.twitter_id)
 					except TweepError, e:
 						self.x= self.process_exception(e)
-						if x  == "break":
+						if self.x  == "break":
 							break
 					self.followed +=1
 					self.socialprofile.add_friend(status.twitter_user)
