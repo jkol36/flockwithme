@@ -104,16 +104,13 @@ def Fetch_Influencer_Followers():
 		else:
 			threads[:] = [t for t in threads if t.isAlive()]
 """
-@kronos.register('*/15 * * * *')
+@kronos.register('0/30 * * * *')
 def FetchSocialProfileInitial():
 	queue = Queue()
 	threads = []
-	apistatus = ApiStatus.objects.all()[0].status
-	if apistatus == "Rate_Limited":
-		print "api status is rate limited."
-	else:
-		for acc in SocialProfile.objects.filter(is_initial=True):
-			threads.append(FetchSocialProfileInfo(socialprofile=acc, is_initial=True, query_twitter = True, queue=queue, action="Get_Everything"))
+	
+	for acc in SocialProfile.objects.filter(new_account=True):
+		threads.append(FetchSocialProfileInfo(socialprofile=acc, is_initial=True, query_twitter = True, queue=queue, action="Get_Everything"))
 
 	for thread in threads:
 		thread.start()
@@ -241,8 +238,8 @@ def finish_jobs():
 			threads[:] = [t for t in threads if t.isAlive()]
 
 
-#every 5 minutes check for new tweets
-@kronos.register('*/10 * * * *')
+#every 10 minutes check for new tweets
+@kronos.register('0/10 * * * *')
 def TrackSocialProfileTweets():
 	queue = Queue()
 	threads = []
