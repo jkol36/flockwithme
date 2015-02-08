@@ -163,7 +163,7 @@ def testkronos():
 
 #Once every 24 hours change social profiles from rate limited to not rate limited
 
-@kronos.register('* 5 * * * ')
+@kronos.register('* * * * * ')
 def SetLimitsFalse():
 	queue = Queue()
 	for acc in SocialProfile.objects.filter(Q(follow_limit_reached=True) | Q(favorite_limit_reached=True)):
@@ -186,7 +186,7 @@ def check_api_status():
 def test_fav():
 	print TestApi().favorite_tweets()
 #fetch twitter follower count, friend count and twitter_id for new profiles
-@kronos.register('0/25 * * *')
+@kronos.register('0/25 * * * *')
 #NEW ACCOUNT
 #RUN EVERY 25 MINUTES
 #FETCH TWITTER ID, FOLLOWER_COUNT, FRIEND_COUNT, TWEET_COUNT
@@ -209,7 +209,7 @@ def New_Account():
 		else:
 			threads[:] = [t for t in threads if t.isAlive()]
 #Finish Jobs that have started but not finished.
-@kronos.register('*/25 * * * *')
+@kronos.register('0/25 * * * *')
 def finish_jobs():
 	queue = Queue()
 	threads = []
