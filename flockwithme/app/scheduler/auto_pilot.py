@@ -42,12 +42,16 @@ class OnEvent(object):
 						self.api.create_friendship(user_id=status.twitter_user.twitter_id)
 						time.sleep(random.randint(0,20))
 					except TweepError, e:
-						self.process_exception(e)
+						self.x = self.process_exception(e)
+						if self.x == "break":
+							break
 					self.followed +=1
 					self.socialprofile.add_friend(status.twitter_user)
 					self.socialprofile.save()
 			except TweepError, e:
-				self.process_exception(e)
+				self.x = self.process_exception(e)
+				if self.x == "break":
+					break
 			self.followed +=1
 			print self.followed
 		return "Done"
@@ -70,7 +74,9 @@ class OnEvent(object):
 					self.socialprofile.add_favorite(status)
 					self.socialprofile.save()
 				except TweepError, e:
-					self.process_exception(e)
+					self.x = self.process_exception(e)
+					if self.x == "break":
+						break
 				print self.favorited
 				time.sleep(random.randint(0,40))
 	def Follow_Fav(self):
@@ -93,14 +99,20 @@ class OnEvent(object):
 						self.api.create_friendship(user_id=status.twitter_user.twitter_id)
 						self.api.create_favorite(status.twitter_id)
 					except TweepError, e:
-						self.process_exception(e)
+						self.x= self.process_exception(e)
+						if x  == "break":
+							break
 					self.followed +=1
 					self.socialprofile.add_friend(status.twitter_user)
 					self.socialprofile.add_favorite(status)
 					self.socialprofile.save()
 					time.sleep(random.randint(0,20))
 			except TweepError, e:
-				self.process_exception(e)
+				self.x = self.process_exception(e)
+				if x == "break":
+					break
+
+
 		return "Done"
 
 	def get_tweets(self):
@@ -122,7 +134,7 @@ class OnEvent(object):
 			self.socialprofile.job_status = "Follow_Limit_Reached"
 			self.socialprofile.follow_limit_reached = True
 			self.socialprofile.save()
-			break
+			return "break"
 
 		elif "No status found with that ID" in str(e):
 			print e
