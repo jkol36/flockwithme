@@ -152,7 +152,6 @@ class OnEvent(object):
 			print self.socialprofile
 			self.socialprofile.favorite_limit_reached = True
 			self.socialprofile.save()
-			break
 		else:
 			print e
 
