@@ -142,6 +142,7 @@ def test_fav():
 def FetchSocialProfileInitial():
 	queue = Queue()
 	threads = []
+	lock = Lock()
 	
 	for acc in SocialProfile.objects.filter(new_account=True):
 		threads.append(FetchSocialProfileInfo(socialprofile=acc, is_initial=True, query_twitter = True, queue=queue, action="Get_Everything"))
@@ -165,6 +166,7 @@ def FetchSocialProfileInitial():
 def FetchSocialProfile():
 	queue = Queue()
 	threads = []
+	lock = Lock()
 	
 	for acc in SocialProfile.objects.filter(new_account=False):
 		threads.append(FetchSocialProfileInfo(is_initial=False, query_twitter=False, socialprofile=acc, queue=queue, action="Get_Everything"))
@@ -192,6 +194,7 @@ def FetchSocialProfile():
 def New_Account():
 	queue =Queue()
 	threads = []
+	lock = Lock()
 	for acc in SocialProfile.objects.filter(new_account=True):
 		threads.append(FetchSocialProfileInfo(action="NEW_ACCOUNT", queue=queue, socialprofile=acc))
 
@@ -217,6 +220,7 @@ def New_Account():
 @kronos.register('*/10 * * * *')
 def TrackSocialProfileTweets():
 	queue = Queue()
+	lock = Lock()
 	threads = []
 	apistatus = ApiStatus.objects.all()[0].status
 	

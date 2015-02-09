@@ -200,7 +200,7 @@ class Job(models.Model):
 		('NEW_FOLLOWER', 'New Follower'),
 		('FAVORITE', 'New Favorite'),
 		('MENTION', 'Mention'),
-		('RETWEER', 'Retweet'),
+		('RETWEET', 'Retweet'),
 		)
 
 	socialprofile = models.ForeignKey(SocialProfile, related_name='jobs')

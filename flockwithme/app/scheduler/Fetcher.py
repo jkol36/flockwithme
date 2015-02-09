@@ -421,11 +421,9 @@ class FetchSocialProfileInfo(Thread, TwitterGetFunctions):
 				if self.action == "Done":
 					self.job.is_complete = True
 					self.job.save()
-					self._Thread__delete()
 					self.socialprofile.job_status = "Followed_And_Favorited"
 					self.socialprofile.save()
-				else:
-					self._Thread__delete()
+
 			#Cannot follow or favorite
 			elif self.tweet_count != self.db_tweet_count and self.follow_limit_reached == True and self.favorite_limit_reached == True:
 				self._Thread__delete()
@@ -442,7 +440,6 @@ class FetchSocialProfileInfo(Thread, TwitterGetFunctions):
 				self.action = OnTweet(socialprofile=self.socialprofile, queue=self.queue, job=self.job, follow=False, favorite=True)
 				#on job completion
 				if self.action == "Done":
-					self._Thread__delete()
 					self.job.is_complete = True
 					self.job.status = "complete"
 					self.job.save()
@@ -456,7 +453,6 @@ class FetchSocialProfileInfo(Thread, TwitterGetFunctions):
 				self.job.save()
 				self.action = OnTweet(socialprofile=self.socialprofile, job=self.job, queue=self.queue, follow=True, favorite=False)
 				if self.action == "Done":
-					self._Thread__delete()
 					self.job.is_complete = True
 					self.job.status = "complete"
 					self.job.save()

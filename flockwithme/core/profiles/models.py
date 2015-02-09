@@ -72,6 +72,7 @@ class SocialProfile(models.Model):
 	tweet_count = models.IntegerField(default=None, null=True)
 	is_clean = models.BooleanField(default=False)
 	new_account = models.BooleanField(default=True)
+	is_on_auto_pilot = models.BooleanField(default=False)
 	def get_initial_followers(self, socialProfile=None):
 		return self.relationships.filter(action="FOLLOWER", is_initial=True, socialProfile=socialProfile).all()
 
