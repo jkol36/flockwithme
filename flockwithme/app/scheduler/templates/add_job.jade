@@ -14,12 +14,12 @@ mixin panel(title, description)
 						i.fa.fa-twitter.fa-fw
 						| &nbsp; {{title}}
 					p.text-muted
-						| description
+						| {{description}}
 						a(href="#", style="padding-left:3px;") Here.
 -block content
 .container-fluid
-	+panel("testing")
-	+panel
+	+panel("Put Your Social Media Account On Auto-Pilot.", "By putting your socialmedia account on auto-pilot Flock takes care of everything for you. Learn More")
+	+panel("Schedule actions to take place when an event happens.", "Just select an event below and tell us what should happen.")
 	
 
 
