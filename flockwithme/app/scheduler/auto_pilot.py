@@ -270,7 +270,7 @@ class OnRatioDirty(Thread, OnEvent):
 		self.socialprofile = socialprofile
 		self.queue = queue
 		self.queue.put(self)
-	super(OnRatioDirty, self).__init__(*args, **kwargs)
+		super(OnRatioDirty, self).__init__(*args, **kwargs)
 
 	def run(self):
 		self.action = self.unfollow()	
