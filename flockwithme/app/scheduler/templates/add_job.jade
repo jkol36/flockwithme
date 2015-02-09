@@ -19,7 +19,7 @@ mixin panel(title, description)
 mixin form(form_name)
 		.form-group
 			form(role='form', method='POST')
-				input(type="hidden", name={{form_name}})
+				input(type="hidden", name="{{form_name}}" )
 			button.btn.btn-info.btn-lg.form-submit(style="text-align:center; margin-left:40%;") Select This One
 
 
