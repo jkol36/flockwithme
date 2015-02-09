@@ -5,7 +5,7 @@ extends base
 - endblock
 - block include
 - endblock
-mixin panel
+mixin panel(title, description)
 	.row
 		.col-md-12
 			.panel.panel-default.content
@@ -18,7 +18,7 @@ mixin panel
 						a(href="#", style="padding-left:3px;") Here.
 -block content
 .container-fluid
-	+panel
+	+panel("testing")
 	+panel
 	
 
