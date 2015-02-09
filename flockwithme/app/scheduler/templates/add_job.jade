@@ -8,16 +8,16 @@ extends base
 
 -block content
 .container-fluid
-	mixin panel(title, description)
+	mixin panel
 	.row
 		.col-md-12
 			.panel.panel-default.content
 				.panel-body
 					p.lead.content-header
 						i.fa.fa-twitter.fa-fw
-						| &nbsp; = title
+						| &nbsp; title
 					p.text-muted
-						| = description
+						| description
 						a(href="#", style="padding-left:3px;") Here.
 
 
