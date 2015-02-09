@@ -8,7 +8,7 @@ extends base
 
 -block content
 .container-fluid
-	- mixin panel(title, description)
+	mixin panel(title, description)
 	.row
 		.col-md-12
 			.panel.panel-default.content
@@ -20,7 +20,7 @@ extends base
 						| = description
 						a(href="#", style="padding-left:3px;") Here.
 
-+panel("Put your social media account on auto-pilot", "Putting your socialmedia account on auto-pilot means that Flock will take care of everything for you. Learn More")
+	+panel("Put your social media account on auto-pilot", "Putting your socialmedia account on auto-pilot means that Flock will take care of everything for you. Learn More")
 
 -endblock content
 
