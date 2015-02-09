@@ -8,16 +8,19 @@ extends base
 
 -block content
 .container-fluid
+	mixin panel(title, description)
 	.row
 		.col-md-12
 			.panel.panel-default.content
 				.panel-body
 					p.lead.content-header
 						i.fa.fa-twitter.fa-fw
-						| &nbsp; Put your SocialMedia Account on Auto-Pilot
+						| &nbsp; = title
 					p.text-muted
-						| Putting your account on auto-pilot means that Flock will handle everything for you. Learn more
-						a(href="#") here.
+						| = description
+						a(href="#", style="padding-left:3px;") Here.
+
++panel("Put your social media account on auto-pilot", "Putting your socialmedia account on auto-pilot means that Flock will take care of everything for you. Learn More")
 
 -endblock content
 
