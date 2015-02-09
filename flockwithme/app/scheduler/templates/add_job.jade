@@ -10,10 +10,10 @@ mixin panel(title, description)
 		.col-md-12
 			.panel.panel-default.content
 				.panel-body
-					p.lead.content-header
+					p.lead.content-header(style="text-align:center;")
 						i.fa.fa-twitter.fa-fw
 						| &nbsp; {{title}}
-					p.text-muted
+					p.text-muted(style="text-align:center;")
 						| {{description}}
 						a(href="#", style="padding-left:3px;") Here.
 -block content
