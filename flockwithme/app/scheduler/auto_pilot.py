@@ -27,7 +27,9 @@ class OnEvent(object):
 		self.api = self.get_api()
 		self.hashtags = self.profile.hashtags.all()
 		self.tweets = []
-		self.follow_limit = 100
+		self.follow_limit = int(self.socialprofile.friend_count) - int(self.socialprofile.followers_count)
+		if self.follow_limit >= 1000:
+			self.follow_limit = 800
 		for i in self.hashtags:
 			statuses = TwitterStatus.objects.filter(hashtags=i).order_by('-created_at')
 			for status in statuses:
@@ -83,7 +85,9 @@ class OnEvent(object):
 		self.api = self.get_api()
 		self.hashtags = self.profile.hashtags.all()
 		self.tweets = []
-		self.follow_limit = 100
+		self.follow_limit = int(self.socialprofile.friend_count) - int(self.socialprofile.followers_count) 
+		if self.follow_limit >= 1000:
+			self.follow_limit = 800
 		self.favorite_limit = 100
 		for i in self.hashtags:
 			statuses = TwitterStatus.objects.filter(hashtags=i).exclude(favorited_by=self.socialprofile)[:300]
