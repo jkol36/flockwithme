@@ -180,6 +180,27 @@ class OnTweet(Thread, OnEvent):
 			self.action = self.Follow_Users()
 		super(OnTweet, self).__init__(*args, **kwargs)
 
+class OnUnfinishedJob(Thread, OnEvent):
+	def __init__(self, socialprofile=None, job=None, queue=None, follow=False, favorite=False, *args, **kwargs):
+		self.socialprofile = socialprofile
+		self.queue = queue
+		self.job = job
+		self.profile = Profile.objects.get(accounts=self.socialprofile)
+		self.follow = follow
+		self.favorite = favorite
+		self.queue.put(self)
+		if self.follow == True and self.favorite == True:
+			self.action = self.Follow_Fav()
+		elif self.follow != True and self.favorite == True:
+			self.action = self.Favorite_Tweets()
+		elif self.favorite != True and self.follow == True:
+			self.action = self.Follow_Users()
+		elif self.favorite == False and self.follow == False:
+			self.action = self.quit()
+		super(OnUnfinishedJob, self).__init__(*args, **kwargs)
+
+	def quit(self):
+		return "quit"
 
 		
 

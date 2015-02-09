@@ -392,7 +392,7 @@ class FetchSocialProfileInfo(Thread, TwitterGetFunctions):
 		#FETCH TWEET COUNT
 		#FETCH FOLLOWER COUNT
 		#FETCH FRIEND COUNT
-		elif self.action == "NEW_ACCOUNT":
+		elif self.action == "NEW_ACCOUNT" or self.action=="Get_Count":
 			self.follower_count = self.get_follower_count()
 			self.twitter_id = self.get_twitter_id()
 			self.tweet_count = self.get_tweet_count()

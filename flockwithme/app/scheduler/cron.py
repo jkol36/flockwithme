@@ -7,7 +7,7 @@ from .Fetcher import FetchInfluencerInfo, FetchSocialProfileInfo
 from Queue import Queue
 from threading import Lock
 from django.db.models import Q
-from .auto_pilot import AutoPilot, OnTweet
+from .auto_pilot import AutoPilot, OnTweet, OnUnfinishedJob
 from .oauthtest import TestApi
 
 
@@ -32,7 +32,25 @@ def do_work():
 	for acct in SocialProfile.objects.filter(job_status="Ratio_Bad"):
 		threads.append(AutoPilot(account=acct, action="clean_account", queue=queue))
 
+#test kronos
+@kronos.register('* * * * *')
+def testkronos():
+	queue = Queue()
+	threads = []
+	threads.append(FetchSocialProfileInfo(queue = queue, action = "Test", socialprofile=SocialProfile.objects.get(handle="Jkol36")))
+	for thread in threads:
+		thread.start()
 
+
+#Once every 24 hours change social profiles from rate limited to not rate limited
+
+@kronos.register('* * * * * ')
+def SetLimitsFalse():
+	queue = Queue()
+	for acc in SocialProfile.objects.filter(Q(follow_limit_reached=True) | Q(favorite_limit_reached=True)):
+		acc.follow_limit_reached = False
+		acc.favorite_limit_reached = False
+		acc.save()
 
 
 	for thread in threads:
@@ -103,8 +121,24 @@ def Fetch_Influencer_Followers():
 			threads.remove(executer)
 		else:
 			threads[:] = [t for t in threads if t.isAlive()]
+#every 2 minutes check database api status
+#if api status is limited then check to see if it has requests left.
+@kronos.register('*/2 * * * *')
+def check_api_status():
+	apistatus = ApiStatus.objects.filter(status="Rate_Limited")[0]
+	if apistatus:
+		requests_left = TestApi().get_remaining_follow_requests()
+		if requests_left > 1:
+			apistatus.status = "Active"
+			apistatus.save()
+
+@kronos.register('* * * * *')
+def test_fav():
+	print TestApi().favorite_tweets()
 """
-@kronos.register('0/30 * * * *')
+############# FETCHING JOBS ########################
+#Every 30 minutes check for new accounts. Fetch their followers, friends, and favorites.
+@kronos.register('*/30 * * * *')
 def FetchSocialProfileInitial():
 	queue = Queue()
 	threads = []
@@ -127,16 +161,13 @@ def FetchSocialProfileInitial():
 			threads[:] = [t for t in threads if t.isAlive()]
 #update favorites, followers, freinds, etc
 #every 2 hours get everything
-@kronos.register('0 */2 * * *')
-def TrackSocialProfile():
+@kronos.register('* */2 * * *')
+def FetchSocialProfile():
 	queue = Queue()
 	threads = []
-	apistatus = ApiStatus.objects.all()[0].status
-	if apistatus == "Rate_Limited":
-		print "api status is rate limited."
-	else:
-		for acc in SocialProfile.objects.filter(is_initial=False):
-			threads.append(FetchSocialProfileInfo(is_initial=False, query_twitter=False, socialprofile=acc, queue=queue, action="Get_Everything"))
+	
+	for acc in SocialProfile.objects.filter(new_account=False):
+		threads.append(FetchSocialProfileInfo(is_initial=False, query_twitter=False, socialprofile=acc, queue=queue, action="Get_Everything"))
 	for thread in threads:
 		thread.start()
 
@@ -151,40 +182,8 @@ def TrackSocialProfile():
 		else:
 			threads[:] = [t for t in threads if t.isAlive()]
 
-#test kronos
-@kronos.register('* * * * *')
-def testkronos():
-	queue = Queue()
-	threads = []
-	threads.append(FetchSocialProfileInfo(queue = queue, action = "Test", socialprofile=SocialProfile.objects.get(handle="Jkol36")))
-	for thread in threads:
-		thread.start()
 
 
-#Once every 24 hours change social profiles from rate limited to not rate limited
-
-@kronos.register('* * * * * ')
-def SetLimitsFalse():
-	queue = Queue()
-	for acc in SocialProfile.objects.filter(Q(follow_limit_reached=True) | Q(favorite_limit_reached=True)):
-		acc.follow_limit_reached = False
-		acc.favorite_limit_reached = False
-		acc.save()
-
-#every 2 minutes check database api status
-#if api status is limited then check to see if it has requests left.
-@kronos.register('*/2 * * * *')
-def check_api_status():
-	apistatus = ApiStatus.objects.filter(status="Rate_Limited")[0]
-	if apistatus:
-		requests_left = TestApi().get_remaining_follow_requests()
-		if requests_left > 1:
-			apistatus.status = "Active"
-			apistatus.save()
-
-@kronos.register('* * * * *')
-def test_fav():
-	print TestApi().favorite_tweets()
 #fetch twitter follower count, friend count and twitter_id for new profiles
 @kronos.register('0/25 * * * *')
 #NEW ACCOUNT
@@ -208,38 +207,14 @@ def New_Account():
 			threads._Thread.delete()
 		else:
 			threads[:] = [t for t in threads if t.isAlive()]
-#Finish Jobs that have started but not finished.
-@kronos.register('0/25 * * * *')
-def finish_jobs():
-	queue = Queue()
-	threads = []
-	apistatus = ApiStatus.objects.all()[0].status
-	if apistatus != "Rate_Limited":
-		for job in Job.objects.filter(status="started"):
-			if job.action == "FAVORITE":
-				threads.append(OnTweet(socialprofile=job.socialprofile, queue=queue, job=job, follow=False, favorite=True))
-			elif job.action == "FAV_FOLLOW":
-				threads.append(OnTweet(socialprofile=job.socialprofile, queue=queue, job=job, follow=True, favorite=True))
-			elif job.action == "FOLLOW":
-				threads.append(OnTweet(socialprofile=job.socialprofile, queue=queue, job=job, follow=True, favorite=False))
-
-	for thread in threads:
-		thread.start()
-
-	while threads:
-		try:
-			executer = queue.get(timeout=1)
-		except:
-			executer = None
-		if executer != None:
-			print 'executer needs to bre removied'
-			threads.remove(executer)
-		else:
-			threads[:] = [t for t in threads if t.isAlive()]
 
 
 #every 10 minutes check for new tweets
-@kronos.register('0/10 * * * *')
+
+
+
+############################# ACTION JOBS ##############################
+@kronos.register('*/10 * * * *')
 def TrackSocialProfileTweets():
 	queue = Queue()
 	threads = []
@@ -261,6 +236,15 @@ def TrackSocialProfileTweets():
 			threads.remove(executer)
 		else:
 			threads[:] = [t for t in threads if t.isAlive()]
+
+@kronos.register('*/5 * * * *')
+def TrackSocialProfile():
+	queue = Queue()
+	threads = []
+	for acc in SocialProfile.objects.filter(new_account=False):
+		threads.append(FetchSocialProfileInfo(is_initial=False, queue=queue, query_twitter=False, socialprofile=acc, action="Get_Count"))
+
+
 """
 @kronos.register('* * * * *')
 ####initial influencer query 
