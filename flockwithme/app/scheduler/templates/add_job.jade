@@ -5,10 +5,7 @@ extends base
 - endblock
 - block include
 - endblock
-
--block content
-.container-fluid
-	mixin panel
+mixin panel
 	.row
 		.col-md-12
 			.panel.panel-default.content
@@ -19,6 +16,9 @@ extends base
 					p.text-muted
 						| description
 						a(href="#", style="padding-left:3px;") Here.
+-block content
+.container-fluid
+	
 
 
 -endblock content
