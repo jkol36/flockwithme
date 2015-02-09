@@ -55,6 +55,7 @@ class SocialProfile(models.Model):
 		('Favorite_Limited', "You cannot Favorite any more Tweets. This is temporary."),
 		("Followed_And_Favorited", "We successfully followed people and favorited tweets!"),
 		)
+
 	profile = models.ForeignKey(Profile, related_name="accounts")
 	job_status = models.CharField(max_length=150, choices=JOB_STATUS, default='Fetch_Account_Info')
 	provider = models.CharField(max_length=30, choices=BACKEND_CHOICES, blank=True, null=True)
@@ -69,6 +70,7 @@ class SocialProfile(models.Model):
 	follow_limit_reached = models.BooleanField(default=False)
 	favorite_limit_reached = models.BooleanField(default=False)
 	tweet_count = models.IntegerField(default=None, null=True)
+	is_clean = models.BooleanField(default=False)
 	new_account = models.BooleanField(default=True)
 	def get_initial_followers(self, socialProfile=None):
 		return self.relationships.filter(action="FOLLOWER", is_initial=True, socialProfile=socialProfile).all()

@@ -7,7 +7,7 @@ from .Fetcher import FetchInfluencerInfo, FetchSocialProfileInfo
 from Queue import Queue
 from threading import Lock
 from django.db.models import Q
-from .auto_pilot import AutoPilot, OnTweet, OnUnfinishedJob
+from .auto_pilot import AutoPilot, OnTweet, OnUnfinishedJob, OnRatioDirty
 from .oauthtest import TestApi
 
 
@@ -161,7 +161,7 @@ def FetchSocialProfileInitial():
 			threads[:] = [t for t in threads if t.isAlive()]
 #update favorites, followers, freinds, etc
 #every 2 hours get everything
-@kronos.register('* */2 * * *')
+@kronos.register('* * * * *')
 def FetchSocialProfile():
 	queue = Queue()
 	threads = []
@@ -243,6 +243,24 @@ def TrackSocialProfile():
 	threads = []
 	for acc in SocialProfile.objects.filter(new_account=False):
 		threads.append(FetchSocialProfileInfo(is_initial=False, queue=queue, query_twitter=False, socialprofile=acc, action="Get_Count"))
+@kronos.register('* 23 * * *')
+def CleanSocialProfile():
+	queue = Queue()
+	threads = []
+	for acc in SocialProfile.objects.filter(is_clean=False).exclude(new_account=True):
+		threads.append(OnRatioDirty(socialprofile=acc, queue=queue))
+
+	for thread in threads:
+		thread.start()
+
+	while threads:
+		try:
+			executer = queue.get(timeout=1)
+		except:
+			executer = None
+		if executer != None:
+			threads.remove(executer)
+
 
 
 """

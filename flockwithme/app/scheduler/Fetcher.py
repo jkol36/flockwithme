@@ -400,9 +400,10 @@ class FetchSocialProfileInfo(Thread, TwitterGetFunctions):
 			self.socialprofile.tweet_count = self.tweet_count
 			self.friends_count = self.get_friends_count()
 			self.socialprofile.friend_count = self.friends_count
+			if self.socialprofile.friend_count > self.socialprofile.followers_count:
+				self.socialprofile.is_clean = False
 			self.socialprofile.new_account = False
 			self.socialprofile.save()
-			self._Thread__delete()
 
 		#ALL_SOCIAL_PROFILES
 		#FETCH TWEET COUNT. 
@@ -447,8 +448,7 @@ class FetchSocialProfileInfo(Thread, TwitterGetFunctions):
 					self.job.save()
 					self.socialprofile.job_status = "Just_Favorited"
 					self.socialprofile.save()
-				else:
-					self._Thread__delete()
+				
 			#Can follow but not favorite
 			elif self.tweet_count != self.db_tweet_count and self.follow_limit_reached == False and self.favorite_limit_reached == True:
 				#if action completes it will return done. Otherwise it will return an error.
@@ -462,8 +462,7 @@ class FetchSocialProfileInfo(Thread, TwitterGetFunctions):
 					self.job.save()
 					self.socialprofile.job_status = "Just_Followed"
 					self.socialprofile.save()
-				else:
-					self._Thread__delete()
+				
 
 			else:
 				print "no new tweets"

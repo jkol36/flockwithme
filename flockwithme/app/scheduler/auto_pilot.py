@@ -63,6 +63,69 @@ class OnEvent(object):
 	def Direct_Message_Users(self):
 		pass
 
+	
+
+	def unfollow(self):
+		self.api = self.get_api()
+		self.user = self.socialprofile.twitter_id
+		self.friends = self.get_friends()
+		self.followers = self.get_followers()
+		#People following the user
+		self.followers_ids = [x.twitterUser.twitter_id for x in self.followers]
+		#people the user is following
+		self.friend_ids = [x.twitterUser.twitter_id for x in self.friends]
+		self.non_followers = [x for x in self.friend_ids if x not in self.followers_ids]
+		self.unfollowed = []
+
+		if not self.non_followers > 1:
+			try:
+				self.followers = self.api.followers_ids()
+			except TweepError as e:
+				self.handle_e = self.process_exception(e)
+			
+			try:
+				self.friends = self.api.friends_ids()
+			except TweepError as e:
+				self.handle_e = self.process_exception(e)
+
+			self.non_followers = [x for x in self.friends if x not in self.followers]
+
+			if not self.non_followers:
+				return "no_unfollowers"
+
+			for twitter_id in self.non_followers:
+				try:
+					self.api.destroy_friendship(twitter_id)
+				except TweepError as e:
+					self.handle_e = self.process_exception(e)
+				self.unfollowed.append(twitter_id)
+			
+			if not len(self.unfollowed) > 0:
+				print "No one was unfollowed"
+
+			for twitter_id in self.unfollowed:
+				self.tuser, _ = TwitterUser.objects.get_or_create(twitter_id=twitter_id)
+				self.tuser.save()
+				self.socialprofile.add_unfriend(self.tuser)
+				self.socialprofile.relationships.remove(self.tuser, 'FRIEND')
+			self.socialprofile.is_clean = True
+			self.socialprofile.save()
+
+
+		for twitter_id in self.non_followers:
+			try:
+				self.api.destroy_friendship(twitter_id)
+			except TweepError as e:
+				self.handle_e = self.process_exception(e)
+			self.unfollowed.append(twitter_id)
+		for twitter_id in self.unfollowed:
+			self.tuser, _ = TwitterUser.objects.get_or_create(twitter_id=twitter_id)
+			self.tuser.save()
+			self.socialprofile.add_unfriend(self.tuser)
+			self.socialprofile.relationships.remove(self.tuser, "FRIEND")
+		self.socialprofile.is_clean = True
+		self.socialprofile.save()
+	
 	def Favorite_Tweets(self, status_id=None):
 		self.api = self.get_api()
 		self.tweets = self.get_tweets()
@@ -202,7 +265,15 @@ class OnUnfinishedJob(Thread, OnEvent):
 	def quit(self):
 		return "quit"
 
-		
+class OnRatioDirty(Thread, OnEvent):
+	def __init__(self, socialprofile=None, queue=None):
+		self.socialprofile = socialprofile
+		self.queue = queue
+		self.queue.put(self)
+	super(OnRatioDirty, self).__init__(*args, **kwargs)
+
+	def run(self):
+		self.action = self.unfollow()	
 
 class OnNewFollower(OnEvent):
 	def __init__(self, action=None, *args, **kwargs):
