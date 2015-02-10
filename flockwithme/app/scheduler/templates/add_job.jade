@@ -17,8 +17,8 @@ mixin panel(title, form_name, description)
 						| {{description}}
 						a(href="#", style="padding-left:3px;") Here.
 					form(role="form", action="#", method="POST")
-						input(type="text", name='{{form_name}}')
-					button.btn.btn.btn-info.btn-lg.form-submit(value="submit", type="submit") Select This One
+						input(type="hidden", name='{{form_name}}')
+					button.btn.btn.btn-info.btn-lg.form-submit(value="submit", style="margin-left:40%;", type="submit") Select This One
 
 
 
