@@ -5,7 +5,7 @@ extends base
 - endblock
 - block include
 - endblock
-mixin panel(title, description)
+mixin panel(title, form_name, description)
 	.row
 		.col-md-12
 			.panel.panel-default.content
@@ -16,20 +16,18 @@ mixin panel(title, description)
 					p.text-muted(style="text-align:center;")
 						| {{description}}
 						a(href="#", style="padding-left:3px;") Here.
-mixin form(form_name)
-		.form-group
-			form(role='form', method='POST')
-				input(type="hidden", name="{{form_name}}")
-			button.btn.btn-info.btn-lg.form-submit(style="text-align:center; margin-left:40%;", type="submit", value="submit") Select This One
+					form(role="form", action="#", method="POST")
+						input(type="text", name='{{form_name}}')
+					button.btn.btn.btn-info.btn-lg.form-submit(value="submit", type="submit") Select This One
+
 
 
 -block content
 .container-fluid
-	+panel("Put Your Social Media Account On Auto-Pilot.", "Flock will take care of everything for you. Learn More")
+	+panel("Put Your Social Media Account On Auto-Pilot.", 'auto_pilot', "Flock will take care of everything for you. Learn More")
 	p.text-primary(style="text-align:center;") or
-	+form("Auto-Pilot")
-	+panel("Only start actions when an event happens.", " You control when Flock runs. Learn More")
-	+form('OnEvent')
+	+panel("Only start actions when an event happens.", 'on_event', " You control when Flock runs. Learn More")
+	
 
 
 -endblock content

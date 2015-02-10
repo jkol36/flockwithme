@@ -1,0 +1,14 @@
+mixin panel(form_name, title, description)
+.row
+	.col-md-12
+		.panel.panel-default.content
+			.panel-body
+				p.lead.content-header(style="text-align:center;")
+					i.fa.fa-twitter.fa-fw
+					| &nbsp; {{title}}
+				p.text-muted(style="text-align:center;")
+					| {{description}}
+					a(href="#", style="padding-left:3px;") Here.
+				.form-group		
+					form(role="form", action="#", method="POST")
+						input(type="text", name="{{form_name}}", )
