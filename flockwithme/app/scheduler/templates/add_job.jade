@@ -18,7 +18,7 @@ mixin panel(title, form_name, description)
 						a(href="#", style="padding-left:3px;") Here.
 					form(role="form", action="{% url 'add_job' %}", method="POST")
 						- csrf_token
-						input(type="hidden", name='{{form_name}}')
+						input(type="hidden", name='job_type', value='{{form_name}}')
 						button.btn.btn.btn-info.btn-lg.form-submit(value="submit", style="margin-left:40%;", type="submit") Select This One
 
 

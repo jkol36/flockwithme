@@ -99,10 +99,12 @@ class JobCreationForm(forms.Form):
 
 
 class JobTypeForm(forms.Form):
+	job_type= forms.CharField(required=False)
 
 	def __init__(self, job_selection, *args, **kwargs):
 		self.job_selection = job_selection
 		return super(JobTypeForm, self).__init__(*args, **kwargs)
+
 	
 
 
