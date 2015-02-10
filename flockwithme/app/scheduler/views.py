@@ -43,7 +43,7 @@ def handle_form(request):
 def add_job(request):
 	if not request.POST:
 		return render(request, 'add_job.jade')
-	handle_form(request)
+	print request.POST
 	return render(request, 'add_job.jade')
 @login_required
 def api_status(request):

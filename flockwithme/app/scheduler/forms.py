@@ -37,6 +37,7 @@ class JobCreationForm(forms.Form):
 		valid = super(JobCreationForm, self).is_valid()
 		if not valid:
 			return valid
+
 		if self.cleaned_data['action'] == "AUTO_DM":
 			if not self.cleaned_data['message']:
 				self._errors = 'Provide a message'
@@ -96,6 +97,13 @@ class JobCreationForm(forms.Form):
 		return job
 	
 
+
+class JobTypeForm(forms.Form):
+
+	def __init__(self, job_selection, *args, **kwargs):
+		self.job_selection = job_selection
+		return super(JobTypeForm, self).__init__(*args, **kwargs)
+	
 
 
 
