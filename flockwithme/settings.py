@@ -24,6 +24,8 @@ SECRET_KEY = '6&nk*8d**vdfddn0q(d0pa3j@!t2tl^n+j@_f3q#j=*rqheu)k'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+USE_POSTGRES = True
+
 TEMPLATE_DEBUG = DEBUG
 
 ALLOWED_HOSTS = ['www.flockwith.me']
@@ -75,7 +77,7 @@ MEDIA_ROOT = '/webapps/flock_django/uploads'
 # https://docs.djangoproject.com/en/1.6/ref/settings/#databases
 
 
-if DEBUG == True:
+if DEBUG == True and USE_POSTGRES == False:
     DATABASES = {
     'default': {
         'ENGINE':'django.db.backends.sqlite3',
