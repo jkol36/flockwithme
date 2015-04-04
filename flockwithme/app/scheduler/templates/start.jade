@@ -1,0 +1,32 @@
+extends base
+- load staticfiles
+- block title
+| Add a Job
+- endblock
+- block include
+- endblock
+mixin panel(title,description)
+	.row
+		.col-md-12
+			.panel.panel-default.content
+				.panel-body
+					p.lead.content-header(style="text-align:center;")
+						i.fa.fa-twitter.fa-fw
+						| &nbsp; {{title}}
+					p.text-muted(style="text-align:center;")
+						| {{description}}
+						a(href="#", style="padding-left:3px;") Here.
+					form(role="form", action="{% url 'add_job' %}", method="POST")
+						- csrf_token
+						input(type="hidden", name='job_type', value='Auto-Pilot')
+						button.btn.btn.btn-info.btn-lg.form-submit(value="submit", style="margin-left:40%;", type="submit") Click To Start
+
+
+
+-block content
+.container-fluid
+	+panel("Put Your Social Media Account On Auto-Pilot.", "Flock will take care of everything for you. Learn More")
+	
+
+
+-endblock content

@@ -39,11 +39,11 @@ def handle_form(request):
 		print form.errors
 
 @login_required
-def add_job(request):
+def start(request):
 	if not request.POST:
-		return render(request, 'add_job.jade')
+		return render(request, 'start.jade')
 	print request.POST
-	return render(request, 'add_job.jade')
+	return render(request, 'start.jade')
 		
 		
 @login_required
