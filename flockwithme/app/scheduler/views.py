@@ -31,12 +31,8 @@ def analytics_view(request):
 
 def handle_form(request):
 	form = StartForm (request.user)
-	if form.is_valid():
-		form.save()
-		messages.success(request, "Smile! :) Your social media marketing is now being handles by us. Focus your energy elsewhere!")
-	else:
-		messages.error(request, "Something went wrong...")
-		print form.errors
+	form.save()
+	messages.success(request, "Smile! :) Your social media marketing is now being handles by us. Focus your energy elsewhere!")
 
 @login_required
 def start(request):
