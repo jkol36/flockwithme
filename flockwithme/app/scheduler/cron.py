@@ -13,7 +13,8 @@ def do_work():
 	queue = Queue()
 	for acc in SocialProfile.objects.filter(jobs__isnull=False).distinct():
 		jobs = acc.jobs.all()
-		print jobs
+		socialprofiles = acc.socialprofiles.all()
+		print socialprofiles
 	
 
 
