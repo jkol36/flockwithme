@@ -280,7 +280,7 @@ class AutoPilot(object):
 
 
 	def run(self):
-		return "called"
+		print "called"
 
 		
 		
