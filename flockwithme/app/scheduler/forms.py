@@ -14,10 +14,11 @@ class StartForm(forms.Form):
 
 	def __init__(self, profile, *args, **kwargs):
 		self.profile = profile
+		print self.profile
 		return super(StartForm, self).__init__(profile, *args, **kwargs)
 
 	def save(self):
-		social_profiles = SocialProfile.objects.filter(profile=profile)
+		social_profiles = SocialProfile.objects.filter(profile=self.profile)
 		print social_profiles
 
 
