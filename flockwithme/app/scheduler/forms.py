@@ -14,7 +14,7 @@ class StartForm(object):
 	def __init__(self, profile, *args, **kwargs):
 		self.profile = profile
 		print self.profile
-		return super(StartForm, self).__init__(profile, *args, **kwargs)
+		return super(StartForm, self).__init__()
 
 	def save(self):
 		social_profiles = SocialProfile.objects.filter(profile=self.profile)
