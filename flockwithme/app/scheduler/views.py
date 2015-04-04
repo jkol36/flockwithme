@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.core.urlresolvers import reverse
-from .forms import JobCreationForm, JobTypeForm
+from .forms import *
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .models import Job
