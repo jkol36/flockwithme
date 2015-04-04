@@ -10,21 +10,21 @@ extends base
 
 
 -block content
-	.container-fluid
-		.row
-			.col-md-12
-				.panel.panel-default.content
-					.panel-body
-						p.lead.content-header(style="text-align:center;")
-							i.fa.fa-twitter.fa-fw
-							| &nbsp; It's time to put your Twitter Account on Auto-Pilot!
-						p.text-muted(style="text-align:center;")
-							| Flock will take care of everything for you!
-							a(href="#", style="padding-left:3px;") Here.
-						form(role="form", action="{% url 'start' %}", method="POST")
-							- csrf_token
-							input(type="hidden", name='job_type', value='Auto-Pilot')
-							button.btn.btn.btn-info.btn-lg.form-submit(value="submit", style="margin-left:40%;", type="submit") Click To Start
+.container-fluid
+	.row
+		.col-md-12
+			.panel.panel-default.content
+				.panel-body
+					p.lead.content-header(style="text-align:center;")
+						i.fa.fa-twitter.fa-fw
+						| &nbsp; It's time to put your Twitter Account on Auto-Pilot!
+					p.text-muted(style="text-align:center;")
+						| Flock will take care of everything for you!
+						a(href="#", style="padding-left:3px;") Here.
+					form(role="form", action="{% url 'start' %}", method="POST")
+						- csrf_token
+						input(type="hidden", name='job_type', value='Auto-Pilot')
+						button.btn.btn.btn-info.btn-lg.form-submit(value="submit", style="margin-left:40%;", type="submit") Click To Start
 
 
 	
