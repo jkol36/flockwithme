@@ -20,7 +20,7 @@ extends base
 						| &nbsp; It's time to put your Twitter Account on Auto-Pilot!
 					p.text-muted(style="text-align:center;")
 						| Flock will take care of everything for you!
-						a(href="#", style="padding-left:3px;") Here.
+			
 					form(role="form", action="{% url 'start' %}", method="POST")
 						- csrf_token
 						input(type="hidden", name='job_type', value='Auto-Pilot')
