@@ -18,7 +18,16 @@ class StartForm(object):
 
 	def save(self):
 		social_profiles = SocialProfile.objects.filter(profile=self.profile)
-		print social_profiles
+		for t_account in social_profiles:
+			start(t_account)
+
+	def start(self, t_account):
+		hashtags = [x for x Hashtag.objects.filter(profile=self.profile)]
+		return Job.objects.get_or_create(
+			   social_profile=t_account, 
+			   hashtags=hashtags)
+			   
+
 
 
 
