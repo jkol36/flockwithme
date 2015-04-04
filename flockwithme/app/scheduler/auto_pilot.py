@@ -45,11 +45,10 @@ class AutoPilot(object):
 		#self.following = self.get_friends()
 		#self.followers = self.get_followers()
 		#self.following_ids = [x.twitterUser.twitter_id for x in self.following]
-		self.twitter_ids =[] #author ids + influencers followers
+		 #author ids + influencers followers
 		self.author_ids = self.get_author_ids()
 		self.influencers = self.profile.influencers.all()
-		for x, y in self.author_ids, self.influencers:
-			self.twitter_ids.append(x,y)
+		self.twitter_ids = set(self.author_ids, self.influencers)
 		return self.twitter_ids
 		
 		#self.should_follow = [x for x in self.authors_and_followers if x not in self.following_ids]
