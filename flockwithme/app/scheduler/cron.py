@@ -11,10 +11,9 @@ from auto_pilot import *
 @kronos.register('0 10 * * *')
 def do_work():
 	queue = Queue()
-	for job in Job.objects.all():
-		SocialProfile = Job.socialprofile.handle
-		print SocialProfile
-		#auto_pilot(job=job, queue=queue)
+	for acc in SocialProfile.objects.filter(jobs__isnull=False).distinct():
+		jobs = acc.jobs.all()
+		print jobs
 	
 
 
