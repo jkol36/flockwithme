@@ -14,7 +14,8 @@ def do_work():
 	for acc in SocialProfile.objects.filter(jobs__isnull=False).distinct():
 		jobs = acc.jobs.all()
 		socialprofile = acc
-		AutoPilot(queue=queue, jobs=jobs, socialprofile=socialprofile)
+		print AutoPilot(queue=queue, jobs=jobs, socialprofile=socialprofile)
+	print "done"
 
 	
 
