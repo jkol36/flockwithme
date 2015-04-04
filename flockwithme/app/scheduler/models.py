@@ -190,9 +190,8 @@ class Job(models.Model):
 		("GET_ACCOUNT_INFO", "get_account_info"),
 		)
 
-	JOB_CHOICES = (("AUTO_PILOT", 'AUTO_PILOT'),)
+
 	socialprofile = models.ForeignKey(SocialProfile, related_name='jobs')
-	job_type = models.CharField(choices=JOB_CHOICES, max_length=20)
 	action = models.CharField(max_length=20, choices=ACTION_CHOICES, blank=True, null=True)
 	message = models.CharField(max_length=160, blank=True, null=True)
 	hashtag = models.ForeignKey(Hashtag, related_name='hashtags', blank=True, null=True)
