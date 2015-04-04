@@ -11,7 +11,7 @@ from django.db.models import Q
 
 from flockwithme.app.scheduler.models import OauthSet, Influencer, TwitterUser, TwitterRelationship, TwitterStatus, Hashtag, Job
 from flockwithme.core.profiles.models import SocialProfile
-from .auto_pilot import OnTweet
+#from .auto_pilot import OnTweet
 
 
 #a class with all our Twitter Get Methods
