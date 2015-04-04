@@ -1,11 +1,10 @@
 from pq import Queue, Flow
+from pq.decorators import Job
 from datetime import datetime
 
 
-q = Queue()
-def my_first_task():
-	print "hello_world"
-with Flow(q) as f:
-	f.enqueue(my_first_task)
+@Job('default')
+def say_hello():
+	return("Hello")
 
 
