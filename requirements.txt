@@ -1,17 +1,7 @@
-Django==1.7.2
-Markdown==2.4.1
-coverage==3.7.1
--e git://github.com/yceruto/django-ajax@36d45bc0f4380feb69b213241fc6ff74a6d05161#egg=django_ajax-2.2.8
-django-filter==0.7
-django-kronos==0.4
-geopy==0.99
-oauthlib==0.6.3
-pyjade==2.2.0
-python-openid==2.2.5
-pytz==2014.4
-requests==2.3.0
-requests-oauthlib==0.4.1
-six==1.6.1
-tweepy==2.3.0
+arrow==0.5.4
+django-picklefield==0.3.1
+django-pq==0.3.2
+python-dateutil==2.4.2
+six==1.9.0
+times==0.7
 wsgiref==0.1.2
-

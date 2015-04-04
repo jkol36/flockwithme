@@ -191,6 +191,7 @@ class Job(models.Model):
 		)
 
 	socialprofile = models.ForeignKey(SocialProfile, related_name='jobs')
+	job_type = models.CharField(choices=JOB_CHOICES)
 	action = models.CharField(max_length=20, choices=ACTION_CHOICES, blank=True, null=True)
 	message = models.CharField(max_length=160, blank=True, null=True)
 	follow_timestamp = models.DateTimeField()
