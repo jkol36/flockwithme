@@ -30,7 +30,7 @@ def analytics_view(request):
 			return redirect("my_accounts")
 
 def handle_form(request):
-	form = StartForm(request.POST)
+	form = StartForm (request.POST)
 	if form.is_valid():
 		form.save()
 		messages.success(request, "Smile! :) Your social media marketing is now being handles by us. Focus your energy elsewhere!")
@@ -42,7 +42,7 @@ def handle_form(request):
 def start(request):
 	if not request.POST:
 		return render(request, 'start.jade')
-	handle_form(request.POST)
+	handle_form(request)
 	return render(request, 'start.jade')
 		
 		
