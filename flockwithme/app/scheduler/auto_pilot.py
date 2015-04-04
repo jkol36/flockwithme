@@ -45,40 +45,13 @@ class AutoPilot(object):
 		#self.following = self.get_friends()
 		#self.followers = self.get_followers()
 		#self.following_ids = [x.twitterUser.twitter_id for x in self.following]
+		self.twitter_ids =[] #author ids + influencers followers
 		self.author_ids = self.get_author_ids()
 		self.influencers = self.profile.influencers.all()
-		self.authors_and_followers = []
+		for x, y in self.author_ids, self.influencers:
+			self.twitter_ids.append(x,y)
+		return self.twitter_ids
 		
-		if not len(self.influencers) > 0:
-			print 'no influencers.'
-		
-		
-		try:
-			for i in self.influencers:
-				self.twitter_ids = self.get_followers_of_influencer(i.id)
-		except Exception, e:
-			self.process_e = self.process_exception(e)
-		
-		if not len(self.twitter_ids) > 0:
-			print "no twitter ids to follow"
-			
-		try:
-			for i in self.twitter_ids:
-				self.authors_and_followers.append(i)
-		except Exception, e:
-			self.process_e = self.process_exception(e)
-		
-		#if not len(self.author_ids) > 
-		
-		if len(self.author_ids) > 0:
-			try:
-				for i in self.author_ids:
-					self.authors_and_followers.append(i)
-			except Exception, e:
-				self.process_e = self.process_exception(e)
-		else:
-			print "no author_ids"
-
 		#self.should_follow = [x for x in self.authors_and_followers if x not in self.following_ids]
 		#print self.should_follow
 		#################NOW TIME FOR THE FOLLOWING BITCHES ##############
@@ -285,7 +258,7 @@ class AutoPilot(object):
 		follow = False
 		favorite = False
 		DM = False
-		self.follow()
+		print self.follow()
 
 		
 		
