@@ -12,11 +12,10 @@ from auto_pilot import AutoPilot
 @kronos.register('0 10 * * *')
 def do_work():
 	queue = Queue()
-	jobs = []
 	for acc in SocialProfile.objects.filter(jobs__isnull=False).distinct():
 		jobs = acc.jobs.all()
 		socialprofile = acc
-		jobs.append(AutoPilot(queue=queue, jobs=jobs, socialprofile=socialprofile))
+		AutoPilot(queue=queue, jobs=jobs, socialprofile=socialprofile)
 
 
 
