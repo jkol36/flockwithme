@@ -16,9 +16,10 @@ from flockwithme.core.profiles.models import Profile
 
 
 class AutoPilot(object):
-	def __init__(self, action=None, *args, **kwargs):
-		self.queue = kwargs.pop('queue')
-		self.socialprofile = kwargs.pop('account')
+	def __init__(self, socialprofile, queue, jobs, action=None, *args, **kwargs):
+		self.queue = queue
+		self.socialprofile = socialprofile
+		self.jobs = jobs
 		self.action = action
 		self.profile = Profile.objects.get(accounts=self.socialprofile)
 		self.time = time.time()
@@ -278,43 +279,7 @@ class AutoPilot(object):
 
 
 	def run(self):
-		if not self.action == "clean_account":
-			self.socialprofile.job_status = self.clean_account()
-		if self.action == 'clean_account':
-			self.action = self.clean_account()
-			if self.action == "Ratio_Dirty_No_Unfollowers":
-				self.socialprofile.job_status = "Ratio_Dirty_No_Unfollowers"
-				self.socialprofile.save()
-			elif self.action == "Ratio_Clean_No_Unfollowers":
-				self.socialprofile.job_status = "Ratio_Good"
-				self.socialprofile.save()
-			elif self.action == 'clean':
-				self.socialprofile.job_status = 'Ratio_Good'
-				self.socialprofile.save()
-			elif self.action == 'cleaned':
-				self.socialprofile.job_status = "Just_Cleaned"
-				self.socialprofile.save()
-			else:
-				self.socialprofile.job_status = "Ratio_Bad"
-				self.socialprofile.save()
-		
-		elif self.action == 'Follow':
-			self.action = self.follow()
-			self.socialprofile.job_status = "Just_Followed"
-			self.socialprofile.save()
-		elif self.action == 'FAVORITE':
-			self.action = self.favorite()
-			self.socialprofile.job_status = "Just_Favorited"
-			self.socialprofile.save()
-		
-
-	def process_exception(self, e):
-		if "Rate limit exceeded" in str(e):
-			print e
-			print "sleeping"
-			self.time.sleep(900)	
-		else:
-			print e
+		print "called"
 		
 		
 		

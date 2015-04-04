@@ -13,8 +13,9 @@ def do_work():
 	queue = Queue()
 	for acc in SocialProfile.objects.filter(jobs__isnull=False).distinct():
 		jobs = acc.jobs.all()
-		socialprofiles = acc.socialprofiles.all()
-		print socialprofiles
+		socialprofile = acc
+		auto_pilot(queue=queue, jobs=jobs, socialprofile=socialprofile)
+
 	
 
 
