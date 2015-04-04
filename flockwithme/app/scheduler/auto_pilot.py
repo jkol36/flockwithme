@@ -278,6 +278,8 @@ class AutoPilot(object):
 		return 'clean'
 
 
+	def process_exception(e):
+		print e
 
 	def run(self):
 		follow = False
