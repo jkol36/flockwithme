@@ -205,12 +205,12 @@ class Job(models.Model):
 	#This bookmark tracks the progress of a Job through it's 
 	#Entire lfie cycle.
 	BOOKMARK = (
-		{
+		({
 		'LAST_ACTION': {},
 		'FOLLOW': {'LAST_RUN': 'some_data_and_time', 'COMPLETED': False, 'STARTED': False},
 		'FAVORITE': {'LAST_RUN': 'some_data_and_time', 'COMPLETED': False, 'STARTED': False},
 		'AUTO_DM': {'LAST_RUN': 'some_data_and_time', 'COMPLETED': False, 'STARTED': False},
-		}
+		}),
 		)
 
 	socialprofile = models.ForeignKey(SocialProfile, related_name='jobs')
