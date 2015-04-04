@@ -210,7 +210,6 @@ class Job(models.Model):
 
 
 
-
 @receiver(post_save, sender=SocialProfile)
 def run_analysis(sender, **kwargs):
 	if kwargs.pop('created'):
