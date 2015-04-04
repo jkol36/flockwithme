@@ -194,7 +194,7 @@ class AutoPilot(object):
 		print self.hashtags
 		self.author_ids = []
 		for i in self.hashtags:
-			self.author_id = [x.twitter_user.twitter_id for x in TwitterStatus.objects.filter(hashtags=i)[:100] if x not in self.friends]
+			self.author_id = [x.twitter_user.twitter_id for x in TwitterStatus.objects.filter(hashtags=i).order_by('created_at')[:100] if x not in self.friends]
 			self.author_ids.append(self.author_id)
 		return self.author_ids
 
