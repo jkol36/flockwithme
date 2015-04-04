@@ -24,6 +24,7 @@ class AutoPilot(object):
 		self.profile = Profile.objects.get(accounts=self.socialprofile)
 		self.time = time.time()
 		self.queue.put(self)
+		self.run()
 		return super(AutoPilot, self).__init__(*args, **kwargs)
 		
 
@@ -279,7 +280,8 @@ class AutoPilot(object):
 
 
 	def run(self):
-		print "called"
+		return "called"
+
 		
 		
 		
