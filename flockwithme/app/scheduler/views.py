@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.core.urlresolvers import reverse
-from .forms import *
+from .forms import StartForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .models import Job
@@ -30,7 +30,7 @@ def analytics_view(request):
 			return redirect("my_accounts")
 
 def handle_form(request):
-	form = JobCreationForm(request.POST)
+	form = StartForm(request.POST)
 	if form.is_valid():
 		form.save()
 		messages.success(request, "Smile! :) Your social media marketing is now being handles by us. Focus your energy elsewhere!")
@@ -42,7 +42,7 @@ def handle_form(request):
 def start(request):
 	if not request.POST:
 		return render(request, 'start.jade')
-	print request.POST
+	handle_form(request.POST)
 	return render(request, 'start.jade')
 		
 		
