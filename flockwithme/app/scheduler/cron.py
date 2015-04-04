@@ -4,7 +4,7 @@ from flockwithme.app.scheduler.models import Influencer, Job
 from Queue import Queue
 from threading import Lock
 from django.db.models import Q
-from auto_pilot import *
+from auto_pilot import auto_pilot
 
 
 
