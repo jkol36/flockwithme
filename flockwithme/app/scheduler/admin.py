@@ -18,7 +18,7 @@ class TwitterListAdmin(admin.ModelAdmin):
 	list_display = ('name', 'owner', 'profile', )
 
 class JobAdmin(admin.ModelAdmin):
-	list_display = ['action', 'is_complete']
+	list_display = ['socialprofile', 'is_complete']
 
 class TwitterListAdmin(admin.ModelAdmin):
 	list_display = ['name', 'owner', 'twitter_id',]
