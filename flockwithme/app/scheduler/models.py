@@ -202,6 +202,14 @@ class Job(models.Model):
 		('MENTION', 'Mention'),
 		('RETWEET', 'Retweet'),
 		)
+	#This bookmark tracks the progress of a Job through it's 
+	#Entire lfie cycle.
+	BOOKMARK = {
+		'LAST_ACTION': {},
+		'FOLLOW': {'LAST_RUN': 'some_data_and_time', 'COMPLETED': False, 'STARTED': False},
+		'FAVORITE': {'LAST_RUN': 'some_data_and_time', 'COMPLETED': False, 'STARTED': False},
+		'AUTO_DM': {'LAST_RUN': 'some_data_and_time', 'COMPLETED': False, 'STARTED': False},
+		}
 
 	socialprofile = models.ForeignKey(SocialProfile, related_name='jobs')
 	action = models.CharField(max_length=20, choices=ACTION_CHOICES, blank=True, null=True)
@@ -216,8 +224,14 @@ class Job(models.Model):
 	owner = models.CharField(max_length=250, null = True, blank = True)
 	twitter_list = models.ForeignKey(TwitterList, related_name = 'twitter_lists', blank=True, null = True)
 	is_complete = models.BooleanField(default=False)
+	slicer = models.CharField(choices=BOOKMARK, max_length=250)
 	def __unicode__(self):
 		return unicode("%s for %s" % (self.action, self.socialprofile))
+
+	def get_last_run(self):
+		pass
+
+
 
 @receiver(post_save, sender=SocialProfile)
 def run_analysis(sender, **kwargs):

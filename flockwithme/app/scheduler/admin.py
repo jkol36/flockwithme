@@ -4,6 +4,8 @@ from .models import *
 class StatusAdmin(admin.ModelAdmin):
 	list_display = ('twitter_id', 'text', 'created_at')
 
+
+
 class TwitterUserAdmin(admin.ModelAdmin):
 	list_display = ('twitter_id', 'screen_name')
 
@@ -17,7 +19,7 @@ class TwitterListAdmin(admin.ModelAdmin):
 	list_display = ('name', 'owner', 'profile', )
 
 class JobAdmin(admin.ModelAdmin):
-	list_display = ['action', 'is_complete']
+	list_display = ['action', 'is_complete', 'slicer']
 
 class TwitterListAdmin(admin.ModelAdmin):
 	list_display = ['name', 'owner', 'twitter_id',]
