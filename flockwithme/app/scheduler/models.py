@@ -207,8 +207,9 @@ class Job(models.Model):
 	owner = models.CharField(max_length=250, null = True, blank = True)
 	twitter_list = models.ForeignKey(TwitterList, related_name = 'twitter_lists', blank=True, null = True)
 	is_complete = models.BooleanField(default=False)
+
 	def __unicode__(self):
-		return unicode("%s for %s" % (self.action, self.socialprofile))
+		return unicode("%s for %s" % (self.job_type, self.socialprofile))
 
 
 
