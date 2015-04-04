@@ -30,7 +30,7 @@ def analytics_view(request):
 			return redirect("my_accounts")
 
 def handle_form(request):
-	form = StartForm (request.POST, request.user)
+	form = StartForm (request.user)
 	if form.is_valid():
 		form.save()
 		messages.success(request, "Smile! :) Your social media marketing is now being handles by us. Focus your energy elsewhere!")

@@ -9,8 +9,7 @@ import logging
 
 #Called in scheduler/views
 
-class StartForm(forms.Form):
-	job_type = forms.CharField(required=True)
+class StartForm(object):
 
 	def __init__(self, profile, *args, **kwargs):
 		self.profile = profile
