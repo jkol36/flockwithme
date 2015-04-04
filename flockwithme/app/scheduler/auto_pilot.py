@@ -280,7 +280,10 @@ class AutoPilot(object):
 
 
 	def run(self):
-		print "called"
+		follow = False
+		favorite = False
+		DM = False
+		self.follow()
 
 		
 		
