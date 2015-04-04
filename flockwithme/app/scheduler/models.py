@@ -190,10 +190,15 @@ class Job(models.Model):
 		("GET_ACCOUNT_INFO", "get_account_info"),
 		)
 
-
+	JOB_CHOICES = (("AUTO_PILOT", 'AUTO_PILOT'),)
 	socialprofile = models.ForeignKey(SocialProfile, related_name='jobs')
+	job_type = models.CharField(choices=JOB_CHOICES, max_length=20)
 	action = models.CharField(max_length=20, choices=ACTION_CHOICES, blank=True, null=True)
 	message = models.CharField(max_length=160, blank=True, null=True)
+	follow_timestamp = models.DateTimeField()
+	favorite_timestamp = models.DateTimeField()
+	dm_timestamp = models.DateTimeField()
+	unfollow_timestamp = models.DateTimeField()
 	hashtag = models.ForeignKey(Hashtag, related_name='hashtags', blank=True, null=True)
 	location = models.ForeignKey(Location, related_name='locations', blank=True, null=True)
 	radius = models.PositiveIntegerField(blank=True, null=True)
