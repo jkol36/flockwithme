@@ -22,7 +22,7 @@ class StartForm(object):
 			self.start(t_account)
 
 	def start(self, t_account):
-		hashtags = [x for x in Hashtag.objects.filter(profile=self.profile)]
+		hashtags = [x for x in Hashtag.objects.filter(profiles=self.profile)]
 		return Job.objects.get_or_create(
 			   social_profile=t_account, 
 			   hashtags=hashtags)
