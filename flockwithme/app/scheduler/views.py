@@ -5,7 +5,6 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .models import Job
 from flockwithme.core.profiles.models import SocialProfile
-from flockwithme.app.scheduler.models import ApiStatus
 from django.utils import timezone
 from datetime import timedelta
 
