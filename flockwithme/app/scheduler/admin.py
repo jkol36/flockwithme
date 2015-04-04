@@ -2,7 +2,7 @@ from django.contrib import admin
 from .models import *
 
 class StatusAdmin(admin.ModelAdmin):
-	list_display = ('twitter_id', 'text')
+	list_display = ('twitter_id', 'text', 'created_at')
 
 class TwitterUserAdmin(admin.ModelAdmin):
 	list_display = ('twitter_id', 'screen_name')
