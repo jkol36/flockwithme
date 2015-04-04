@@ -45,56 +45,6 @@ def add_job(request):
 		return render(request, 'add_job.jade')
 	print request.POST
 	return render(request, 'add_job.jade')
-@login_required
-def api_status(request):
-	apistatus = ApiStatus.objects.all()[0].status
-	return render(request, 'api_status.jade', {'APISTATUS':apistatus})
-
-@login_required
-def auto_favorite(request):
-	if request.POST:
-		handle_form(request)
-		return render(request, 'auto_favorite.jade')
-
-	try:
-		accounts = request.user.accounts.all()
-		pk = accounts[0].id
-		return render(request, 'auto_favorite.jade')
-	except Exception, e:
-		messages.error(request, "Please add a Twitter Account first")
-		return redirect("my_accounts")
-
-@login_required
-def auto_follow(request):
-	if request.POST:
-		handle_form(request)
-	try:
-		accounts = request.user.accounts.all()
-		pk = accounts[0].id
-		return render(request, 'auto_follow.jade')
-	except Exception, e:
-		messages.error(request, "Please add a Twitter Account First")
-		return redirect("my_accounts")
-
-@login_required
-def auto_unfollow(request):
-	if request.POST:
-		action = request.POST['action']
-		print action
-		account_id = request.POST['socialProfile']
-		account = SocialProfile.objects.get(pk=account_id)
-		
-		if action == "UNFOLLOW_BACK":
-			print 'bla'
-			new_job = Job.objects.create(action="UNFOLLOW_BACK", socialprofile=account)
-			new_job.save()
-	try:
-		accounts = request.user.accounts.all()
-		pk = accounts[0].id
-		return render(request, "auto_unfollow.jade")
-	except Exception, NoAccounts:
-		messages.error(request, "please add a Twitter Account first")
-		return redirect("my_accounts")
 		
 		
 @login_required

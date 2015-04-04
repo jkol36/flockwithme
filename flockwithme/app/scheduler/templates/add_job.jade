@@ -18,16 +18,14 @@ mixin panel(title, form_name, description)
 						a(href="#", style="padding-left:3px;") Here.
 					form(role="form", action="{% url 'add_job' %}", method="POST")
 						- csrf_token
-						input(type="hidden", name='job_type', value='{{form_name}}')
-						button.btn.btn.btn-info.btn-lg.form-submit(value="submit", style="margin-left:40%;", type="submit") Select This One
+						input(type="hidden", name='job_type', value='Auto-Pilot')
+						button.btn.btn.btn-info.btn-lg.form-submit(value="submit", style="margin-left:40%;", type="submit") Click To Start
 
 
 
 -block content
 .container-fluid
-	+panel("Put Your Social Media Account On Auto-Pilot.", 'auto_pilot_job', "Flock will take care of everything for you. Learn More")
-	p.text-primary(style="text-align:center;") or
-	+panel("Only start actions when an event happens.", 'event_job', " You control when Flock runs. Learn More")
+	+panel("Put Your Social Media Account On Auto-Pilot.", "Flock will take care of everything for you. Learn More")
 	
 
 
