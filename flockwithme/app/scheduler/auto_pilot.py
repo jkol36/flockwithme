@@ -47,10 +47,10 @@ class AutoPilot(object):
 		#self.following_ids = [x.twitterUser.twitter_id for x in self.following]
 		self.author_ids = self.get_author_ids()
 		self.influencers = self.profile.influencers.all()
-		twitter_ids = [x for x in self.author_ids]
-		for i in influencers:
+		self.twitter_ids = [x for x in self.author_ids]
+		for i in self.influencers:
 			twitter_ids.append(i)
-		return twitter_ids
+		return self.twitter_ids
 		
 		#self.should_follow = [x for x in self.authors_and_followers if x not in self.following_ids]
 		#print self.should_follow
