@@ -7,7 +7,7 @@ from threading import Thread
 
 import tweepy
 from tweepy.error import TweepError
-from pq import Queue, Flow
+
 
 from flockwithme.app.scheduler.models import TwitterStatus, TwitterUser, Influencer, ApiStatus
 from flockwithme.core.profiles.models import Profile
@@ -15,14 +15,13 @@ from flockwithme.core.profiles.models import Profile
 
 
 
-class AutoPilot(Thread):
-	def __init__(self, lock=None, action=None, *args, **kwargs):
+class AutoPilot(object):
+	def __init__(self, action=None, *args, **kwargs):
 		self.queue = kwargs.pop('queue')
 		self.socialprofile = kwargs.pop('account')
 		self.action = action
 		self.profile = Profile.objects.get(accounts=self.socialprofile)
 		self.time = time.time()
-		self.lock = lock
 		self.queue.put(self)
 		return super(AutoPilot, self).__init__(*args, **kwargs)
 		

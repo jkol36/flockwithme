@@ -54,7 +54,7 @@ INSTALLED_APPS = (
     # 'flockwithme.app.notification',
     
     'django_ajax',
-    'pq'
+    'kronos'
 )
 
 MIDDLEWARE_CLASSES = (
