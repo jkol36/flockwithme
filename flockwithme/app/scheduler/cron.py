@@ -12,8 +12,8 @@ from auto_pilot import *
 def do_work():
 	queue = Queue()
 	for job in Job.objects.all():
-		SocialProfile = job.socialprofile
-		print socialprofile
+		SocialProfile = Job.socialprofile
+		print SocialProfile
 		#auto_pilot(job=job, queue=queue)
 	
 
