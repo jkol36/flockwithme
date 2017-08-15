@@ -24,7 +24,7 @@ SECRET_KEY = '6&nk*8d**vdfddn0q(d0pa3j@!t2tl^n+j@_f3q#j=*rqheu)k'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-USE_POSTGRES = True
+USE_POSTGRES = False
 
 TEMPLATE_DEBUG = DEBUG
 
